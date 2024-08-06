@@ -9,33 +9,23 @@ void main() {
 class RewardRavenApp extends StatelessWidget {
   const RewardRavenApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: [
-        Locale('en'), // English
-        // Locale('es'), // Spanish
-      ],
-      title: AppLocalizations.of(context)!.appTitle,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      title: AppLocalizations.of(context)!.appTitle, // TODO The Material app has to actually be started to initialize AppLocalizations. If the app hasn't yet started, AppLocalizations.of(context)!.helloWorld causes a null exception.
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Reward Raven Home Page'),
+      home: const HomePage(title: 'Reward Raven Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  // This widget is the home page of your application.
-  const MyHomePage({super.key, required this.title});
+class HomePage extends StatelessWidget {
+  const HomePage({super.key, required this.title});
 
   final String title;
 
