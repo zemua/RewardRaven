@@ -14,30 +14,27 @@ class RewardRavenApp extends StatelessWidget {
     return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      title: AppLocalizations.of(context)!.appTitle, // TODO The Material app has to actually be started to initialize AppLocalizations. If the app hasn't yet started, AppLocalizations.of(context)!.helloWorld causes a null exception.
+      title: "Reward Raven",
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomePage(title: 'Reward Raven Home Page'),
+      home: HomePage(),
     );
   }
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key, required this.title});
-
-  final String title;
-
+  const HomePage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(AppLocalizations.of(context)!.homePage),
       ),
-      body: const Center(
+      body: Center(
         child: Text(
-          'Welcome to Reward Raven',
+          AppLocalizations.of(context)!.welcome,
         ),
       ),
     );

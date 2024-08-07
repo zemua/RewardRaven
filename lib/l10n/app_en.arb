@@ -2,5 +2,10 @@
   "appTitle": "Reward Raven",
   "@appTitle": {
     "description": "The title of the app"
-  }
+  },
+  "homePage": "Reward Raven Home Page",
+  "welcome": "Welcome to Reward Raven",
+    "@welcome": {
+        "description": "The welcome message"
+    }
 }
