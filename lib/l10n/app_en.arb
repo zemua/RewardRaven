@@ -7,5 +7,11 @@
   "welcome": "Welcome to Reward Raven",
     "@welcome": {
         "description": "The welcome message"
-    }
+    },
+  "positiveApps": "Positive Apps",
+  "positiveGroups": "Positive Groups",
+  "negativeApps": "Negative Apps",
+  "negativeGroups": "Negative Groups",
+  "randomChecks": "Random Checks",
+  "seeTimings": "See Timings"
 }

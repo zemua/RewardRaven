@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
@@ -33,8 +32,88 @@ class HomePage extends StatelessWidget {
         title: Text(AppLocalizations.of(context)!.homePage),
       ),
       body: Center(
-        child: Text(
-          AppLocalizations.of(context)!.welcome,
+        child: SingleChildScrollView(
+          child: IntrinsicWidth(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          print('Positive apps button pressed');
+                        },
+                        child: Text(
+                          AppLocalizations.of(context)!.positiveApps,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          print('Positive groups button pressed');
+                        },
+                        child:
+                            Text(AppLocalizations.of(context)!.positiveGroups),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          print('Negative apps button pressed');
+                        },
+                        child: Text(
+                          AppLocalizations.of(context)!.negativeApps,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          print('Negative groups button pressed');
+                        },
+                        child:
+                            Text(AppLocalizations.of(context)!.negativeGroups),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        print('Random checks button pressed');
+                      },
+                      child: Text(AppLocalizations.of(context)!.randomChecks),
+                    ),
+                  ),
+                ]),
+                SizedBox(height: 20),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        print('Random checks button pressed');
+                      },
+                      child: Text(AppLocalizations.of(context)!.randomChecks),
+                    ),
+                  ),
+                ]),
+                SizedBox(height: 20),
+              ],
+            ),
+          ),
         ),
       ),
     );
