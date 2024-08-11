@@ -7,6 +7,7 @@ import 'fetcher/apps_fetcher.dart';
 final GetIt locator = GetIt.instance;
 
 class AppList extends StatelessWidget {
+  // TODO test
   const AppList({super.key});
 
   @override
