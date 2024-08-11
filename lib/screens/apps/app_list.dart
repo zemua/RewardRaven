@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:installed_apps/app_info.dart';
 
-import 'fetcher/apps_fetcher_provider.dart';
+import 'fetcher/apps_fetcher.dart';
 
 final GetIt locator = GetIt.instance;
 
@@ -11,7 +11,7 @@ class AppList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appsFetcher = locator<AppsFetcherProvider>();
+    final appsFetcher = locator<AppsFetcher>();
     return Scaffold(
       appBar: AppBar(
         title: Text('Installed Apps'),

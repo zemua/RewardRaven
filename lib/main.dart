@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:reward_raven/screens/apps/fetcher/apps_fetcher.dart';
 import 'package:reward_raven/screens/apps/fetcher/apps_fetcher_provider.dart';
 import 'package:reward_raven/screens/homepage/home_page.dart';
 
@@ -30,5 +31,5 @@ class RewardRavenApp extends StatelessWidget {
 }
 
 void setupLocator() {
-  locator.registerSingleton<AppsFetcherProvider>(AppsFetcherProvider());
+  locator.registerSingleton<AppsFetcher>(AppsFetcherProvider());
 }

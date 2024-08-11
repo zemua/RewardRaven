@@ -1,8 +1,22 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
+import 'package:installed_apps/app_info.dart';
+import 'package:mockito/mockito.dart';
 import 'package:reward_raven/main.dart';
 import 'package:reward_raven/screens/apps/app_list.dart';
+import 'package:reward_raven/screens/apps/fetcher/apps_fetcher.dart';
 
 void main() {
+  final getIt = GetIt.instance;
+
+  setUp(() {
+    getIt.registerSingleton<AppsFetcher>(MockAppsFetcher());
+  });
+
+  tearDown(() {
+    getIt.reset();
+  });
+
   group('Home Page', () {
     testWidgets('navigates to app list on positive apps button press',
         (WidgetTester tester) async {
@@ -60,4 +74,11 @@ void main() {
       // Check console output for the message
     });
   });
+}
+
+class MockAppsFetcher extends Mock implements AppsFetcher {
+  @override
+  Future<List<AppInfo>> fetchInstalledApps() async {
+    return [];
+  }
 }
