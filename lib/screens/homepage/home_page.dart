@@ -32,14 +32,14 @@ class HomePage extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.thumb_up),
-                            SizedBox(width: 8),
+                            const Icon(Icons.thumb_up),
+                            const SizedBox(width: 8),
                             Text(AppLocalizations.of(context)!.positiveApps),
                           ],
                         ),
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
@@ -48,8 +48,8 @@ class HomePage extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.group),
-                            SizedBox(width: 8),
+                            const Icon(Icons.group),
+                            const SizedBox(width: 8),
                             Text(AppLocalizations.of(context)!.positiveGroups),
                           ],
                         ),
@@ -57,7 +57,7 @@ class HomePage extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -69,14 +69,14 @@ class HomePage extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.thumb_down),
-                            SizedBox(width: 8),
+                            const Icon(Icons.thumb_down),
+                            const SizedBox(width: 8),
                             Text(AppLocalizations.of(context)!.negativeApps),
                           ],
                         ),
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
@@ -85,8 +85,8 @@ class HomePage extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.group_off),
-                            SizedBox(width: 8),
+                            const Icon(Icons.group_off),
+                            const SizedBox(width: 8),
                             Text(AppLocalizations.of(context)!.negativeGroups),
                           ],
                         ),
@@ -94,7 +94,7 @@ class HomePage extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Expanded(
                     child: ElevatedButton(
@@ -104,15 +104,15 @@ class HomePage extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.shuffle),
-                          SizedBox(width: 8),
+                          const Icon(Icons.shuffle),
+                          const SizedBox(width: 8),
                           Text(AppLocalizations.of(context)!.randomChecks),
                         ],
                       ),
                     ),
                   ),
                 ]),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Expanded(
                     child: ElevatedButton(
@@ -122,15 +122,15 @@ class HomePage extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.access_time),
-                          SizedBox(width: 8),
+                          const Icon(Icons.access_time),
+                          const SizedBox(width: 8),
                           Text(AppLocalizations.of(context)!.myTimings),
                         ],
                       ),
                     ),
                   ),
                 ]),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Expanded(
                     child: ElevatedButton(
@@ -140,8 +140,8 @@ class HomePage extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.settings),
-                          SizedBox(width: 8),
+                          const Icon(Icons.settings),
+                          const SizedBox(width: 8),
                           Text(AppLocalizations.of(context)!.settings),
                         ],
                       ),

@@ -38,6 +38,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: any
+  installed_apps: any
+  get_it: any
 
 dev_dependencies:
   flutter_test:
