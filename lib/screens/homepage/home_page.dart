@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../apps/app_list.dart';
+
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
   @override
@@ -21,7 +23,11 @@ class HomePage extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          print('Positive apps button pressed');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AppList()),
+                          );
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
