@@ -45,8 +45,13 @@ class HomePage extends StatelessWidget {
                         onPressed: () {
                           print('Positive apps button pressed');
                         },
-                        child: Text(
-                          AppLocalizations.of(context)!.positiveApps,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.thumb_up),
+                            SizedBox(width: 8),
+                            Text(AppLocalizations.of(context)!.positiveApps),
+                          ],
                         ),
                       ),
                     ),
@@ -56,8 +61,14 @@ class HomePage extends StatelessWidget {
                         onPressed: () {
                           print('Positive groups button pressed');
                         },
-                        child:
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.group),
+                            SizedBox(width: 8),
                             Text(AppLocalizations.of(context)!.positiveGroups),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -71,8 +82,13 @@ class HomePage extends StatelessWidget {
                         onPressed: () {
                           print('Negative apps button pressed');
                         },
-                        child: Text(
-                          AppLocalizations.of(context)!.negativeApps,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.thumb_down),
+                            SizedBox(width: 8),
+                            Text(AppLocalizations.of(context)!.negativeApps),
+                          ],
                         ),
                       ),
                     ),
@@ -82,8 +98,14 @@ class HomePage extends StatelessWidget {
                         onPressed: () {
                           print('Negative groups button pressed');
                         },
-                        child:
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.group_off),
+                            SizedBox(width: 8),
                             Text(AppLocalizations.of(context)!.negativeGroups),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -95,7 +117,14 @@ class HomePage extends StatelessWidget {
                       onPressed: () {
                         print('Random checks button pressed');
                       },
-                      child: Text(AppLocalizations.of(context)!.randomChecks),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.shuffle),
+                          SizedBox(width: 8),
+                          Text(AppLocalizations.of(context)!.randomChecks),
+                        ],
+                      ),
                     ),
                   ),
                 ]),
@@ -104,13 +133,37 @@ class HomePage extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        print('Random checks button pressed');
+                        print('My Times button pressed');
                       },
-                      child: Text(AppLocalizations.of(context)!.randomChecks),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.access_time),
+                          SizedBox(width: 8),
+                          Text(AppLocalizations.of(context)!.myTimings),
+                        ],
+                      ),
                     ),
                   ),
                 ]),
                 SizedBox(height: 20),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        print('Settings button pressed');
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.settings),
+                          SizedBox(width: 8),
+                          Text(AppLocalizations.of(context)!.settings),
+                        ],
+                      ),
+                    ),
+                  ),
+                ]),
               ],
             ),
           ),
