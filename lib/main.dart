@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:reward_raven/screens/apps/fetcher/apps_fetcher.dart';
 import 'package:reward_raven/screens/apps/fetcher/apps_fetcher_provider.dart';
+import 'package:reward_raven/screens/apps/fetcher/impl/ampty_apps_fetcher.dart';
 import 'package:reward_raven/screens/apps/fetcher/impl/android_apps_fetcher.dart';
 import 'package:reward_raven/screens/homepage/home_page.dart';
 import 'package:reward_raven/service/impl/platform_wrapper_impl.dart';
@@ -35,8 +37,12 @@ class RewardRavenApp extends StatelessWidget {
 
 void setupLocator() {
   locator.registerSingleton<PlatformWrapper>(PlatformWrapperImpl());
-  locator.registerSingleton<AppsFetcher>(AppsFetcherProvider());
 
-  // Implementation specific
-  locator.registerSingleton<AndroidAppsFetcher>(AndroidAppsFetcher());
+  if (!kIsWeb) {
+    // Register platform-specific implementations only if not running on the web
+    locator.registerSingleton<AndroidAppsFetcher>(AndroidAppsFetcher());
+  }
+  locator.registerSingleton<EmptyAppsFetcher>(EmptyAppsFetcher());
+
+  locator.registerSingleton<AppsFetcher>(AppsFetcherProvider());
 }

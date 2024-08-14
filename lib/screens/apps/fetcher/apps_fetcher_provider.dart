@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:installed_apps/app_info.dart';
+import 'package:reward_raven/screens/apps/fetcher/impl/ampty_apps_fetcher.dart';
 import 'package:reward_raven/screens/apps/fetcher/impl/android_apps_fetcher.dart';
 import 'package:reward_raven/service/platform_wrapper.dart';
 
@@ -17,7 +18,7 @@ class AppsFetcherProvider implements AppsFetcher {
     if (platform.isAndroid()) {
       return locator<AndroidAppsFetcher>();
     } else {
-      throw UnsupportedError('This platform is not supported');
+      return locator<EmptyAppsFetcher>();
     }
   }
 

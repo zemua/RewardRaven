@@ -4,6 +4,7 @@ import 'package:installed_apps/app_info.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:reward_raven/screens/apps/fetcher/apps_fetcher_provider.dart';
+import 'package:reward_raven/screens/apps/fetcher/impl/ampty_apps_fetcher.dart';
 import 'package:reward_raven/screens/apps/fetcher/impl/android_apps_fetcher.dart';
 import 'package:reward_raven/service/platform_wrapper.dart';
 
@@ -46,14 +47,19 @@ void main() {
       expect(apps.first.name, 'App1');
     });
 
-    test('throws UnsupportedError on non-Android platforms', () {
+    test('fetchInstalledApps returns empty list on non-Android platforms',
+        () async {
       MockPlatformWrapper mockPlatformWrapper = MockPlatformWrapper();
       MockAndroidAppsFetcher mockAndroidAppsFetcher = MockAndroidAppsFetcher();
       locator.registerSingleton<PlatformWrapper>(mockPlatformWrapper);
-      locator.registerSingleton<AndroidAppsFetcher>(mockAndroidAppsFetcher);
+      locator.registerSingleton<EmptyAppsFetcher>(EmptyAppsFetcher());
       when(mockPlatformWrapper.isAndroid()).thenReturn(false);
 
-      expect(() => AppsFetcherProvider(), throwsA(isA<UnsupportedError>()));
+      final provider = AppsFetcherProvider();
+      final apps = await provider.fetchInstalledApps();
+
+      expect(apps, isA<List<AppInfo>>());
+      expect(apps, isEmpty);
     });
   });
 }
