@@ -34,7 +34,9 @@ class RewardRavenApp extends StatelessWidget {
 }
 
 void setupLocator() {
-  locator.registerSingleton<AppsFetcher>(AppsFetcherProvider());
-  locator.registerSingleton<AndroidAppsFetcher>(AndroidAppsFetcher());
   locator.registerSingleton<PlatformWrapper>(PlatformWrapperImpl());
+  locator.registerSingleton<AppsFetcher>(AppsFetcherProvider());
+
+  // Implementation specific
+  locator.registerSingleton<AndroidAppsFetcher>(AndroidAppsFetcher());
 }
