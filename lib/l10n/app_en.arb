@@ -1,0 +1,18 @@
+{
+  "appTitle": "Reward Raven",
+  "@appTitle": {
+    "description": "The title of the app"
+  },
+  "homePage": "Reward Raven Home Page",
+  "welcome": "Welcome to Reward Raven",
+    "@welcome": {
+        "description": "The welcome message"
+    },
+  "positiveApps": "Positive Apps",
+  "positiveGroups": "Positive Groups",
+  "negativeApps": "Negative Apps",
+  "negativeGroups": "Negative Groups",
+  "randomChecks": "Random Checks",
+  "myTimings": "My Timings",
+  "settings": "Settings"
+}
