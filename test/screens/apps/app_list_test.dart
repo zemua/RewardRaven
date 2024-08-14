@@ -40,7 +40,7 @@ void main() {
       final mockAppsFetcher = MockAppsFetcher();
       locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
       when(mockAppsFetcher.fetchInstalledApps())
-          .thenThrow(Exception('Failed to fetch apps'));
+          .thenAnswer((_) async => throw Exception('Failed to fetch apps'));
 
       await tester.pumpWidget(MaterialApp(home: AppList()));
       await tester.pump();
