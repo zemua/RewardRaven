@@ -14,5 +14,8 @@
   "negativeGroups": "Negative Groups",
   "randomChecks": "Random Checks",
   "myTimings": "My Timings",
-  "settings": "Settings"
+  "settings": "Settings",
+  "installedApps": "Installed Apps",
+  "error": "Error",
+  "noAppsFound": "No apps found"
 }

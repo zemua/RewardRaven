@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:installed_apps/app_info.dart';
 
@@ -14,7 +15,7 @@ class AppList extends StatelessWidget {
     final appsFetcher = locator<AppsFetcher>();
     return Scaffold(
       appBar: AppBar(
-        title: Text('Installed Apps'),
+        title: Text(AppLocalizations.of(context)!.installedApps),
       ),
       body: FutureBuilder<List<AppInfo>>(
         future: appsFetcher.fetchInstalledApps(),
@@ -22,14 +23,14 @@ class AppList extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(
+                child: Text(
+                    '${AppLocalizations.of(context)!.error} ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No apps found'));
+            return Center(
+                child: Text(AppLocalizations.of(context)!.noAppsFound));
           } else {
             final apps = snapshot.data!;
-            for (var app in apps) {
-              print(app.name);
-            }
             return ListView.builder(
               itemCount: apps.length,
               itemBuilder: (context, index) {
