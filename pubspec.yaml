@@ -41,6 +41,10 @@ dependencies:
   installed_apps: any
   get_it: any
   package_info_plus: ^3.0.0
+  sqflite: any
+  path: any
+  path_provider: any
+  logger: any
 
 dev_dependencies:
   flutter_test:
