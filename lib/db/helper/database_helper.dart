@@ -5,6 +5,7 @@ import 'package:sqflite/sqflite.dart';
 import '../entity/listed_app.dart';
 
 class DatabaseHelper {
+  // TODO change to firebase
   static final _databaseName = 'reward_raven_app.db';
   static final _databaseVersion = 1;
 
