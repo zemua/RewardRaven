@@ -34,12 +34,38 @@ class AppList extends StatelessWidget {
             return ListView.builder(
               itemCount: apps.length,
               itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(apps[index].name),
-                );
+                return AppListItem(app: apps[index]);
               },
             );
           }
+        },
+      ),
+    );
+  }
+}
+
+class AppListItem extends StatefulWidget {
+  final AppInfo app;
+
+  const AppListItem({required this.app, Key? key}) : super(key: key);
+
+  @override
+  _AppListItemState createState() => _AppListItemState();
+}
+
+class _AppListItemState extends State<AppListItem> {
+  bool _isSwitched = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(widget.app.name),
+      trailing: Switch(
+        value: _isSwitched,
+        onChanged: (value) {
+          setState(() {
+            _isSwitched = value;
+          });
         },
       ),
     );
