@@ -46,6 +46,7 @@ dependencies:
   path_provider: any
   logger: any
   firebase_database: any
+  equatable: any
 
 dev_dependencies:
   flutter_test:

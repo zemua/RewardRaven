@@ -4,7 +4,7 @@ import 'package:logger/logger.dart';
 class FirebaseHelper {
   final FirebaseDatabase _database = FirebaseDatabase.instance;
   late DatabaseReference _databaseReference;
-  final String _databasePath = 'your_database_path';
+  final String _databasePath = 'reward_raven';
 
   final _logger = Logger();
 
@@ -13,11 +13,13 @@ class FirebaseHelper {
   }
 
   Future<void> _loadDatabase() async {
-    try {
-      _databaseReference = await _database.reference().child(_databasePath);
-      _logger.i("Database loaded successfully");
-    } catch (e) {
-      _logger.e('Failed to load database: $e');
+    if (_databaseReference == null) {
+      try {
+        _databaseReference = await _database.reference().child(_databasePath);
+        _logger.i("Database loaded successfully");
+      } catch (e) {
+        _logger.e('Failed to load database: $e');
+      }
     }
   }
 

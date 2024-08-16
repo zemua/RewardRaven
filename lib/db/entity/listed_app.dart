@@ -1,4 +1,6 @@
-class ListedApp {
+import 'package:equatable/equatable.dart';
+
+class ListedApp extends Equatable {
   int? id;
   String identifier;
   String platform;
@@ -11,16 +13,22 @@ class ListedApp {
     required this.list,
   });
 
-  factory ListedApp.fromMap(Map<String, dynamic> map) {
+  String get compositeKey =>
+      '${identifier}_${platform}'; // _databaseReference.child('listedApps').child(app.compositeKey).set(app.toJson());
+
+  @override
+  List<Object?> get props => [id, identifier, platform, list];
+
+  factory ListedApp.fromJson(Map<String, dynamic> json) {
     return ListedApp(
-      id: map['id'],
-      identifier: map['identifier'],
-      platform: map['platform'],
-      list: map['list'],
+      id: json['id'],
+      identifier: json['identifier'],
+      platform: json['platform'],
+      list: json['list'],
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'id': id,
       'identifier': identifier,
@@ -28,20 +36,4 @@ class ListedApp {
       'list': list,
     };
   }
-
-  static const String tableName = 'listed_apps';
-  static const String columnId = 'id';
-  static const String columnIdentifier = 'identifier';
-  static const String columnPlatform = 'platform';
-  static const String columnList = 'list';
-
-  static const String createTableQuery = '''
-    CREATE TABLE $tableName (
-      $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
-      $columnIdentifier TEXT NOT NULL,
-      $columnPlatform TEXT NOT NULL,
-      $columnList TEXT NOT NULL,
-      UNIQUE ($columnIdentifier, $columnPlatform)
-    );
-  ''';
 }

@@ -11,7 +11,6 @@ import 'package:reward_raven/screens/homepage/home_page.dart';
 import 'package:reward_raven/service/impl/platform_wrapper_impl.dart';
 import 'package:reward_raven/service/platform_wrapper.dart';
 
-import 'db/helper/database_helper.dart';
 import 'firebase_options.dart'; // $ flutterfire configure
 
 final GetIt locator = GetIt.instance;
@@ -53,6 +52,4 @@ void setupLocator() {
   locator.registerSingleton<EmptyAppsFetcher>(EmptyAppsFetcher());
 
   locator.registerSingleton<AppsFetcher>(AppsFetcherProvider());
-
-  locator.registerSingleton<DatabaseHelper>(DatabaseHelper.instance);
 }
