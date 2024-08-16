@@ -9,7 +9,7 @@ class DatabaseHelper {
   static final _databaseName = 'reward_raven_app.db';
   static final _databaseVersion = 1;
 
-  final logger = Logger();
+  final _logger = Logger();
 
   DatabaseHelper._privateConstructor();
 
@@ -31,7 +31,7 @@ class DatabaseHelper {
       return await openDatabase(path,
           version: _databaseVersion, onCreate: _onCreate);
     } catch (e) {
-      logger.e("Error initializing database: $e");
+      _logger.e("Error initializing database: $e");
     }
   }
 
@@ -39,7 +39,7 @@ class DatabaseHelper {
     try {
       await db.execute(ListedApp.createTableQuery);
     } catch (e) {
-      logger.e("Error creating table: $e");
+      _logger.e("Error creating table: $e");
     }
   }
 

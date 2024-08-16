@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -11,10 +12,15 @@ import 'package:reward_raven/service/impl/platform_wrapper_impl.dart';
 import 'package:reward_raven/service/platform_wrapper.dart';
 
 import 'db/helper/database_helper.dart';
+import 'firebase_options.dart'; // $ flutterfire configure
 
 final GetIt locator = GetIt.instance;
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform, // $ flutterfire configure
+  );
   setupLocator();
   runApp(const RewardRavenApp());
 }
