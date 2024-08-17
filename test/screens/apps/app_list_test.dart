@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:installed_apps/app_info.dart';
@@ -23,6 +25,21 @@ void main() {
     locator.reset();
   });
 
+  Widget createTestableWidget(Widget child) {
+    return MaterialApp(
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en', ''),
+      ],
+      home: child,
+    );
+  }
+
   group('AppList', () {
     testWidgets('displays CircularProgressIndicator while waiting for data',
         (WidgetTester tester) async {
@@ -30,7 +47,7 @@ void main() {
       locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
       when(mockAppsFetcher.fetchInstalledApps()).thenAnswer((_) async => []);
 
-      await tester.pumpWidget(MaterialApp(home: AppList()));
+      await tester.pumpWidget(createTestableWidget(AppList()));
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
@@ -42,7 +59,7 @@ void main() {
       when(mockAppsFetcher.fetchInstalledApps())
           .thenAnswer((_) async => throw Exception('Failed to fetch apps'));
 
-      await tester.pumpWidget(MaterialApp(home: AppList()));
+      await tester.pumpWidget(createTestableWidget(AppList()));
       await tester.pump();
 
       expect(
@@ -55,7 +72,7 @@ void main() {
       locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
       when(mockAppsFetcher.fetchInstalledApps()).thenAnswer((_) async => []);
 
-      await tester.pumpWidget(MaterialApp(home: AppList()));
+      await tester.pumpWidget(createTestableWidget(AppList()));
       await tester.pump();
 
       expect(find.text('No apps found'), findsOneWidget);
@@ -65,30 +82,28 @@ void main() {
       final apps = [
         AppInfo(
           name: 'App 1',
-          icon: Uint8List(0), // Correct type for icon
+          icon: Uint8List(0),
           packageName: 'com.example.app1',
           versionName: '1.0.0',
           versionCode: 1,
-          builtWith: BuiltWith.flutter, // Correct type for builtWith
-          installedTimestamp: DateTime.now()
-              .millisecondsSinceEpoch, // Correct type for installedTimestamp
+          builtWith: BuiltWith.flutter,
+          installedTimestamp: DateTime.now().millisecondsSinceEpoch,
         ),
         AppInfo(
           name: 'App 2',
-          icon: Uint8List(0), // Correct type for icon
+          icon: Uint8List(0),
           packageName: 'com.example.app2',
           versionName: '1.0.0',
           versionCode: 1,
-          builtWith: BuiltWith.flutter, // Correct type for builtWith
-          installedTimestamp: DateTime.now()
-              .millisecondsSinceEpoch, // Correct type for installedTimestamp
+          builtWith: BuiltWith.flutter,
+          installedTimestamp: DateTime.now().millisecondsSinceEpoch,
         ),
       ];
       final mockAppsFetcher = MockAppsFetcher();
       locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
       when(mockAppsFetcher.fetchInstalledApps()).thenAnswer((_) async => apps);
 
-      await tester.pumpWidget(MaterialApp(home: AppList()));
+      await tester.pumpWidget(createTestableWidget(AppList()));
       await tester.pump();
 
       expect(find.byType(ListTile), findsNWidgets(2));
