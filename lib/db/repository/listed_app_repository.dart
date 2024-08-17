@@ -47,12 +47,15 @@ class ListedAppRepository {
 
   Future<ListedApp?> getListedAppById(String compositeKey) async {
     try {
-      DataSnapshot snapshot = await _firebaseHelper.databaseReference
+      DatabaseEvent event = await _firebaseHelper.databaseReference
           .child(DbCollection.listedApps.name)
           .child(compositeKey)
           .once();
+
+      DataSnapshot snapshot = event.snapshot;
       if (snapshot.value != null) {
-        return ListedApp.fromJson(Map<String, dynamic>.from(snapshot.value));
+        return ListedApp.fromJson(
+            Map<String, dynamic>.from(snapshot.value as Map));
       }
     } catch (e) {
       logger.e('Failed to get listed app: $e');

@@ -1,34 +1,30 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:logger/logger.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:your_project/db/repository/listed_app_repository.dart';
-import 'package:your_project/entity/listed_app.dart';
-import 'package:your_project/helper/firebase_helper.dart';
+import 'package:reward_raven/db/entity/listed_app.dart';
+import 'package:reward_raven/db/helper/firebase_helper.dart';
+import 'package:reward_raven/db/repository/listed_app_repository.dart';
 
-class MockFirebaseHelper extends Mock implements FirebaseHelper {}
+import 'listed_app_repository_test.mocks.dart';
 
-class MockDatabaseReference extends Mock implements DatabaseReference {}
-
-class MockDataSnapshot extends Mock implements DataSnapshot {}
-
+@GenerateMocks([FirebaseHelper, DatabaseReference, DataSnapshot, DatabaseEvent])
 void main() {
-  MockFirebaseHelper mockFirebaseHelper;
-  MockDatabaseReference mockDatabaseReference;
-  ListedAppRepository listedAppRepository;
-  Logger logger;
+  late MockFirebaseHelper mockFirebaseHelper;
+  late MockDatabaseReference mockDatabaseReference;
+  late ListedAppRepository listedAppRepository;
 
   setUp(() {
     mockFirebaseHelper = MockFirebaseHelper();
     mockDatabaseReference = MockDatabaseReference();
-    logger = Logger();
     when(mockFirebaseHelper.databaseReference)
         .thenReturn(mockDatabaseReference);
     listedAppRepository = ListedAppRepository(mockFirebaseHelper);
   });
 
   group('ListedAppRepository', () {
-    final listedApp = ListedApp(compositeKey: 'testKey', name: 'Test App');
+    final listedApp = ListedApp(
+        identifier: 'testId', platform: 'testPlatform', list: 'testList');
 
     test('addListedApp adds a listed app successfully', () async {
       when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
@@ -36,7 +32,8 @@ void main() {
 
       await listedAppRepository.addListedApp(listedApp);
 
-      verify(mockDatabaseReference.child('listedApps/testKey')).called(1);
+      verify(mockDatabaseReference.child('listedApps')).called(1);
+      verify(mockDatabaseReference.child('testId_testPlatform')).called(1);
       verify(mockDatabaseReference.set(listedApp.toJson())).called(1);
     });
 
@@ -46,7 +43,8 @@ void main() {
 
       await listedAppRepository.updateListedApp(listedApp);
 
-      verify(mockDatabaseReference.child('listedApps/testKey')).called(1);
+      verify(mockDatabaseReference.child('listedApps')).called(1);
+      verify(mockDatabaseReference.child('testId_testPlatform')).called(1);
       verify(mockDatabaseReference.update(listedApp.toJson())).called(1);
     });
 
@@ -56,29 +54,34 @@ void main() {
 
       await listedAppRepository.deleteListedApp(listedApp);
 
-      verify(mockDatabaseReference.child('listedApps/testKey')).called(1);
+      verify(mockDatabaseReference.child('listedApps')).called(1);
+      verify(mockDatabaseReference.child('testId_testPlatform')).called(1);
       verify(mockDatabaseReference.remove()).called(1);
     });
 
     test('getListedAppById retrieves a listed app successfully', () async {
+      final mockDatabaseEvent = MockDatabaseEvent();
       final mockDataSnapshot = MockDataSnapshot();
       when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
+      when(mockDatabaseEvent.snapshot).thenReturn(mockDataSnapshot);
       when(mockDatabaseReference.once())
-          .thenAnswer((_) async => mockDataSnapshot);
+          .thenAnswer((_) async => mockDatabaseEvent);
       when(mockDataSnapshot.value).thenReturn(listedApp.toJson());
 
       final result = await listedAppRepository.getListedAppById('testKey');
 
       expect(result, isNotNull);
       expect(result!.compositeKey, listedApp.compositeKey);
-      expect(result.name, listedApp.name);
+      expect(result.identifier, listedApp.identifier);
     });
 
     test('getListedAppById returns null if app does not exist', () async {
+      final mockDatabaseEvent = MockDatabaseEvent();
       final mockDataSnapshot = MockDataSnapshot();
       when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
+      when(mockDatabaseEvent.snapshot).thenReturn(mockDataSnapshot);
       when(mockDatabaseReference.once())
-          .thenAnswer((_) async => mockDataSnapshot);
+          .thenAnswer((_) async => mockDatabaseEvent);
       when(mockDataSnapshot.value).thenReturn(null);
 
       final result =
