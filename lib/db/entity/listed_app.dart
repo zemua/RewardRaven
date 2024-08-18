@@ -3,25 +3,25 @@ import 'package:equatable/equatable.dart';
 class ListedApp extends Equatable {
   String identifier;
   String platform;
-  String list;
+  int listId;
 
   ListedApp({
     required this.identifier,
     required this.platform,
-    required this.list,
+    required this.listId,
   });
 
   String get compositeKey =>
       '${identifier}_${platform}'; // _databaseReference.child('listedApps').child(app.compositeKey).set(app.toJson());
 
   @override
-  List<Object?> get props => [identifier, platform, list];
+  List<Object?> get props => [identifier, platform, listId];
 
   factory ListedApp.fromJson(Map<String, dynamic> json) {
     return ListedApp(
       identifier: json['identifier'],
       platform: json['platform'],
-      list: json['list'],
+      listId: json['listId'],
     );
   }
 
@@ -29,7 +29,7 @@ class ListedApp extends Equatable {
     return {
       'identifier': identifier,
       'platform': platform,
-      'list': list,
+      'listId': listId,
     };
   }
 }

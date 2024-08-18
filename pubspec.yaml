@@ -40,7 +40,7 @@ dependencies:
   intl: any
   installed_apps: any
   get_it: any
-  package_info_plus: any
+  package_info_plus: ^1.4.2
   sqflite: any
   path: any
   path_provider: any
