@@ -8,12 +8,14 @@ import 'package:get_it/get_it.dart';
 import 'package:installed_apps/app_info.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:reward_raven/db/entity/listed_app.dart';
+import 'package:reward_raven/db/service/listed_app_service.dart';
 import 'package:reward_raven/screens/apps/app_list.dart';
 import 'package:reward_raven/screens/apps/fetcher/apps_fetcher.dart';
 
 import 'app_list_test.mocks.dart';
 
-@GenerateMocks([AppsFetcher])
+@GenerateMocks([AppsFetcher, ListedAppService])
 void main() {
   final locator = GetIt.instance;
 
@@ -102,6 +104,10 @@ void main() {
       final mockAppsFetcher = MockAppsFetcher();
       locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
       when(mockAppsFetcher.fetchInstalledApps()).thenAnswer((_) async => apps);
+      final mockListedAppService = MockListedAppService();
+      locator.registerSingleton<ListedAppService>(mockListedAppService);
+      when(mockListedAppService.fetchStatus(any))
+          .thenAnswer((_) async => AppStatus.NEUTRAL);
 
       await tester.pumpWidget(createTestableWidget(AppList()));
       await tester.pump();

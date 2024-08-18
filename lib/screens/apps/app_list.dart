@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:installed_apps/app_info.dart';
+import 'package:reward_raven/db/entity/listed_app.dart';
 
+import '../../db/service/listed_app_service.dart';
 import 'fetcher/apps_fetcher.dart';
 
 final GetIt locator = GetIt.instance;
@@ -55,6 +57,20 @@ class AppListItem extends StatefulWidget {
 
 class _AppListItemState extends State<AppListItem> {
   bool _isSwitched = false;
+  final ListedAppService _service = locator<ListedAppService>();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSwitchValue();
+  }
+
+  Future<void> _loadSwitchValue() async {
+    final status = await _service.fetchStatus(widget.app.packageName);
+    setState(() {
+      _isSwitched = (status == AppStatus.POSITIVE);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,10 +78,12 @@ class _AppListItemState extends State<AppListItem> {
       title: Text(widget.app.name),
       trailing: Switch(
         value: _isSwitched,
-        onChanged: (value) {
+        onChanged: (value) async {
           setState(() {
             _isSwitched = value;
           });
+          final status = value ? AppStatus.POSITIVE : AppStatus.NEUTRAL;
+          await _service.saveStatus(widget.app.packageName, status);
         },
       ),
     );

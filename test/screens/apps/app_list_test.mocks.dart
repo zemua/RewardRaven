@@ -7,6 +7,8 @@ import 'dart:async' as _i3;
 
 import 'package:installed_apps/app_info.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:reward_raven/db/entity/listed_app.dart' as _i6;
+import 'package:reward_raven/db/service/listed_app_service.dart' as _i5;
 import 'package:reward_raven/screens/apps/fetcher/apps_fetcher.dart' as _i2;
 
 // ignore_for_file: type=lint
@@ -38,4 +40,80 @@ class MockAppsFetcher extends _i1.Mock implements _i2.AppsFetcher {
         ),
         returnValue: _i3.Future<List<_i4.AppInfo>>.value(<_i4.AppInfo>[]),
       ) as _i3.Future<List<_i4.AppInfo>>);
+}
+
+/// A class which mocks [ListedAppService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockListedAppService extends _i1.Mock implements _i5.ListedAppService {
+  MockListedAppService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i3.Future<void> addListedApp(_i6.ListedApp? app) => (super.noSuchMethod(
+        Invocation.method(
+          #addListedApp,
+          [app],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> updateListedApp(_i6.ListedApp? app) => (super.noSuchMethod(
+        Invocation.method(
+          #updateListedApp,
+          [app],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> deleteListedApp(_i6.ListedApp? app) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteListedApp,
+          [app],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<_i6.ListedApp?> getListedAppById(String? identifier) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getListedAppById,
+          [identifier],
+        ),
+        returnValue: _i3.Future<_i6.ListedApp?>.value(),
+      ) as _i3.Future<_i6.ListedApp?>);
+
+  @override
+  _i3.Future<_i6.AppStatus> fetchStatus(String? identifier) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchStatus,
+          [identifier],
+        ),
+        returnValue: _i3.Future<_i6.AppStatus>.value(_i6.AppStatus.POSITIVE),
+      ) as _i3.Future<_i6.AppStatus>);
+
+  @override
+  _i3.Future<void> saveStatus(
+    String? identifier,
+    _i6.AppStatus? status,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #saveStatus,
+          [
+            identifier,
+            status,
+          ],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
 }

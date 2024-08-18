@@ -9,4 +9,12 @@ class PlatformWrapperImpl implements PlatformWrapper {
   bool isAndroid() {
     return !kIsWeb && Platform.isAndroid;
   }
+
+  @override
+  String get platformName {
+    if (kIsWeb) {
+      return 'web';
+    }
+    return Platform.operatingSystem;
+  }
 }

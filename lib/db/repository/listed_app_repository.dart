@@ -1,16 +1,17 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:logger/logger.dart';
+import 'package:reward_raven/main.dart';
 
 import '../entity/collections.dart';
 import '../entity/listed_app.dart';
 import '../helper/firebase_helper.dart';
 
 class ListedAppRepository {
-  final FirebaseHelper _firebaseHelper;
+  final FirebaseHelper _firebaseHelper = locator.get<FirebaseHelper>();
 
   final logger = Logger();
 
-  ListedAppRepository(this._firebaseHelper);
+  ListedAppRepository();
 
   Future<void> addListedApp(ListedApp app) async {
     try {
@@ -45,7 +46,9 @@ class ListedAppRepository {
     }
   }
 
-  Future<ListedApp?> getListedAppById(String compositeKey) async {
+  Future<ListedApp?> getListedAppById(
+      String identifier, String platform) async {
+    String compositeKey = '${identifier}_${platform}';
     try {
       DatabaseEvent event = await _firebaseHelper.databaseReference
           .child(DbCollection.listedApps.name)

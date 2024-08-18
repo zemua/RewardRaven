@@ -5,21 +5,22 @@ import 'package:mockito/mockito.dart';
 import 'package:reward_raven/db/entity/listed_app.dart';
 import 'package:reward_raven/db/helper/firebase_helper.dart';
 import 'package:reward_raven/db/repository/listed_app_repository.dart';
+import 'package:reward_raven/main.dart';
 
 import 'listed_app_repository_test.mocks.dart';
 
 @GenerateMocks([FirebaseHelper, DatabaseReference, DataSnapshot, DatabaseEvent])
 void main() {
-  late MockFirebaseHelper mockFirebaseHelper;
+  final MockFirebaseHelper mockFirebaseHelper = MockFirebaseHelper();
+  locator.registerSingleton<FirebaseHelper>(mockFirebaseHelper);
   late MockDatabaseReference mockDatabaseReference;
   late ListedAppRepository listedAppRepository;
 
   setUp(() {
-    mockFirebaseHelper = MockFirebaseHelper();
     mockDatabaseReference = MockDatabaseReference();
     when(mockFirebaseHelper.databaseReference)
         .thenReturn(mockDatabaseReference);
-    listedAppRepository = ListedAppRepository(mockFirebaseHelper);
+    listedAppRepository = ListedAppRepository();
   });
 
   group('ListedAppRepository', () {
@@ -71,7 +72,8 @@ void main() {
           .thenAnswer((_) async => mockDatabaseEvent);
       when(mockDataSnapshot.value).thenReturn(listedApp.toJson());
 
-      final result = await listedAppRepository.getListedAppById('testKey');
+      final result =
+          await listedAppRepository.getListedAppById('testId', "testPlatform");
 
       expect(result, isNotNull);
       expect(result!.compositeKey, listedApp.compositeKey);
@@ -87,8 +89,8 @@ void main() {
           .thenAnswer((_) async => mockDatabaseEvent);
       when(mockDataSnapshot.value).thenReturn(null);
 
-      final result =
-          await listedAppRepository.getListedAppById('nonExistentKey');
+      final result = await listedAppRepository.getListedAppById(
+          'nonExistingId', "nonExistingPlatform");
 
       expect(result, isNull);
     });
