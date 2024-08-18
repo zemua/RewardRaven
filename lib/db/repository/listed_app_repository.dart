@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:logger/logger.dart';
 import 'package:reward_raven/main.dart';
@@ -57,12 +59,10 @@ class ListedAppRepository {
     String compositeKey = '${identifier}_${platform}';
     try {
       final dbRef = await _firebaseHelper.databaseReference;
-      DatabaseEvent event = await dbRef
+      DataSnapshot snapshot = await dbRef
           .child(DbCollection.listedApps.name)
           .child(sanitizeDbPath(compositeKey))
-          .once();
-
-      DataSnapshot snapshot = event.snapshot;
+          .get();
       if (snapshot.value != null) {
         logger.d("Got listed app: $compositeKey");
         return ListedApp.fromJson(

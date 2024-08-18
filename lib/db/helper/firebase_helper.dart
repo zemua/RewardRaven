@@ -17,8 +17,12 @@ class FirebaseHelper {
 
   Future<void> _loadDatabase() async {
     try {
+      _database.setPersistenceEnabled(true);
+      _database.setPersistenceCacheSizeBytes(90000000); // cache size 90MB
+
       _databaseReference = _database.ref().child(_databasePath);
-      _logger.i("Database loaded successfully");
+      _logger
+          .i("Database loaded successfully with offline persistence enabled");
       _completer.complete();
     } catch (e) {
       _logger.e('Failed to load database: $e');
@@ -34,9 +38,9 @@ class FirebaseHelper {
 
 String sanitizeDbPath(String packageName) {
   return packageName
-      .replaceAll('.', '_')
-      .replaceAll('#', '_')
-      .replaceAll('\$', '_')
-      .replaceAll('[', '_')
-      .replaceAll(']', '_');
+      .replaceAll('.', '-')
+      .replaceAll('#', '-')
+      .replaceAll('\$', '-')
+      .replaceAll('[', '-')
+      .replaceAll(']', '-');
 }
