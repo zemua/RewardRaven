@@ -15,10 +15,12 @@ class ListedAppRepository {
 
   Future<void> addListedApp(ListedApp app) async {
     try {
-      await _firebaseHelper.databaseReference
+      final dbRef = await _firebaseHelper.databaseReference;
+      await dbRef
           .child(DbCollection.listedApps.name)
-          .child(app.compositeKey)
+          .child(sanitizeDbPath(app.compositeKey))
           .set(app.toJson());
+      logger.d("Added listed app: ${app.compositeKey}");
     } catch (e) {
       logger.e('Failed to add listed app: $e');
     }
@@ -26,10 +28,12 @@ class ListedAppRepository {
 
   Future<void> updateListedApp(ListedApp app) async {
     try {
-      await _firebaseHelper.databaseReference
+      final dbRef = await _firebaseHelper.databaseReference;
+      await dbRef
           .child(DbCollection.listedApps.name)
-          .child(app.compositeKey)
+          .child(sanitizeDbPath(app.compositeKey))
           .update(app.toJson());
+      logger.d("Updated listed app: ${app.compositeKey}");
     } catch (e) {
       logger.e('Failed to update listed app: $e');
     }
@@ -37,10 +41,12 @@ class ListedAppRepository {
 
   Future<void> deleteListedApp(ListedApp app) async {
     try {
-      await _firebaseHelper.databaseReference
+      final dbRef = await _firebaseHelper.databaseReference;
+      await dbRef
           .child(DbCollection.listedApps.name)
-          .child(app.compositeKey)
+          .child(sanitizeDbPath(app.compositeKey))
           .remove();
+      logger.d("Deleted listed app: ${app.compositeKey}");
     } catch (e) {
       logger.e('Failed to delete listed app: $e');
     }
@@ -50,15 +56,19 @@ class ListedAppRepository {
       String identifier, String platform) async {
     String compositeKey = '${identifier}_${platform}';
     try {
-      DatabaseEvent event = await _firebaseHelper.databaseReference
+      final dbRef = await _firebaseHelper.databaseReference;
+      DatabaseEvent event = await dbRef
           .child(DbCollection.listedApps.name)
-          .child(compositeKey)
+          .child(sanitizeDbPath(compositeKey))
           .once();
 
       DataSnapshot snapshot = event.snapshot;
       if (snapshot.value != null) {
+        logger.d("Got listed app: $compositeKey");
         return ListedApp.fromJson(
             Map<String, dynamic>.from(snapshot.value as Map));
+      } else {
+        logger.d('Listed app not found: $compositeKey');
       }
     } catch (e) {
       logger.e('Failed to get listed app: $e');
