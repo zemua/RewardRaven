@@ -23,8 +23,11 @@ void main() {
   });
 
   group('ListedAppRepository', () {
-    final listedApp =
-        ListedApp(identifier: 'testId', platform: 'testPlatform', listId: 3);
+    final listedApp = ListedApp(
+        identifier: 'testId',
+        platform: 'testPlatform',
+        listId: 3,
+        status: AppStatus.POSITIVE);
 
     test('addListedApp adds a listed app successfully', () async {
       when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
