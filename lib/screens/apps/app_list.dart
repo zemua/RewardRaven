@@ -23,7 +23,7 @@ class AppList extends StatelessWidget {
         future: appsFetcher.fetchInstalledApps(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(
                 child: Text(
@@ -36,7 +36,10 @@ class AppList extends StatelessWidget {
             return ListView.builder(
               itemCount: apps.length,
               itemBuilder: (context, index) {
-                return AppListItem(app: apps[index]);
+                return AppListItem(
+                    app: apps[index],
+                    targetStatus: AppStatus
+                        .POSITIVE); // TODO receive the type POSITIVE/NEGATIVE from the button call
               },
             );
           }
@@ -48,14 +51,31 @@ class AppList extends StatelessWidget {
 
 class AppListItem extends StatefulWidget {
   final AppInfo app;
+  final AppStatus
+      targetStatus; // TODO make a new enum ListType { POSITIVE, NEGATIVE } that contains both target and disabled status
+  final AppStatus disabledStatus;
 
-  const AppListItem({required this.app, Key? key}) : super(key: key);
+  AppListItem({
+    required this.app,
+    required this.targetStatus,
+    super.key,
+  }) : disabledStatus = _calculateDisabledStatus(targetStatus);
+
+  static AppStatus _calculateDisabledStatus(AppStatus targetStatus) {
+    if (targetStatus == AppStatus.POSITIVE) {
+      return AppStatus.NEGATIVE;
+    } else if (targetStatus == AppStatus.NEGATIVE) {
+      return AppStatus.POSITIVE;
+    } else {
+      throw ArgumentError('Invalid targetStatus');
+    }
+  }
 
   @override
-  _AppListItemState createState() => _AppListItemState();
+  AppListItemState createState() => AppListItemState();
 }
 
-class _AppListItemState extends State<AppListItem> {
+class AppListItemState extends State<AppListItem> {
   bool _isSwitched = false;
   final ListedAppService _service = locator<ListedAppService>();
 
@@ -68,7 +88,7 @@ class _AppListItemState extends State<AppListItem> {
   Future<void> _loadSwitchValue() async {
     final status = await _service.fetchStatus(widget.app.packageName);
     setState(() {
-      _isSwitched = (status == AppStatus.POSITIVE);
+      _isSwitched = (status == widget.targetStatus);
     });
   }
 
@@ -82,7 +102,7 @@ class _AppListItemState extends State<AppListItem> {
           setState(() {
             _isSwitched = value;
           });
-          final status = value ? AppStatus.POSITIVE : AppStatus.NEUTRAL;
+          final status = value ? widget.targetStatus : AppStatus.NEUTRAL;
           await _service.saveStatus(widget.app.packageName, status);
         },
       ),
