@@ -92,5 +92,44 @@ void main() {
 
       expect(result, isNull);
     });
+
+    test('fromJson should set status to UNKNOWN if null', () {
+      final json = {
+        'identifier': 'app1',
+        'platform': 'android',
+        'listId': 1,
+        'status': null,
+      };
+
+      final app = ListedApp.fromJson(json);
+
+      expect(app.status, AppStatus.UNKNOWN);
+    });
+
+    test('fromJson should correctly deserialize status', () {
+      final json = {
+        'identifier': 'app1',
+        'platform': 'android',
+        'listId': 1,
+        'status': 'POSITIVE',
+      };
+
+      final app = ListedApp.fromJson(json);
+
+      expect(app.status, AppStatus.POSITIVE);
+    });
+
+    test('toJson should correctly serialize status', () {
+      final app = ListedApp(
+        identifier: 'app1',
+        platform: 'android',
+        listId: 1,
+        status: AppStatus.POSITIVE,
+      );
+
+      final json = app.toJson();
+
+      expect(json['status'], 'POSITIVE');
+    });
   });
 }
