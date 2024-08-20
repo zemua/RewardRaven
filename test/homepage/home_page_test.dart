@@ -38,8 +38,8 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(const RewardRavenApp());
       await tester.tap(find.text('Negative Apps'));
-      await tester.pump();
-      // Check console output for the message
+      await tester.pumpAndSettle();
+      expect(find.byType(AppList), findsOneWidget);
     });
 
     testWidgets('prints message on negative groups button press',

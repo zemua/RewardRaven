@@ -66,7 +66,12 @@ class HomePage extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          print('Negative apps button pressed');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const AppList(listType: ListType.NEGATIVE)),
+                          );
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
