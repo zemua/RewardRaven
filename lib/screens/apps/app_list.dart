@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:installed_apps/app_info.dart';
 import 'package:reward_raven/db/entity/listed_app.dart';
+import 'package:reward_raven/screens/apps/list_type.dart';
 
 import '../../db/service/listed_app_service.dart';
 import 'fetcher/apps_fetcher.dart';
@@ -38,7 +39,7 @@ class AppList extends StatelessWidget {
               itemBuilder: (context, index) {
                 return AppListItem(
                     app: apps[index],
-                    targetStatus: AppStatus
+                    listType: ListType
                         .POSITIVE); // TODO receive the type POSITIVE/NEGATIVE from the button call
               },
             );
@@ -51,25 +52,13 @@ class AppList extends StatelessWidget {
 
 class AppListItem extends StatefulWidget {
   final AppInfo app;
-  final AppStatus
-      targetStatus; // TODO make a new enum ListType { POSITIVE, NEGATIVE } that contains both target and disabled status
-  final AppStatus disabledStatus;
+  final ListType listType;
 
   AppListItem({
     required this.app,
-    required this.targetStatus,
+    required this.listType,
     super.key,
-  }) : disabledStatus = _calculateDisabledStatus(targetStatus);
-
-  static AppStatus _calculateDisabledStatus(AppStatus targetStatus) {
-    if (targetStatus == AppStatus.POSITIVE) {
-      return AppStatus.NEGATIVE;
-    } else if (targetStatus == AppStatus.NEGATIVE) {
-      return AppStatus.POSITIVE;
-    } else {
-      throw ArgumentError('Invalid targetStatus');
-    }
-  }
+  });
 
   @override
   AppListItemState createState() => AppListItemState();
@@ -88,7 +77,7 @@ class AppListItemState extends State<AppListItem> {
   Future<void> _loadSwitchValue() async {
     final status = await _service.fetchStatus(widget.app.packageName);
     setState(() {
-      _isSwitched = (status == widget.targetStatus);
+      _isSwitched = (status == getTargetApp(widget.listType));
     });
   }
 
@@ -102,7 +91,8 @@ class AppListItemState extends State<AppListItem> {
           setState(() {
             _isSwitched = value;
           });
-          final status = value ? widget.targetStatus : AppStatus.NEUTRAL;
+          final status =
+              value ? getTargetApp(widget.listType) : AppStatus.UNKNOWN;
           await _service.saveStatus(widget.app.packageName, status);
         },
       ),
