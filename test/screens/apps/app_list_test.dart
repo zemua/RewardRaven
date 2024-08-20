@@ -12,6 +12,7 @@ import 'package:reward_raven/db/entity/listed_app.dart';
 import 'package:reward_raven/db/service/listed_app_service.dart';
 import 'package:reward_raven/screens/apps/app_list.dart';
 import 'package:reward_raven/screens/apps/fetcher/apps_fetcher.dart';
+import 'package:reward_raven/screens/apps/list_type.dart';
 
 import 'app_list_test.mocks.dart';
 
@@ -49,7 +50,8 @@ void main() {
       locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
       when(mockAppsFetcher.fetchInstalledApps()).thenAnswer((_) async => []);
 
-      await tester.pumpWidget(createTestableWidget(AppList()));
+      await tester.pumpWidget(
+          createTestableWidget(AppList(listType: ListType.POSITIVE)));
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
@@ -61,7 +63,8 @@ void main() {
       when(mockAppsFetcher.fetchInstalledApps())
           .thenAnswer((_) async => throw Exception('Failed to fetch apps'));
 
-      await tester.pumpWidget(createTestableWidget(AppList()));
+      await tester.pumpWidget(
+          createTestableWidget(AppList(listType: ListType.POSITIVE)));
       await tester.pump();
 
       expect(
@@ -74,7 +77,8 @@ void main() {
       locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
       when(mockAppsFetcher.fetchInstalledApps()).thenAnswer((_) async => []);
 
-      await tester.pumpWidget(createTestableWidget(AppList()));
+      await tester.pumpWidget(
+          createTestableWidget(AppList(listType: ListType.POSITIVE)));
       await tester.pump();
 
       expect(find.text('No apps found'), findsOneWidget);
@@ -109,7 +113,8 @@ void main() {
       when(mockListedAppService.fetchStatus(any))
           .thenAnswer((_) async => AppStatus.NEUTRAL);
 
-      await tester.pumpWidget(createTestableWidget(AppList()));
+      await tester.pumpWidget(
+          createTestableWidget(AppList(listType: ListType.POSITIVE)));
       await tester.pump();
 
       expect(find.byType(ListTile), findsNWidgets(2));

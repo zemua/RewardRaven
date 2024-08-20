@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../apps/app_list.dart';
+import '../apps/list_type.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -26,7 +27,8 @@ class HomePage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const AppList()),
+                                builder: (context) =>
+                                    const AppList(listType: ListType.POSITIVE)),
                           );
                         },
                         child: Row(

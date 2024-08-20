@@ -11,7 +11,9 @@ import 'fetcher/apps_fetcher.dart';
 final GetIt locator = GetIt.instance;
 
 class AppList extends StatelessWidget {
-  const AppList({super.key});
+  final ListType listType;
+
+  const AppList({required this.listType, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +39,7 @@ class AppList extends StatelessWidget {
             return ListView.builder(
               itemCount: apps.length,
               itemBuilder: (context, index) {
-                return AppListItem(
-                    app: apps[index],
-                    listType: ListType
-                        .POSITIVE); // TODO receive the type POSITIVE/NEGATIVE from the button call
+                return AppListItem(app: apps[index], listType: listType);
               },
             );
           }
