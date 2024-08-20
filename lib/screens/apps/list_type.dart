@@ -3,6 +3,7 @@ import '../../db/entity/listed_app.dart';
 enum ListType { POSITIVE, NEGATIVE }
 
 class ListTypeConfig {
+  // TODO extend like DbCollection in collections.dart
   final AppStatus targetApps;
   final List<AppStatus> disabledApps;
 

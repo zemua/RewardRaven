@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:installed_apps/app_info.dart';
+import 'package:logger/logger.dart';
 import 'package:reward_raven/db/entity/listed_app.dart';
 import 'package:reward_raven/screens/apps/list_type.dart';
 
@@ -64,6 +67,7 @@ class AppListItem extends StatefulWidget {
 }
 
 class AppListItemState extends State<AppListItem> {
+  final _logger = Logger();
   bool _isSwitched = false;
   final ListedAppService _service = locator<ListedAppService>();
 
@@ -74,14 +78,21 @@ class AppListItemState extends State<AppListItem> {
   }
 
   Future<void> _loadSwitchValue() async {
-    final status = await _service.fetchStatus(widget.app.packageName);
-    setState(() {
-      _isSwitched = (status == getTargetApp(widget.listType));
-    });
+    try {
+      final status = await _service.fetchStatus(widget.app.packageName);
+      setState(() {
+        _isSwitched = (status == getTargetApp(widget.listType));
+      });
+    } on TimeoutException {
+      _logger.w('Timeout while loading switch value');
+    } catch (e) {
+      _logger.e('Error loading switch value: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    // TODO set disable when in another list
     return ListTile(
       title: Text(widget.app.name),
       trailing: Switch(

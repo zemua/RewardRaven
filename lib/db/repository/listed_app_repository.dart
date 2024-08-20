@@ -59,10 +59,12 @@ class ListedAppRepository {
     String compositeKey = '${identifier}_${platform}';
     try {
       final dbRef = await _firebaseHelper.databaseReference;
-      DataSnapshot snapshot = await dbRef
+      DatabaseEvent dbEvent = await dbRef
           .child(DbCollection.listedApps.name)
           .child(sanitizeDbPath(compositeKey))
-          .get();
+          .once()
+          .timeout(const Duration(seconds: 10));
+      DataSnapshot snapshot = dbEvent.snapshot;
       if (snapshot.value != null) {
         logger.d("Got listed app: $compositeKey");
         return ListedApp.fromJson(
@@ -72,6 +74,7 @@ class ListedAppRepository {
       }
     } catch (e) {
       logger.e('Failed to get listed app: $e');
+      rethrow;
     }
     return null;
   }
