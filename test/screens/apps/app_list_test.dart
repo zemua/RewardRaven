@@ -50,8 +50,8 @@ void main() {
       locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
       when(mockAppsFetcher.fetchInstalledApps()).thenAnswer((_) async => []);
 
-      await tester.pumpWidget(
-          createTestableWidget(AppList(listType: ListType.POSITIVE)));
+      await tester.pumpWidget(createTestableWidget(AppList(
+          listType: ListType.POSITIVE, titleBarMessage: "Title Bar Message")));
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
@@ -63,8 +63,8 @@ void main() {
       when(mockAppsFetcher.fetchInstalledApps())
           .thenAnswer((_) async => throw Exception('Failed to fetch apps'));
 
-      await tester.pumpWidget(
-          createTestableWidget(AppList(listType: ListType.POSITIVE)));
+      await tester.pumpWidget(createTestableWidget(AppList(
+          listType: ListType.POSITIVE, titleBarMessage: "Title Bar Message")));
       await tester.pump();
 
       expect(
@@ -77,8 +77,8 @@ void main() {
       locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
       when(mockAppsFetcher.fetchInstalledApps()).thenAnswer((_) async => []);
 
-      await tester.pumpWidget(
-          createTestableWidget(AppList(listType: ListType.POSITIVE)));
+      await tester.pumpWidget(createTestableWidget(AppList(
+          listType: ListType.POSITIVE, titleBarMessage: "Title Bar Message")));
       await tester.pump();
 
       expect(find.text('No apps found'), findsOneWidget);
@@ -113,13 +113,80 @@ void main() {
       when(mockListedAppService.fetchStatus(any))
           .thenAnswer((_) async => AppStatus.NEUTRAL);
 
-      await tester.pumpWidget(
-          createTestableWidget(AppList(listType: ListType.POSITIVE)));
+      await tester.pumpWidget(createTestableWidget(AppList(
+          listType: ListType.POSITIVE, titleBarMessage: "Title Bar Message")));
       await tester.pump();
 
       expect(find.byType(ListTile), findsNWidgets(2));
       expect(find.text('App 1'), findsOneWidget);
       expect(find.text('App 2'), findsOneWidget);
+    });
+
+    testWidgets(
+        'displays switch as disabled if app status is in getDisabledApp',
+        (WidgetTester tester) async {
+      final apps = [
+        AppInfo(
+          name: 'App 1',
+          icon: Uint8List(0),
+          packageName: 'com.example.app1',
+          versionName: '1.0.0',
+          versionCode: 1,
+          builtWith: BuiltWith.flutter,
+          installedTimestamp: DateTime.now().millisecondsSinceEpoch,
+        ),
+      ];
+      final mockAppsFetcher = MockAppsFetcher();
+      locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
+      when(mockAppsFetcher.fetchInstalledApps()).thenAnswer((_) async => apps);
+      final mockListedAppService = MockListedAppService();
+      locator.registerSingleton<ListedAppService>(mockListedAppService);
+      when(mockListedAppService.fetchStatus(any))
+          .thenAnswer((_) async => AppStatus.NEGATIVE);
+
+      await tester.pumpWidget(createTestableWidget(AppList(
+          listType: ListType.POSITIVE, titleBarMessage: "Title Bar Message")));
+      await tester.pump();
+      await tester.pump(Duration(
+          milliseconds:
+              100)); // wait for the _loadSwitchValue method to complete
+
+      final switcher = find.byType(Switch);
+      expect(switcher, findsOneWidget);
+      expect(tester.widget<Switch>(switcher).onChanged, isNull);
+    });
+
+    testWidgets('displays switch as enabled if app status is in getEnabledApp',
+        (WidgetTester tester) async {
+      final apps = [
+        AppInfo(
+          name: 'App 1',
+          icon: Uint8List(0),
+          packageName: 'com.example.app1',
+          versionName: '1.0.0',
+          versionCode: 1,
+          builtWith: BuiltWith.flutter,
+          installedTimestamp: DateTime.now().millisecondsSinceEpoch,
+        ),
+      ];
+      final mockAppsFetcher = MockAppsFetcher();
+      locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
+      when(mockAppsFetcher.fetchInstalledApps()).thenAnswer((_) async => apps);
+      final mockListedAppService = MockListedAppService();
+      locator.registerSingleton<ListedAppService>(mockListedAppService);
+      when(mockListedAppService.fetchStatus(any))
+          .thenAnswer((_) async => AppStatus.POSITIVE);
+
+      await tester.pumpWidget(createTestableWidget(AppList(
+          listType: ListType.POSITIVE, titleBarMessage: "Title Bar Message")));
+      await tester.pump();
+      await tester.pump(Duration(
+          milliseconds:
+              100)); // wait for the _loadSwitchValue method to complete
+
+      final switcher = find.byType(Switch);
+      expect(switcher, findsOneWidget);
+      expect(tester.widget<Switch>(switcher).onChanged, isNotNull);
     });
   });
 }

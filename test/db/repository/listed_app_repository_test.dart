@@ -68,8 +68,8 @@ void main() {
       final mockDataSnapshot = MockDataSnapshot();
       when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
       when(mockDatabaseEvent.snapshot).thenReturn(mockDataSnapshot);
-      when(mockDatabaseReference.get())
-          .thenAnswer((_) async => mockDataSnapshot);
+      when(mockDatabaseReference.once())
+          .thenAnswer((_) async => Future.value(mockDatabaseEvent));
       when(mockDataSnapshot.value).thenReturn(listedApp.toJson());
 
       final result =
@@ -85,8 +85,8 @@ void main() {
       final mockDataSnapshot = MockDataSnapshot();
       when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
       when(mockDatabaseEvent.snapshot).thenReturn(mockDataSnapshot);
-      when(mockDatabaseReference.get())
-          .thenAnswer((_) async => mockDataSnapshot);
+      when(mockDatabaseReference.once())
+          .thenAnswer((_) async => Future.value(mockDatabaseEvent));
       when(mockDataSnapshot.value).thenReturn(null);
 
       final result = await listedAppRepository.getListedAppById(

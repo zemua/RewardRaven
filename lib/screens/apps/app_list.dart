@@ -15,15 +15,20 @@ final GetIt locator = GetIt.instance;
 
 class AppList extends StatelessWidget {
   final ListType listType;
+  final String titleBarMessage;
 
-  const AppList({required this.listType, super.key});
+  const AppList({
+    required this.listType,
+    required this.titleBarMessage,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     final appsFetcher = locator<AppsFetcher>();
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.installedApps),
+        title: Text(titleBarMessage),
       ),
       body: FutureBuilder<List<AppInfo>>(
         future: appsFetcher.fetchInstalledApps(),
@@ -69,6 +74,7 @@ class AppListItem extends StatefulWidget {
 class AppListItemState extends State<AppListItem> {
   final _logger = Logger();
   bool _isSwitched = false;
+  bool _isDisabled = false;
   final ListedAppService _service = locator<ListedAppService>();
 
   @override
@@ -82,6 +88,7 @@ class AppListItemState extends State<AppListItem> {
       final status = await _service.fetchStatus(widget.app.packageName);
       setState(() {
         _isSwitched = (status == getTargetApp(widget.listType));
+        _isDisabled = getDisabledApp(widget.listType).contains(status);
       });
     } on TimeoutException {
       _logger.w('Timeout while loading switch value');
@@ -92,19 +99,20 @@ class AppListItemState extends State<AppListItem> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO set disable when in another list
     return ListTile(
       title: Text(widget.app.name),
       trailing: Switch(
         value: _isSwitched,
-        onChanged: (value) async {
-          setState(() {
-            _isSwitched = value;
-          });
-          final status =
-              value ? getTargetApp(widget.listType) : AppStatus.UNKNOWN;
-          await _service.saveStatus(widget.app.packageName, status);
-        },
+        onChanged: _isDisabled
+            ? null
+            : (value) async {
+                setState(() {
+                  _isSwitched = value;
+                });
+                final status =
+                    value ? getTargetApp(widget.listType) : AppStatus.UNKNOWN;
+                await _service.saveStatus(widget.app.packageName, status);
+              },
       ),
     );
   }

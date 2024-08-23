@@ -27,8 +27,11 @@ class HomePage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    const AppList(listType: ListType.POSITIVE)),
+                                builder: (context) => AppList(
+                                    listType: ListType.POSITIVE,
+                                    titleBarMessage:
+                                        AppLocalizations.of(context)!
+                                            .positiveApps)),
                           );
                         },
                         child: Row(
@@ -69,8 +72,11 @@ class HomePage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    const AppList(listType: ListType.NEGATIVE)),
+                                builder: (context) => AppList(
+                                    listType: ListType.NEGATIVE,
+                                    titleBarMessage:
+                                        AppLocalizations.of(context)!
+                                            .negativeApps)),
                           );
                         },
                         child: Row(
