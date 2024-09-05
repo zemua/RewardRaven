@@ -13,7 +13,7 @@ class ListedApp extends Equatable {
     this.listId,
   });
 
-  String get compositeKey =>
+  String get compositeKey => // TODO use platform node and identifier node instead of a single composite node
       '${identifier}_${platform}'; // _databaseReference.child('listedApps').child(app.compositeKey).set(app.toJson());
 
   @override
