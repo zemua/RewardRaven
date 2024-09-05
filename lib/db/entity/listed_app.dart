@@ -24,10 +24,18 @@ class ListedApp extends Equatable {
       identifier: json['identifier'],
       platform: json['platform'],
       listId: json['listId'],
-      status: json['status'] != null
-          ? AppStatus.values
-              .firstWhere((e) => e.toString().split('.').last == json['status'])
-          : AppStatus.UNKNOWN,
+      status: _parseAppStatus(json['status']),
+    );
+  }
+
+  static AppStatus _parseAppStatus(String? statusJson) {
+    if (statusJson == null) {
+      return AppStatus.unknown;
+    }
+    final statusString = statusJson.toString().split('.').last;
+    return AppStatus.values.firstWhere(
+      (e) => e.toString().split('.').last == statusString,
+      orElse: () => AppStatus.unknown,
     );
   }
 
@@ -36,17 +44,21 @@ class ListedApp extends Equatable {
       'identifier': identifier,
       'platform': platform,
       'listId': listId,
-      'status': status != null
-          ? status.toString().split('.').last
-          : AppStatus.UNKNOWN.toString().split('.').last,
+      'status': _formatStatus(status),
     };
+  }
+
+  static String _formatStatus(AppStatus? status) {
+    return status != null
+        ? status.toString().split('.').last
+        : AppStatus.unknown.toString().split('.').last;
   }
 }
 
 enum AppStatus {
-  POSITIVE,
-  NEGATIVE,
-  NEUTRAL,
-  DEPENDS,
-  UNKNOWN,
+  positive,
+  negative,
+  neutral,
+  depends,
+  unknown,
 }

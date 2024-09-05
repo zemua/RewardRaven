@@ -28,7 +28,7 @@ class HomePage extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => AppList(
-                                    listType: ListType.POSITIVE,
+                                    listType: ListType.positive,
                                     titleBarMessage:
                                         AppLocalizations.of(context)!
                                             .positiveApps)),
@@ -73,7 +73,7 @@ class HomePage extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => AppList(
-                                    listType: ListType.NEGATIVE,
+                                    listType: ListType.negative,
                                     titleBarMessage:
                                         AppLocalizations.of(context)!
                                             .negativeApps)),

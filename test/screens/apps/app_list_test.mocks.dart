@@ -97,7 +97,7 @@ class MockListedAppService extends _i1.Mock implements _i5.ListedAppService {
           #fetchStatus,
           [identifier],
         ),
-        returnValue: _i3.Future<_i6.AppStatus>.value(_i6.AppStatus.POSITIVE),
+        returnValue: _i3.Future<_i6.AppStatus>.value(_i6.AppStatus.positive),
       ) as _i3.Future<_i6.AppStatus>);
 
   @override

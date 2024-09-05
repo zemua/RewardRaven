@@ -1,33 +1,33 @@
 import '../../db/entity/listed_app.dart';
 
-enum ListType { POSITIVE, NEGATIVE }
+enum ListType { positive, negative }
 
-class ListTypeConfig {
-  // TODO extend like DbCollection in collections.dart
-  final AppStatus targetApps;
-  final List<AppStatus> disabledApps;
+extension ListTypeExtension on ListType {
+  AppStatus get targetApps {
+    switch (this) {
+      case ListType.positive:
+        return AppStatus.positive;
+      case ListType.negative:
+        return AppStatus.negative;
+    }
+  }
 
-  ListTypeConfig({required this.targetApps, required this.disabledApps});
-}
-
-var listTypeConfigs = {
-  ListType.POSITIVE: ListTypeConfig(
-      targetApps: AppStatus.POSITIVE,
-      disabledApps: [AppStatus.NEGATIVE, AppStatus.DEPENDS]),
-  ListType.NEGATIVE: ListTypeConfig(
-      targetApps: AppStatus.NEGATIVE, disabledApps: [AppStatus.POSITIVE])
-};
-
-ListTypeConfig? getListTypeConfig(ListType listType) {
-  return listTypeConfigs[listType];
+  List<AppStatus> get disabledApps {
+    switch (this) {
+      case ListType.positive:
+        return [AppStatus.negative, AppStatus.depends, AppStatus.neutral];
+      case ListType.negative:
+        return [AppStatus.positive, AppStatus.depends, AppStatus.neutral];
+    }
+  }
 }
 
 AppStatus getTargetApp(ListType listType) {
-  return getListTypeConfig(listType)!.targetApps;
+  return listType.targetApps;
 }
 
 List<AppStatus> getDisabledApp(ListType listType) {
-  return getListTypeConfig(listType)!.disabledApps;
+  return listType.disabledApps;
 }
 
 bool isTargetApp(ListType listType, AppStatus appStatus) {

@@ -30,7 +30,7 @@ class ListedAppService {
     final listedApp = await _repository.getListedAppById(
         identifier, _platformWrapper.platformName);
     if (listedApp == null) {
-      return AppStatus.UNKNOWN;
+      return AppStatus.unknown;
     }
     return listedApp.status;
   }

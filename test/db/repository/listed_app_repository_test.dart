@@ -28,7 +28,7 @@ void main() {
         identifier: 'testId',
         platform: 'testPlatform',
         listId: 3,
-        status: AppStatus.POSITIVE);
+        status: AppStatus.positive);
 
     test('addListedApp adds a listed app successfully', () async {
       when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
@@ -105,10 +105,23 @@ void main() {
 
       final app = ListedApp.fromJson(json);
 
-      expect(app.status, AppStatus.UNKNOWN);
+      expect(app.status, AppStatus.unknown);
     });
 
     test('fromJson should correctly deserialize status', () {
+      final json = {
+        'identifier': 'app1',
+        'platform': 'android',
+        'listId': 1,
+        'status': 'positive',
+      };
+
+      final app = ListedApp.fromJson(json);
+
+      expect(app.status, AppStatus.positive);
+    });
+
+    test('fromJson return unknown if status is not recognized', () {
       final json = {
         'identifier': 'app1',
         'platform': 'android',
@@ -118,7 +131,7 @@ void main() {
 
       final app = ListedApp.fromJson(json);
 
-      expect(app.status, AppStatus.POSITIVE);
+      expect(app.status, AppStatus.unknown);
     });
 
     test('toJson should correctly serialize status', () {
@@ -126,12 +139,12 @@ void main() {
         identifier: 'app1',
         platform: 'android',
         listId: 1,
-        status: AppStatus.POSITIVE,
+        status: AppStatus.positive,
       );
 
       final json = app.toJson();
 
-      expect(json['status'], 'POSITIVE');
+      expect(json['status'], 'positive');
     });
   });
 }

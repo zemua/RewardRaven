@@ -30,14 +30,14 @@ void main() {
 
   Widget createTestableWidget(Widget child) {
     return MaterialApp(
-      localizationsDelegates: [
+      localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [
-        const Locale('en', ''),
+      supportedLocales: const [
+        Locale('en', ''),
       ],
       home: child,
     );
@@ -50,8 +50,8 @@ void main() {
       locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
       when(mockAppsFetcher.fetchInstalledApps()).thenAnswer((_) async => []);
 
-      await tester.pumpWidget(createTestableWidget(AppList(
-          listType: ListType.POSITIVE, titleBarMessage: "Title Bar Message")));
+      await tester.pumpWidget(createTestableWidget(const AppList(
+          listType: ListType.positive, titleBarMessage: "Title Bar Message")));
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
@@ -63,8 +63,8 @@ void main() {
       when(mockAppsFetcher.fetchInstalledApps())
           .thenAnswer((_) async => throw Exception('Failed to fetch apps'));
 
-      await tester.pumpWidget(createTestableWidget(AppList(
-          listType: ListType.POSITIVE, titleBarMessage: "Title Bar Message")));
+      await tester.pumpWidget(createTestableWidget(const AppList(
+          listType: ListType.positive, titleBarMessage: "Title Bar Message")));
       await tester.pump();
 
       expect(
@@ -77,8 +77,8 @@ void main() {
       locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
       when(mockAppsFetcher.fetchInstalledApps()).thenAnswer((_) async => []);
 
-      await tester.pumpWidget(createTestableWidget(AppList(
-          listType: ListType.POSITIVE, titleBarMessage: "Title Bar Message")));
+      await tester.pumpWidget(createTestableWidget(const AppList(
+          listType: ListType.positive, titleBarMessage: "Title Bar Message")));
       await tester.pump();
 
       expect(find.text('No apps found'), findsOneWidget);
@@ -111,10 +111,10 @@ void main() {
       final mockListedAppService = MockListedAppService();
       locator.registerSingleton<ListedAppService>(mockListedAppService);
       when(mockListedAppService.fetchStatus(any))
-          .thenAnswer((_) async => AppStatus.NEUTRAL);
+          .thenAnswer((_) async => AppStatus.neutral);
 
-      await tester.pumpWidget(createTestableWidget(AppList(
-          listType: ListType.POSITIVE, titleBarMessage: "Title Bar Message")));
+      await tester.pumpWidget(createTestableWidget(const AppList(
+          listType: ListType.positive, titleBarMessage: "Title Bar Message")));
       await tester.pump();
 
       expect(find.byType(ListTile), findsNWidgets(2));
@@ -142,12 +142,12 @@ void main() {
       final mockListedAppService = MockListedAppService();
       locator.registerSingleton<ListedAppService>(mockListedAppService);
       when(mockListedAppService.fetchStatus(any))
-          .thenAnswer((_) async => AppStatus.NEGATIVE);
+          .thenAnswer((_) async => AppStatus.negative);
 
-      await tester.pumpWidget(createTestableWidget(AppList(
-          listType: ListType.POSITIVE, titleBarMessage: "Title Bar Message")));
+      await tester.pumpWidget(createTestableWidget(const AppList(
+          listType: ListType.positive, titleBarMessage: "Title Bar Message")));
       await tester.pump();
-      await tester.pump(Duration(
+      await tester.pump(const Duration(
           milliseconds:
               100)); // wait for the _loadSwitchValue method to complete
 
@@ -175,12 +175,12 @@ void main() {
       final mockListedAppService = MockListedAppService();
       locator.registerSingleton<ListedAppService>(mockListedAppService);
       when(mockListedAppService.fetchStatus(any))
-          .thenAnswer((_) async => AppStatus.POSITIVE);
+          .thenAnswer((_) async => AppStatus.positive);
 
-      await tester.pumpWidget(createTestableWidget(AppList(
-          listType: ListType.POSITIVE, titleBarMessage: "Title Bar Message")));
+      await tester.pumpWidget(createTestableWidget(const AppList(
+          listType: ListType.positive, titleBarMessage: "Title Bar Message")));
       await tester.pump();
-      await tester.pump(Duration(
+      await tester.pump(const Duration(
           milliseconds:
               100)); // wait for the _loadSwitchValue method to complete
 

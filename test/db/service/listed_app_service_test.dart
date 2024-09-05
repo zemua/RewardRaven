@@ -31,28 +31,28 @@ void main() {
   group('ListedAppService', () {
     test('addListedApp adds app to repository', () async {
       final app = ListedApp(
-          identifier: 'test', platform: 'android', status: AppStatus.POSITIVE);
+          identifier: 'test', platform: 'android', status: AppStatus.positive);
       await listedAppService.addListedApp(app);
       verify(mockRepository.addListedApp(app)).called(1);
     });
 
     test('updateListedApp updates app in repository', () async {
       final app = ListedApp(
-          identifier: 'test', platform: 'android', status: AppStatus.POSITIVE);
+          identifier: 'test', platform: 'android', status: AppStatus.positive);
       await listedAppService.updateListedApp(app);
       verify(mockRepository.updateListedApp(app)).called(1);
     });
 
     test('deleteListedApp deletes app from repository', () async {
       final app = ListedApp(
-          identifier: 'test', platform: 'android', status: AppStatus.POSITIVE);
+          identifier: 'test', platform: 'android', status: AppStatus.positive);
       await listedAppService.deleteListedApp(app);
       verify(mockRepository.deleteListedApp(app)).called(1);
     });
 
     test('getListedAppById returns app if found', () async {
       final app = ListedApp(
-          identifier: 'test', platform: 'android', status: AppStatus.POSITIVE);
+          identifier: 'test', platform: 'android', status: AppStatus.positive);
       when(mockRepository.getListedAppById('test', 'android'))
           .thenAnswer((_) async => app);
       when(mockPlatformWrapper.platformName).thenReturn('android');
@@ -70,12 +70,12 @@ void main() {
 
     test('fetchStatus returns status if app found', () async {
       final app = ListedApp(
-          identifier: 'test', platform: 'android', status: AppStatus.POSITIVE);
+          identifier: 'test', platform: 'android', status: AppStatus.positive);
       when(mockRepository.getListedAppById('test', 'android'))
           .thenAnswer((_) async => app);
       when(mockPlatformWrapper.platformName).thenReturn('android');
       final result = await listedAppService.fetchStatus('test');
-      expect(result, AppStatus.POSITIVE);
+      expect(result, AppStatus.positive);
     });
 
     test('fetchStatus returns UNKNOWN if app not found', () async {
@@ -83,24 +83,24 @@ void main() {
           .thenAnswer((_) async => null);
       when(mockPlatformWrapper.platformName).thenReturn('android');
       final result = await listedAppService.fetchStatus('test');
-      expect(result, AppStatus.UNKNOWN);
+      expect(result, AppStatus.unknown);
     });
 
     test('saveStatus adds new app if not found', () async {
       when(mockRepository.getListedAppById('test', 'android'))
           .thenAnswer((_) async => null);
       when(mockPlatformWrapper.platformName).thenReturn('android');
-      await listedAppService.saveStatus('test', AppStatus.POSITIVE);
+      await listedAppService.saveStatus('test', AppStatus.positive);
       verify(mockRepository.addListedApp(any)).called(1);
     });
 
     test('saveStatus updates existing app if found', () async {
       final app = ListedApp(
-          identifier: 'test', platform: 'android', status: AppStatus.POSITIVE);
+          identifier: 'test', platform: 'android', status: AppStatus.positive);
       when(mockRepository.getListedAppById('test', 'android'))
           .thenAnswer((_) async => app);
       when(mockPlatformWrapper.platformName).thenReturn('android');
-      await listedAppService.saveStatus('test', AppStatus.POSITIVE);
+      await listedAppService.saveStatus('test', AppStatus.positive);
       verify(mockRepository.updateListedApp(app)).called(1);
     });
   });

@@ -110,7 +110,7 @@ class AppListItemState extends State<AppListItem> {
                   _isSwitched = value;
                 });
                 final status =
-                    value ? getTargetApp(widget.listType) : AppStatus.UNKNOWN;
+                    value ? getTargetApp(widget.listType) : AppStatus.unknown;
                 await _service.saveStatus(widget.app.packageName, status);
               },
       ),
