@@ -34,7 +34,7 @@ void main() {
       when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
       when(mockDatabaseReference.set(any)).thenAnswer((_) async => null);
 
-      await listedAppRepository.addListedApp(listedApp);
+      await listedAppRepository.saveListedApp(listedApp);
 
       verify(mockDatabaseReference.child('listedApps')).called(1);
       verify(mockDatabaseReference.child('testId_testPlatform')).called(1);

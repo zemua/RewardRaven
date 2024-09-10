@@ -81,7 +81,7 @@ class MockListedAppRepository extends _i1.Mock
       ) as _i2.Logger);
 
   @override
-  _i6.Future<void> addListedApp(_i7.ListedApp? app) => (super.noSuchMethod(
+  _i6.Future<void> saveListedApp(_i7.ListedApp? app) => (super.noSuchMethod(
         Invocation.method(
           #addListedApp,
           [app],

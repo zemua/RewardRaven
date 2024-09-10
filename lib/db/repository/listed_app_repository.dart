@@ -15,27 +15,25 @@ class ListedAppRepository {
 
   ListedAppRepository();
 
-  Future<void> addListedApp(ListedApp app) async {
+  Future<void> saveListedApp(ListedApp app) async {
     try {
-      final dbRef = await _firebaseHelper.databaseReference;
-      await dbRef
-          .child(DbCollection.listedApps.name)
-          .child(sanitizeDbPath(app.compositeKey))
-          .set(app.toJson());
-      logger.d("Added listed app: ${app.compositeKey}");
+      final ref = await _resolveReference(app);
+      await ref?.set(app.toJson());
+      logger.d("Saved listed app: ${app.platform} ${app.identifier}");
     } catch (e) {
-      logger.e('Failed to add listed app: $e');
+      logger.e('Failed to save listed app: $e');
     }
   }
 
   Future<void> updateListedApp(ListedApp app) async {
     try {
       final dbRef = await _firebaseHelper.databaseReference;
-      await dbRef
+      final ref = dbRef
           .child(DbCollection.listedApps.name)
-          .child(sanitizeDbPath(app.compositeKey))
-          .update(app.toJson());
-      logger.d("Updated listed app: ${app.compositeKey}");
+          .child(app.platform)
+          .child(app.identifier);
+      await ref.update(app.toJson());
+      logger.d("Updated listed app: ${app.platform} ${app.identifier}");
     } catch (e) {
       logger.e('Failed to update listed app: $e');
     }
@@ -44,11 +42,8 @@ class ListedAppRepository {
   Future<void> deleteListedApp(ListedApp app) async {
     try {
       final dbRef = await _firebaseHelper.databaseReference;
-      await dbRef
-          .child(DbCollection.listedApps.name)
-          .child(sanitizeDbPath(app.compositeKey))
-          .remove();
-      logger.d("Deleted listed app: ${app.compositeKey}");
+      await dbRef.child(DbCollection.listedApps.name).remove();
+      logger.d("Deleted listed app: ${app.platform} ${app.identifier}");
     } catch (e) {
       logger.e('Failed to delete listed app: $e');
     }
@@ -56,26 +51,44 @@ class ListedAppRepository {
 
   Future<ListedApp?> getListedAppById(
       String identifier, String platform) async {
-    String compositeKey = '${identifier}_${platform}';
     try {
       final dbRef = await _firebaseHelper.databaseReference;
       DatabaseEvent dbEvent = await dbRef
           .child(DbCollection.listedApps.name)
-          .child(sanitizeDbPath(compositeKey))
+          .orderByChild('platform')
+          .equalTo(platform)
+          .orderByChild('identifier')
+          .equalTo(identifier)
           .once()
           .timeout(const Duration(seconds: 10));
       DataSnapshot snapshot = dbEvent.snapshot;
       if (snapshot.value != null) {
-        logger.d("Got listed app: $compositeKey");
+        logger.d("Got listed app: $platform $identifier");
         return ListedApp.fromJson(
             Map<String, dynamic>.from(snapshot.value as Map));
       } else {
-        logger.d('Listed app not found: $compositeKey');
+        logger.d('Listed app not found: $platform $identifier');
       }
     } catch (e) {
       logger.e('Failed to get listed app: $e');
       rethrow;
     }
     return null;
+  }
+
+  Future<DatabaseReference?> _resolveReference(ListedApp app) async {
+    try {
+      if (app.identifier.isEmpty || app.platform.isEmpty) {
+        throw Exception('Identifier and platform cannot be empty');
+      }
+      final dbRef = await _firebaseHelper.databaseReference;
+      return dbRef
+          .child(DbCollection.listedApps.name)
+          .child(app.platform)
+          .child(app.identifier);
+    } catch (e) {
+      logger.e('Failed to resolve db reference: $e');
+      rethrow;
+    }
   }
 }

@@ -10,7 +10,7 @@ class ListedAppService {
   ListedAppService();
 
   Future<void> addListedApp(ListedApp app) async {
-    await _repository.addListedApp(app);
+    await _repository.saveListedApp(app);
   }
 
   Future<void> updateListedApp(ListedApp app) async {
@@ -44,7 +44,7 @@ class ListedAppService {
         platform: _platformWrapper.platformName,
         status: status,
       );
-      await _repository.addListedApp(newApp);
+      await _repository.saveListedApp(newApp);
     } else {
       listedApp.status = status;
       await _repository.updateListedApp(listedApp);

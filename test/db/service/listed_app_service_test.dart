@@ -33,7 +33,7 @@ void main() {
       final app = ListedApp(
           identifier: 'test', platform: 'android', status: AppStatus.positive);
       await listedAppService.addListedApp(app);
-      verify(mockRepository.addListedApp(app)).called(1);
+      verify(mockRepository.saveListedApp(app)).called(1);
     });
 
     test('updateListedApp updates app in repository', () async {
@@ -91,7 +91,7 @@ void main() {
           .thenAnswer((_) async => null);
       when(mockPlatformWrapper.platformName).thenReturn('android');
       await listedAppService.saveStatus('test', AppStatus.positive);
-      verify(mockRepository.addListedApp(any)).called(1);
+      verify(mockRepository.saveListedApp(any)).called(1);
     });
 
     test('saveStatus updates existing app if found', () async {
