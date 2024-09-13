@@ -32,12 +32,13 @@ void main() {
 
     test('addListedApp adds a listed app successfully', () async {
       when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
-      when(mockDatabaseReference.set(any)).thenAnswer((_) async => null);
+      when(mockDatabaseReference.set(any)).thenAnswer((_) => Future.value());
 
       await listedAppRepository.saveListedApp(listedApp);
 
       verify(mockDatabaseReference.child('listedApps')).called(1);
-      verify(mockDatabaseReference.child('testId_testPlatform')).called(1);
+      verify(mockDatabaseReference.child('testPlatform')).called(1);
+      verify(mockDatabaseReference.child('testId')).called(1);
       verify(mockDatabaseReference.set(listedApp.toJson())).called(1);
     });
 
@@ -76,8 +77,8 @@ void main() {
           await listedAppRepository.getListedAppById('testId', "testPlatform");
 
       expect(result, isNotNull);
-      expect(result!.compositeKey, listedApp.compositeKey);
-      expect(result.identifier, listedApp.identifier);
+      expect(result?.platform, listedApp.platform);
+      expect(result?.identifier, listedApp.identifier);
     });
 
     test('getListedAppById returns null if app does not exist', () async {
