@@ -27,12 +27,8 @@ class ListedAppRepository {
 
   Future<void> updateListedApp(ListedApp app) async {
     try {
-      final dbRef = await _firebaseHelper.databaseReference;
-      final ref = dbRef
-          .child(DbCollection.listedApps.name)
-          .child(app.platform)
-          .child(app.identifier);
-      await ref.update(app.toJson());
+      final ref = await _resolveReference(app);
+      await ref?.update(app.toJson());
       logger.d("Updated listed app: ${app.platform} ${app.identifier}");
     } catch (e) {
       logger.e('Failed to update listed app: $e');
@@ -41,8 +37,8 @@ class ListedAppRepository {
 
   Future<void> deleteListedApp(ListedApp app) async {
     try {
-      final dbRef = await _firebaseHelper.databaseReference;
-      await dbRef.child(DbCollection.listedApps.name).remove();
+      final ref = await _resolveReference(app);
+      await ref?.remove();
       logger.d("Deleted listed app: ${app.platform} ${app.identifier}");
     } catch (e) {
       logger.e('Failed to delete listed app: $e');
@@ -52,20 +48,18 @@ class ListedAppRepository {
   Future<ListedApp?> getListedAppById(
       String identifier, String platform) async {
     try {
-      final dbRef = await _firebaseHelper.databaseReference;
-      DatabaseEvent dbEvent = await dbRef
-          .child(DbCollection.listedApps.name)
-          .orderByChild('platform')
-          .equalTo(platform)
-          .orderByChild('identifier')
-          .equalTo(identifier)
-          .once()
-          .timeout(const Duration(seconds: 10));
-      DataSnapshot snapshot = dbEvent.snapshot;
-      if (snapshot.value != null) {
+      final app = ListedApp(
+        identifier: identifier,
+        platform: platform,
+        status: AppStatus.unknown,
+      );
+      final ref = await _resolveReference(app);
+      final dbEvent = await ref?.once().timeout(const Duration(seconds: 10));
+      final DataSnapshot? snapshot = dbEvent?.snapshot;
+      if (snapshot?.value != null) {
         logger.d("Got listed app: $platform $identifier");
         return ListedApp.fromJson(
-            Map<String, dynamic>.from(snapshot.value as Map));
+            Map<String, dynamic>.from(snapshot?.value as Map));
       } else {
         logger.d('Listed app not found: $platform $identifier');
       }
@@ -82,6 +76,8 @@ class ListedAppRepository {
         throw Exception('Identifier and platform cannot be empty');
       }
       final dbRef = await _firebaseHelper.databaseReference;
+      logger.d(
+          "Procesing listed app node: platform ${app.platform} - identifier ${app.identifier}");
       return dbRef
           .child(DbCollection.listedApps.name)
           .child(app.platform)

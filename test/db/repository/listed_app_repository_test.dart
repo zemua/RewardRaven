@@ -44,23 +44,25 @@ void main() {
 
     test('updateListedApp updates a listed app successfully', () async {
       when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
-      when(mockDatabaseReference.update(any)).thenAnswer((_) async => null);
+      when(mockDatabaseReference.update(any)).thenAnswer((_) => Future.value());
 
       await listedAppRepository.updateListedApp(listedApp);
 
       verify(mockDatabaseReference.child('listedApps')).called(1);
-      verify(mockDatabaseReference.child('testId_testPlatform')).called(1);
+      verify(mockDatabaseReference.child('testPlatform')).called(1);
+      verify(mockDatabaseReference.child('testId')).called(1);
       verify(mockDatabaseReference.update(listedApp.toJson())).called(1);
     });
 
     test('deleteListedApp deletes a listed app successfully', () async {
       when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
-      when(mockDatabaseReference.remove()).thenAnswer((_) async => null);
+      when(mockDatabaseReference.remove()).thenAnswer((_) => Future.value());
 
       await listedAppRepository.deleteListedApp(listedApp);
 
       verify(mockDatabaseReference.child('listedApps')).called(1);
-      verify(mockDatabaseReference.child('testId_testPlatform')).called(1);
+      verify(mockDatabaseReference.child('testPlatform')).called(1);
+      verify(mockDatabaseReference.child('testId')).called(1);
       verify(mockDatabaseReference.remove()).called(1);
     });
 
@@ -79,6 +81,12 @@ void main() {
       expect(result, isNotNull);
       expect(result?.platform, listedApp.platform);
       expect(result?.identifier, listedApp.identifier);
+      expect(result?.status, listedApp.status);
+      expect(result?.listId, listedApp.listId);
+
+      verify(mockDatabaseReference.child('listedApps')).called(1);
+      verify(mockDatabaseReference.child('testPlatform')).called(1);
+      verify(mockDatabaseReference.child('testId')).called(1);
     });
 
     test('getListedAppById returns null if app does not exist', () async {
