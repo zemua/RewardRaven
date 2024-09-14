@@ -42,5 +42,6 @@ String sanitizeDbPath(String packageName) {
       .replaceAll('#', '-')
       .replaceAll('\$', '-')
       .replaceAll('[', '-')
-      .replaceAll(']', '-');
+      .replaceAll(']', '-')
+      .replaceAll('/', '-');
 }

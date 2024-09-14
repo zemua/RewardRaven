@@ -13,6 +13,8 @@ import 'package:reward_raven/db/service/listed_app_service.dart';
 import 'package:reward_raven/screens/apps/app_list.dart';
 import 'package:reward_raven/screens/apps/fetcher/apps_fetcher.dart';
 import 'package:reward_raven/screens/apps/list_type.dart';
+import 'package:reward_raven/service/impl/platform_wrapper_impl.dart';
+import 'package:reward_raven/service/platform_wrapper.dart';
 
 import 'app_list_test.mocks.dart';
 
@@ -85,6 +87,7 @@ void main() {
     });
 
     testWidgets('displays list of installed apps', (WidgetTester tester) async {
+      locator.registerSingleton<PlatformWrapper>(PlatformWrapperImpl());
       final apps = [
         AppInfo(
           name: 'App 1',
@@ -125,6 +128,7 @@ void main() {
     testWidgets(
         'displays switch as disabled if app status is in getDisabledApp',
         (WidgetTester tester) async {
+      locator.registerSingleton<PlatformWrapper>(PlatformWrapperImpl());
       final apps = [
         AppInfo(
           name: 'App 1',
@@ -158,6 +162,7 @@ void main() {
 
     testWidgets('displays switch as enabled if app status is in getEnabledApp',
         (WidgetTester tester) async {
+      locator.registerSingleton<PlatformWrapper>(PlatformWrapperImpl());
       final apps = [
         AppInfo(
           name: 'App 1',

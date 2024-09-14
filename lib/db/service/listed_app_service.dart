@@ -9,7 +9,7 @@ class ListedAppService {
 
   ListedAppService();
 
-  Future<void> addListedApp(ListedApp app) async {
+  Future<void> saveListedApp(ListedApp app) async {
     await _repository.saveListedApp(app);
   }
 
@@ -33,21 +33,5 @@ class ListedAppService {
       return AppStatus.unknown;
     }
     return listedApp.status;
-  }
-
-  Future<void> saveStatus(String identifier, AppStatus status) async {
-    final listedApp = await _repository.getListedAppById(
-        identifier, _platformWrapper.platformName);
-    if (listedApp == null) {
-      final newApp = ListedApp(
-        identifier: identifier,
-        platform: _platformWrapper.platformName,
-        status: status,
-      );
-      await _repository.saveListedApp(newApp);
-    } else {
-      listedApp.status = status;
-      await _repository.updateListedApp(listedApp);
-    }
   }
 }

@@ -9,6 +9,7 @@ import 'package:reward_raven/db/entity/listed_app.dart';
 import 'package:reward_raven/screens/apps/list_type.dart';
 
 import '../../db/service/listed_app_service.dart';
+import '../../service/platform_wrapper.dart';
 import 'fetcher/apps_fetcher.dart';
 
 final GetIt locator = GetIt.instance;
@@ -72,6 +73,8 @@ class AppListItem extends StatefulWidget {
 }
 
 class AppListItemState extends State<AppListItem> {
+  final PlatformWrapper _platformWrapper = locator<PlatformWrapper>();
+
   final _logger = Logger();
   bool _isSwitched = false;
   bool _isDisabled = false;
@@ -111,7 +114,12 @@ class AppListItemState extends State<AppListItem> {
                 });
                 final status =
                     value ? getTargetApp(widget.listType) : AppStatus.unknown;
-                await _service.saveStatus(widget.app.packageName, status);
+                final listedApp = ListedApp(
+                  identifier: widget.app.packageName,
+                  platform: _platformWrapper.platformName,
+                  status: status,
+                );
+                await _service.saveListedApp(listedApp);
               },
       ),
     );

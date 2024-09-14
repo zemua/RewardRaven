@@ -51,7 +51,7 @@ class MockListedAppService extends _i1.Mock implements _i5.ListedAppService {
   }
 
   @override
-  _i3.Future<void> addListedApp(_i6.ListedApp? app) => (super.noSuchMethod(
+  _i3.Future<void> saveListedApp(_i6.ListedApp? app) => (super.noSuchMethod(
         Invocation.method(
           #addListedApp,
           [app],

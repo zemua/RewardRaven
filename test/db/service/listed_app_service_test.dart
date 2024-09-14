@@ -32,7 +32,7 @@ void main() {
     test('addListedApp adds app to repository', () async {
       final app = ListedApp(
           identifier: 'test', platform: 'android', status: AppStatus.positive);
-      await listedAppService.addListedApp(app);
+      await listedAppService.saveListedApp(app);
       verify(mockRepository.saveListedApp(app)).called(1);
     });
 
@@ -84,24 +84,6 @@ void main() {
       when(mockPlatformWrapper.platformName).thenReturn('android');
       final result = await listedAppService.fetchStatus('test');
       expect(result, AppStatus.unknown);
-    });
-
-    test('saveStatus adds new app if not found', () async {
-      when(mockRepository.getListedAppById('test', 'android'))
-          .thenAnswer((_) async => null);
-      when(mockPlatformWrapper.platformName).thenReturn('android');
-      await listedAppService.saveStatus('test', AppStatus.positive);
-      verify(mockRepository.saveListedApp(any)).called(1);
-    });
-
-    test('saveStatus updates existing app if found', () async {
-      final app = ListedApp(
-          identifier: 'test', platform: 'android', status: AppStatus.positive);
-      when(mockRepository.getListedAppById('test', 'android'))
-          .thenAnswer((_) async => app);
-      when(mockPlatformWrapper.platformName).thenReturn('android');
-      await listedAppService.saveStatus('test', AppStatus.positive);
-      verify(mockRepository.updateListedApp(app)).called(1);
     });
   });
 }

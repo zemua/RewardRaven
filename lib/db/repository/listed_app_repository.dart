@@ -79,9 +79,9 @@ class ListedAppRepository {
       logger.d(
           "Procesing listed app node: platform ${app.platform} - identifier ${app.identifier}");
       return dbRef
-          .child(DbCollection.listedApps.name)
-          .child(app.platform)
-          .child(app.identifier);
+          .child(sanitizeDbPath(DbCollection.listedApps.name))
+          .child(sanitizeDbPath(app.platform))
+          .child(sanitizeDbPath(app.identifier));
     } catch (e) {
       logger.e('Failed to resolve db reference: $e');
       rethrow;
