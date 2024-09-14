@@ -9,7 +9,7 @@ import 'package:installed_apps/app_info.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:reward_raven/db/entity/listed_app.dart' as _i6;
 import 'package:reward_raven/db/service/listed_app_service.dart' as _i5;
-import 'package:reward_raven/screens/apps/fetcher/apps_fetcher.dart' as _i2;
+import 'package:reward_raven/service/app/apps_fetcher.dart' as _i2;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -53,7 +53,7 @@ class MockListedAppService extends _i1.Mock implements _i5.ListedAppService {
   @override
   _i3.Future<void> saveListedApp(_i6.ListedApp? app) => (super.noSuchMethod(
         Invocation.method(
-          #addListedApp,
+          #saveListedApp,
           [app],
         ),
         returnValue: _i3.Future<void>.value(),
@@ -99,21 +99,4 @@ class MockListedAppService extends _i1.Mock implements _i5.ListedAppService {
         ),
         returnValue: _i3.Future<_i6.AppStatus>.value(_i6.AppStatus.positive),
       ) as _i3.Future<_i6.AppStatus>);
-
-  @override
-  _i3.Future<void> saveStatus(
-    String? identifier,
-    _i6.AppStatus? status,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #saveStatus,
-          [
-            identifier,
-            status,
-          ],
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
 }

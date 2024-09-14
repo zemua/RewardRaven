@@ -11,8 +11,8 @@ import 'package:mockito/mockito.dart';
 import 'package:reward_raven/db/entity/listed_app.dart';
 import 'package:reward_raven/db/service/listed_app_service.dart';
 import 'package:reward_raven/screens/apps/app_list.dart';
-import 'package:reward_raven/screens/apps/fetcher/apps_fetcher.dart';
 import 'package:reward_raven/screens/apps/list_type.dart';
+import 'package:reward_raven/service/app/apps_fetcher.dart';
 import 'package:reward_raven/service/impl/platform_wrapper_impl.dart';
 import 'package:reward_raven/service/platform_wrapper.dart';
 
@@ -22,9 +22,7 @@ import 'app_list_test.mocks.dart';
 void main() {
   final locator = GetIt.instance;
 
-  setUp(() {
-    locator.reset();
-  });
+  setUp(() {});
 
   tearDown(() {
     locator.reset();

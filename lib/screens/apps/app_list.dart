@@ -9,8 +9,8 @@ import 'package:reward_raven/db/entity/listed_app.dart';
 import 'package:reward_raven/screens/apps/list_type.dart';
 
 import '../../db/service/listed_app_service.dart';
+import '../../service/app/apps_fetcher.dart';
 import '../../service/platform_wrapper.dart';
-import 'fetcher/apps_fetcher.dart';
 
 final GetIt locator = GetIt.instance;
 
@@ -62,7 +62,7 @@ class AppListItem extends StatefulWidget {
   final AppInfo app;
   final ListType listType;
 
-  AppListItem({
+  const AppListItem({
     required this.app,
     required this.listType,
     super.key,

@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:reward_raven/db/helper/firebase_helper.dart';
-import 'package:reward_raven/screens/apps/fetcher/apps_fetcher.dart';
-import 'package:reward_raven/screens/apps/fetcher/apps_fetcher_provider.dart';
-import 'package:reward_raven/screens/apps/fetcher/impl/ampty_apps_fetcher.dart';
-import 'package:reward_raven/screens/apps/fetcher/impl/android_apps_fetcher.dart';
 import 'package:reward_raven/screens/homepage/home_page.dart';
+import 'package:reward_raven/service/app/apps_fetcher.dart';
+import 'package:reward_raven/service/app/apps_fetcher_provider.dart';
+import 'package:reward_raven/service/app/impl/ampty_apps_fetcher.dart';
+import 'package:reward_raven/service/app/impl/android_apps_fetcher.dart';
 import 'package:reward_raven/service/impl/platform_wrapper_impl.dart';
 import 'package:reward_raven/service/platform_wrapper.dart';
 
@@ -40,7 +40,7 @@ class RewardRavenApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: HomePage(),
+      home: const HomePage(),
     );
   }
 }

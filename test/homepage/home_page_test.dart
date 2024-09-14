@@ -4,7 +4,7 @@ import 'package:installed_apps/app_info.dart';
 import 'package:mockito/mockito.dart';
 import 'package:reward_raven/main.dart';
 import 'package:reward_raven/screens/apps/app_list.dart';
-import 'package:reward_raven/screens/apps/fetcher/apps_fetcher.dart';
+import 'package:reward_raven/service/app/apps_fetcher.dart';
 
 void main() {
   final getIt = GetIt.instance;

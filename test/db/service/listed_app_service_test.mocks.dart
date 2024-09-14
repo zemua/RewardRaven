@@ -83,7 +83,7 @@ class MockListedAppRepository extends _i1.Mock
   @override
   _i6.Future<void> saveListedApp(_i7.ListedApp? app) => (super.noSuchMethod(
         Invocation.method(
-          #addListedApp,
+          #saveListedApp,
           [app],
         ),
         returnValue: _i6.Future<void>.value(),
