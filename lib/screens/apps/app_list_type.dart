@@ -1,39 +1,39 @@
 import '../../db/entity/listed_app.dart';
 
-enum ListType { positive, negative }
+enum AppListType { positive, negative }
 
-extension ListTypeExtension on ListType {
+extension ListTypeExtension on AppListType {
   AppStatus get targetApps {
     switch (this) {
-      case ListType.positive:
+      case AppListType.positive:
         return AppStatus.positive;
-      case ListType.negative:
+      case AppListType.negative:
         return AppStatus.negative;
     }
   }
 
   List<AppStatus> get disabledApps {
     switch (this) {
-      case ListType.positive:
+      case AppListType.positive:
         return [AppStatus.negative, AppStatus.depends, AppStatus.neutral];
-      case ListType.negative:
+      case AppListType.negative:
         return [AppStatus.positive, AppStatus.depends, AppStatus.neutral];
     }
   }
 }
 
-AppStatus getTargetApp(ListType listType) {
+AppStatus getTargetApp(AppListType listType) {
   return listType.targetApps;
 }
 
-List<AppStatus> getDisabledApp(ListType listType) {
+List<AppStatus> getDisabledApp(AppListType listType) {
   return listType.disabledApps;
 }
 
-bool isTargetApp(ListType listType, AppStatus appStatus) {
+bool isTargetApp(AppListType listType, AppStatus appStatus) {
   return getTargetApp(listType) == appStatus;
 }
 
-bool isDisabledApp(ListType listType, AppStatus appStatus) {
+bool isDisabledApp(AppListType listType, AppStatus appStatus) {
   return getDisabledApp(listType).contains(appStatus);
 }

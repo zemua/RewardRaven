@@ -11,7 +11,7 @@ import 'package:mockito/mockito.dart';
 import 'package:reward_raven/db/entity/listed_app.dart';
 import 'package:reward_raven/db/service/listed_app_service.dart';
 import 'package:reward_raven/screens/apps/app_list.dart';
-import 'package:reward_raven/screens/apps/list_type.dart';
+import 'package:reward_raven/screens/apps/app_list_type.dart';
 import 'package:reward_raven/service/app/apps_fetcher.dart';
 import 'package:reward_raven/service/impl/platform_wrapper_impl.dart';
 import 'package:reward_raven/service/platform_wrapper.dart';
@@ -28,7 +28,7 @@ void main() {
     locator.reset();
   });
 
-  Widget createTestableWidget(Widget child) {
+  Widget createLocalizationTestableWidget(Widget child) {
     return MaterialApp(
       localizationsDelegates: const [
         AppLocalizations.delegate,
@@ -50,8 +50,9 @@ void main() {
       locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
       when(mockAppsFetcher.fetchInstalledApps()).thenAnswer((_) async => []);
 
-      await tester.pumpWidget(createTestableWidget(const AppList(
-          listType: ListType.positive, titleBarMessage: "Title Bar Message")));
+      await tester.pumpWidget(createLocalizationTestableWidget(const AppList(
+          listType: AppListType.positive,
+          titleBarMessage: "Title Bar Message")));
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
@@ -63,8 +64,9 @@ void main() {
       when(mockAppsFetcher.fetchInstalledApps())
           .thenAnswer((_) async => throw Exception('Failed to fetch apps'));
 
-      await tester.pumpWidget(createTestableWidget(const AppList(
-          listType: ListType.positive, titleBarMessage: "Title Bar Message")));
+      await tester.pumpWidget(createLocalizationTestableWidget(const AppList(
+          listType: AppListType.positive,
+          titleBarMessage: "Title Bar Message")));
       await tester.pump();
 
       expect(
@@ -77,8 +79,9 @@ void main() {
       locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
       when(mockAppsFetcher.fetchInstalledApps()).thenAnswer((_) async => []);
 
-      await tester.pumpWidget(createTestableWidget(const AppList(
-          listType: ListType.positive, titleBarMessage: "Title Bar Message")));
+      await tester.pumpWidget(createLocalizationTestableWidget(const AppList(
+          listType: AppListType.positive,
+          titleBarMessage: "Title Bar Message")));
       await tester.pump();
 
       expect(find.text('No apps found'), findsOneWidget);
@@ -114,8 +117,9 @@ void main() {
       when(mockListedAppService.fetchStatus(any))
           .thenAnswer((_) async => AppStatus.neutral);
 
-      await tester.pumpWidget(createTestableWidget(const AppList(
-          listType: ListType.positive, titleBarMessage: "Title Bar Message")));
+      await tester.pumpWidget(createLocalizationTestableWidget(const AppList(
+          listType: AppListType.positive,
+          titleBarMessage: "Title Bar Message")));
       await tester.pump();
 
       expect(find.byType(ListTile), findsNWidgets(2));
@@ -146,8 +150,9 @@ void main() {
       when(mockListedAppService.fetchStatus(any))
           .thenAnswer((_) async => AppStatus.negative);
 
-      await tester.pumpWidget(createTestableWidget(const AppList(
-          listType: ListType.positive, titleBarMessage: "Title Bar Message")));
+      await tester.pumpWidget(createLocalizationTestableWidget(const AppList(
+          listType: AppListType.positive,
+          titleBarMessage: "Title Bar Message")));
       await tester.pump();
       await tester.pump(const Duration(
           milliseconds:
@@ -180,8 +185,9 @@ void main() {
       when(mockListedAppService.fetchStatus(any))
           .thenAnswer((_) async => AppStatus.positive);
 
-      await tester.pumpWidget(createTestableWidget(const AppList(
-          listType: ListType.positive, titleBarMessage: "Title Bar Message")));
+      await tester.pumpWidget(createLocalizationTestableWidget(const AppList(
+          listType: AppListType.positive,
+          titleBarMessage: "Title Bar Message")));
       await tester.pump();
       await tester.pump(const Duration(
           milliseconds:

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../apps/app_list.dart';
-import '../apps/list_type.dart';
+import '../apps/app_list_type.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -28,7 +28,7 @@ class HomePage extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => AppList(
-                                    listType: ListType.positive,
+                                    listType: AppListType.positive,
                                     titleBarMessage:
                                         AppLocalizations.of(context)!
                                             .positiveApps)),
@@ -73,7 +73,7 @@ class HomePage extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => AppList(
-                                    listType: ListType.negative,
+                                    listType: AppListType.negative,
                                     titleBarMessage:
                                         AppLocalizations.of(context)!
                                             .negativeApps)),

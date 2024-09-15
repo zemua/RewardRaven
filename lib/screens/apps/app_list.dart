@@ -6,7 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:installed_apps/app_info.dart';
 import 'package:logger/logger.dart';
 import 'package:reward_raven/db/entity/listed_app.dart';
-import 'package:reward_raven/screens/apps/list_type.dart';
+import 'package:reward_raven/screens/apps/app_list_type.dart';
 
 import '../../db/service/listed_app_service.dart';
 import '../../service/app/apps_fetcher.dart';
@@ -15,7 +15,7 @@ import '../../service/platform_wrapper.dart';
 final GetIt locator = GetIt.instance;
 
 class AppList extends StatelessWidget {
-  final ListType listType;
+  final AppListType listType;
   final String titleBarMessage;
 
   const AppList({
@@ -60,7 +60,7 @@ class AppList extends StatelessWidget {
 
 class AppListItem extends StatefulWidget {
   final AppInfo app;
-  final ListType listType;
+  final AppListType listType;
 
   const AppListItem({
     required this.app,

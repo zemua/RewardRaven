@@ -1,0 +1,1 @@
+enum AppGroupListType { positive, negative }
