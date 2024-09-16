@@ -23,7 +23,7 @@ void main() {
     appGroupRepository = AppGroupRepository();
   });
 
-  group('ListedAppRepository', () {
+  group('AppGroupRepository', () {
     // TODO implement tests
     final appGroup = AppGroup(
       name: 'testName',
@@ -31,16 +31,81 @@ void main() {
       preventClose: true,
     );
 
-    test('addGroup adds a group successfully', () async {
+    test('saveGroup adds a group successfully', () async {
       when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
+      when(mockDatabaseReference.push()).thenReturn(mockDatabaseReference);
       when(mockDatabaseReference.set(any)).thenAnswer((_) => Future.value());
 
-      await appGroupRepository.addGroup(appGroup);
+      await appGroupRepository.saveGroup(appGroup);
 
-      verify(mockDatabaseReference.child('somepath')).called(1);
-      verify(mockDatabaseReference.child('somechild')).called(1);
-      verify(mockDatabaseReference.child('someid')).called(1);
+      verify(mockDatabaseReference.child('appGroups')).called(1);
+      verify(mockDatabaseReference.push()).called(1);
       verify(mockDatabaseReference.set(appGroup.toJson())).called(1);
+    });
+
+    test('updateGroup updates a group successfully', () async {
+      when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
+      when(mockDatabaseReference.update(any)).thenAnswer((_) => Future.value());
+
+      await appGroupRepository.updateGroup('testId', appGroup);
+
+      verify(mockDatabaseReference.child('appGroups')).called(1);
+      verify(mockDatabaseReference.child('positive')).called(1);
+      verify(mockDatabaseReference.child('testId')).called(1);
+      verify(mockDatabaseReference.update(appGroup.toJson())).called(1);
+    });
+
+    test(
+        'getGroup returns a single AppGroup given type is "positive" and key is "testId"',
+        () async {
+      final mockDataSnapshot = MockDataSnapshot();
+      final mockDatabaseEvent = MockDatabaseEvent();
+
+      when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
+      when(mockDatabaseReference.child('testId'))
+          .thenReturn(mockDatabaseReference);
+      when(mockDatabaseReference.once())
+          .thenAnswer((_) async => mockDatabaseEvent);
+      when(mockDatabaseEvent.snapshot).thenReturn(mockDataSnapshot);
+      when(mockDataSnapshot.value).thenReturn(appGroup.toJson());
+
+      final group =
+          await appGroupRepository.getGroup(GroupType.positive, 'testId');
+
+      expect(group, isNotNull);
+      expect(group?.name, 'testName');
+      expect(group?.type, GroupType.positive);
+      expect(group?.preventClose, true);
+
+      verify(mockDatabaseReference.child('appGroups')).called(1);
+      verify(mockDatabaseReference.child('positive')).called(1);
+      verify(mockDatabaseReference.child('testId')).called(1);
+      verify(mockDatabaseReference.once()).called(1);
+    });
+
+    test('getGroups fetches groups of a specific type', () async {
+      final mockDataSnapshot = MockDataSnapshot();
+      final mockDatabaseEvent = MockDatabaseEvent();
+
+      when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
+      when(mockDatabaseReference.once())
+          .thenAnswer((_) async => mockDatabaseEvent);
+      when(mockDatabaseEvent.snapshot).thenReturn(mockDataSnapshot);
+      when(mockDataSnapshot.value).thenReturn({
+        'group1': appGroup.toJson(),
+      });
+
+      final groups = await appGroupRepository.getGroups(GroupType.positive);
+
+      expect(groups, isA<List<AppGroup>>());
+      expect(groups.length, 1);
+      expect(groups.first.name, 'testName');
+      expect(groups.first.type, GroupType.positive);
+      expect(groups.first.preventClose, true);
+
+      verify(mockDatabaseReference.child('appGroups')).called(1);
+      verify(mockDatabaseReference.child('positive')).called(1);
+      verify(mockDatabaseReference.once()).called(1);
     });
   });
 }
