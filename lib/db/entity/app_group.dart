@@ -3,12 +3,12 @@ import 'package:equatable/equatable.dart';
 class AppGroup extends Equatable {
   String name;
   GroupType type;
-  bool preventClose;
+  bool? preventClose;
 
   AppGroup({
     required this.name,
     required this.type,
-    required this.preventClose,
+    this.preventClose,
   }) : assert(type != null, 'type cannot be null');
 
   @override
@@ -18,7 +18,7 @@ class AppGroup extends Equatable {
     return AppGroup(
       name: json['name'],
       type: _parseAppGroupListType(json['type']),
-      preventClose: json['preventClose'],
+      preventClose: json['preventClose'] ?? false,
     );
   }
 
@@ -33,7 +33,7 @@ class AppGroup extends Equatable {
     return {
       'name': name,
       'type': type.toString().split('.').last,
-      'preventClose': preventClose,
+      'preventClose': preventClose ?? false,
     };
   }
 }
