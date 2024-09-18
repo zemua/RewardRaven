@@ -38,8 +38,19 @@ void main() {
       verify(mockRepository.updateGroup(key, group)).called(1);
     });
 
-    test('tests', () {
-      fail('to be implemented');
+    test('getGroups retrieves groups from repository', () async {
+      const groupType = GroupType.positive;
+      final groups = [
+        AppGroup(name: 'Group 1', type: groupType),
+        AppGroup(name: 'Group 2', type: groupType),
+      ];
+
+      when(mockRepository.getGroups(groupType)).thenAnswer((_) async => groups);
+
+      final result = await appGroupService.getGroups(groupType);
+
+      expect(result, equals(groups));
+      verify(mockRepository.getGroups(groupType)).called(1);
     });
   });
 }

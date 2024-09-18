@@ -24,7 +24,6 @@ void main() {
   });
 
   group('AppGroupRepository', () {
-    // TODO implement tests
     final appGroup = AppGroup(
       name: 'testName',
       type: GroupType.positive,

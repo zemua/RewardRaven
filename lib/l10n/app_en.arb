@@ -17,5 +17,6 @@
   "settings": "Settings",
   "installedApps": "Installed Apps",
   "error": "Error",
-  "noAppsFound": "No apps found"
+  "noAppsFound": "No apps found",
+  "noGroupsFound": "No groups found"
 }
