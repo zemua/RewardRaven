@@ -35,9 +35,6 @@ class AppGroupList extends StatelessWidget {
             return Center(
                 child: Text(
                     '${AppLocalizations.of(context)!.error}: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(
-                child: Text(AppLocalizations.of(context)!.noGroupsFound));
           } else {
             final groups = snapshot.data!;
             return ListView.builder(

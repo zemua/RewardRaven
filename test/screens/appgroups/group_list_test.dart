@@ -53,8 +53,60 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    test('tests', () {
-      fail('To implement');
+    testWidgets('displays error message when fetch fails',
+        (WidgetTester tester) async {
+      final mockGroupsService = MockAppGroupService();
+      locator.registerSingleton<AppGroupService>(mockGroupsService);
+      when(mockGroupsService.getGroups(GroupType.positive))
+          .thenAnswer((_) async => throw Exception('Failed to fetch groups'));
+
+      await tester.pumpWidget(createLocalizationTestableWidget(
+          const AppGroupList(
+              listType: AppGroupListType.positive,
+              titleBarMessage: "Title Bar Message")));
+
+      await tester.pump(); // Rebuild the widget with the error
+
+      expect(find.text('Error: Exception: Failed to fetch groups'),
+          findsOneWidget);
+    });
+
+    testWidgets('displays blank screen when no groups are returned',
+        (WidgetTester tester) async {
+      final mockGroupsService = MockAppGroupService();
+      locator.registerSingleton<AppGroupService>(mockGroupsService);
+      when(mockGroupsService.getGroups(GroupType.positive))
+          .thenAnswer((_) async => []);
+
+      await tester.pumpWidget(createLocalizationTestableWidget(
+          const AppGroupList(
+              listType: AppGroupListType.positive,
+              titleBarMessage: "Title Bar Message")));
+
+      await tester.pump(); // Rebuild the widget with the empty data
+
+      expect(find.byType(ListTile), findsNothing);
+    });
+
+    testWidgets('displays list of groups', (WidgetTester tester) async {
+      final mockGroupsService = MockAppGroupService();
+      locator.registerSingleton<AppGroupService>(mockGroupsService);
+      when(mockGroupsService.getGroups(GroupType.positive))
+          .thenAnswer((_) async => [
+                AppGroup(name: 'Group 1', type: GroupType.positive),
+                AppGroup(name: 'Group 2', type: GroupType.positive),
+              ]);
+
+      await tester.pumpWidget(createLocalizationTestableWidget(
+          const AppGroupList(
+              listType: AppGroupListType.positive,
+              titleBarMessage: "Title Bar Message")));
+
+      await tester.pump(); // Rebuild the widget with the data
+
+      expect(find.byType(ListTile), findsNWidgets(2));
+      expect(find.text('Group 1'), findsOneWidget);
+      expect(find.text('Group 2'), findsOneWidget);
     });
   });
 }

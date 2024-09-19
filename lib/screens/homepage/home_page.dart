@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../appgroups/app_group_list.dart';
+import '../appgroups/app_group_list_type.dart';
 import '../apps/app_list.dart';
 import '../apps/app_list_type.dart';
 
@@ -48,7 +50,16 @@ class HomePage extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          print('Positive groups button pressed');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AppGroupList(
+                                listType: AppGroupListType.positive,
+                                titleBarMessage: AppLocalizations.of(context)!
+                                    .positiveGroups,
+                              ),
+                            ),
+                          );
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
