@@ -18,5 +18,7 @@
   "installedApps": "Installed Apps",
   "error": "Error",
   "noAppsFound": "No apps found",
-  "noGroupsFound": "No groups found"
+  "noGroupsFound": "No groups found",
+  "groupName": "Group Name",
+  "addGroup": "Add Group"
 }

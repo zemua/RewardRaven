@@ -7,6 +7,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:reward_raven/db/entity/app_group.dart';
 import 'package:reward_raven/db/service/app_group_service.dart';
+import 'package:reward_raven/screens/appgroups/addgroup/add_group.dart';
 import 'package:reward_raven/screens/appgroups/app_group_list.dart';
 import 'package:reward_raven/screens/appgroups/app_group_list_type.dart';
 
@@ -131,6 +132,29 @@ void main() {
 
       // Check if FAB is still displayed after data load
       expect(find.byType(FloatingActionButton), findsOneWidget);
+    });
+
+    testWidgets(
+        'navigates to AddGroupScreen when floating action button is clicked',
+        (WidgetTester tester) async {
+      final mockGroupsService = MockAppGroupService();
+      locator.registerSingleton<AppGroupService>(mockGroupsService);
+      when(mockGroupsService.getGroups(GroupType.positive))
+          .thenAnswer((_) async => []);
+
+      await tester.pumpWidget(createLocalizationTestableWidget(
+          const AppGroupList(
+              listType: AppGroupListType.positive,
+              titleBarMessage: "Title Bar Message")));
+
+      await tester.pump(); // Rebuild the widget with the empty data
+
+      // Tap the floating action button
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pumpAndSettle(); // Wait for the navigation to complete
+
+      // Verify that AddGroupScreen is displayed
+      expect(find.byType(AddGroupScreen), findsOneWidget);
     });
   });
 }

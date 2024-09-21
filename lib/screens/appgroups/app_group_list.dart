@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../db/entity/app_group.dart';
 import '../../db/service/app_group_service.dart';
+import 'addgroup/add_group.dart';
 import 'app_group_list_type.dart';
 
 final GetIt locator = GetIt.instance;
@@ -52,6 +53,10 @@ class AppGroupList extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // TODO go to screen to add a group
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddGroupScreen()),
+          );
         },
         child: const Icon(Icons.add),
       ),
