@@ -49,6 +49,12 @@ class AppGroupList extends StatelessWidget {
           }
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // TODO go to screen to add a group
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

@@ -10,7 +10,7 @@ import 'package:reward_raven/db/service/app_group_service.dart';
 import 'package:reward_raven/screens/appgroups/app_group_list.dart';
 import 'package:reward_raven/screens/appgroups/app_group_list_type.dart';
 
-import 'group_list_test.mocks.dart';
+import 'app_group_list_test.mocks.dart';
 
 @GenerateMocks([AppGroupService])
 void main() {
@@ -107,6 +107,30 @@ void main() {
       expect(find.byType(ListTile), findsNWidgets(2));
       expect(find.text('Group 1'), findsOneWidget);
       expect(find.text('Group 2'), findsOneWidget);
+    });
+
+    testWidgets('displays floating action button before and after data load',
+        (WidgetTester tester) async {
+      final mockGroupsService = MockAppGroupService();
+      locator.registerSingleton<AppGroupService>(mockGroupsService);
+      when(mockGroupsService.getGroups(GroupType.positive))
+          .thenAnswer((_) async => [
+                AppGroup(name: 'Group 1', type: GroupType.positive),
+                AppGroup(name: 'Group 2', type: GroupType.positive),
+              ]);
+
+      await tester.pumpWidget(createLocalizationTestableWidget(
+          const AppGroupList(
+              listType: AppGroupListType.positive,
+              titleBarMessage: "Title Bar Message")));
+
+      // Check if FAB is displayed before data load
+      expect(find.byType(FloatingActionButton), findsOneWidget);
+
+      await tester.pump(); // Rebuild the widget with the data
+
+      // Check if FAB is still displayed after data load
+      expect(find.byType(FloatingActionButton), findsOneWidget);
     });
   });
 }
