@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../../db/entity/app_group.dart';
+
 final GetIt locator = GetIt.instance;
 
 class AddGroupScreen extends StatelessWidget {
-  const AddGroupScreen({super.key});
+  final GroupType groupType;
+
+  const AddGroupScreen({super.key, required this.groupType});
 
   @override
   Widget build(BuildContext context) {

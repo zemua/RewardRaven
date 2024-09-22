@@ -55,7 +55,10 @@ class AppGroupList extends StatelessWidget {
           // TODO go to screen to add a group
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AddGroupScreen()),
+            MaterialPageRoute(
+                builder: (context) => AddGroupScreen(
+                      groupType: listType.toGroupType(),
+                    )),
           );
         },
         child: const Icon(Icons.add),
