@@ -20,5 +20,6 @@
   "noAppsFound": "No apps found",
   "noGroupsFound": "No groups found",
   "groupName": "Group Name",
-  "addGroup": "Add Group"
+  "addGroup": "Add Group",
+  "groupNameEmpty": "Group name cannot be empty"
 }

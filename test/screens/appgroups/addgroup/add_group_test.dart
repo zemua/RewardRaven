@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:reward_raven/db/entity/app_group.dart';
@@ -13,6 +14,16 @@ import 'add_group_test.mocks.dart';
 @GenerateMocks([AppGroupService])
 void main() {
   AppGroupService appGroupService = MockAppGroupService();
+
+  final GetIt locator = GetIt.instance;
+
+  setUp(() {
+    locator.registerSingleton<AppGroupService>(appGroupService);
+  });
+
+  tearDown(() {
+    locator.reset();
+  });
 
   Widget createLocalizationTestableWidget(Widget child) {
     return MaterialApp(
@@ -32,7 +43,7 @@ void main() {
   testWidgets('displays group name field and add button',
       (WidgetTester tester) async {
     await tester.pumpWidget(createLocalizationTestableWidget(
-        const AddGroupScreen(groupType: GroupType.positive)));
+        AddGroupScreen(groupType: GroupType.positive)));
 
     // Check if the TextField for group name is displayed
     expect(find.byType(TextField), findsOneWidget);
@@ -45,7 +56,7 @@ void main() {
   testWidgets('calls appGroupService.save when button is pressed',
       (WidgetTester tester) async {
     await tester.pumpWidget(createLocalizationTestableWidget(
-        const AddGroupScreen(groupType: GroupType.positive)));
+        AddGroupScreen(groupType: GroupType.positive)));
 
     // Enter text into the TextField
     await tester.enterText(find.byType(TextField), 'New Group');
@@ -59,7 +70,7 @@ void main() {
     verify(appGroupService.saveGroup(appGroup)).called(1);
   });
 
-  // TODO if name is empty cannot save
+  // TODO if name is empty cannot save and popup is shown
 
   // TODO return to previous screen when button is pressed
 }
