@@ -106,5 +106,31 @@ void main() {
       verify(mockDatabaseReference.child('positive')).called(1);
       verify(mockDatabaseReference.once()).called(1);
     });
+
+    test('streamGroups fetches a stream of groups of a specific type',
+        () async {
+      final mockDataSnapshot = MockDataSnapshot();
+      final mockDatabaseEvent = MockDatabaseEvent();
+
+      when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
+      when(mockDatabaseReference.onValue)
+          .thenAnswer((_) => Stream.value(mockDatabaseEvent));
+      when(mockDatabaseEvent.snapshot).thenReturn(mockDataSnapshot);
+      when(mockDataSnapshot.value).thenReturn({
+        'group1': appGroup.toJson(),
+      });
+
+      final stream = appGroupRepository.streamGroups(GroupType.positive);
+
+      await expectLater(
+        stream,
+        emits(isA<List<AppGroup>>()
+            .having((groups) => groups.length, 'length', 1)),
+      );
+
+      verify(mockDatabaseReference.child('appGroups')).called(1);
+      verify(mockDatabaseReference.child('positive')).called(1);
+      verify(mockDatabaseReference.onValue).called(1);
+    });
   });
 }

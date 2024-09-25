@@ -20,4 +20,8 @@ class AppGroupService {
   Future<List<AppGroup>> getGroups(GroupType type) async {
     return await _appGroupRepository.getGroups(type);
   }
+
+  Stream<List<AppGroup>> streamGroups(GroupType type) {
+    return _appGroupRepository.streamGroups(type);
+  }
 }

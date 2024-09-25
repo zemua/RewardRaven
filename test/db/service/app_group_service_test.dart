@@ -52,5 +52,21 @@ void main() {
       expect(result, equals(groups));
       verify(mockRepository.getGroups(groupType)).called(1);
     });
+
+    test('streamGroups streams groups from repository', () {
+      const groupType = GroupType.positive;
+      final groups = [
+        AppGroup(name: 'Group 1', type: groupType),
+        AppGroup(name: 'Group 2', type: groupType),
+      ];
+
+      when(mockRepository.streamGroups(groupType))
+          .thenAnswer((_) => Stream.value(groups));
+
+      final result = appGroupService.streamGroups(groupType);
+
+      expectLater(result, emits(groups));
+      verify(mockRepository.streamGroups(groupType)).called(1);
+    });
   });
 }

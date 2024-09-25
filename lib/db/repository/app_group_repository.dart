@@ -77,6 +77,26 @@ class AppGroupRepository {
     return [];
   }
 
+  Stream<List<AppGroup>> streamGroups(GroupType type) {
+    return _resolveReference(type).asStream().asyncExpand((ref) {
+      return ref!.onValue.map((event) {
+        final snapshot = event.snapshot;
+        if (snapshot.value != null) {
+          final Map<dynamic, dynamic> groupsMap =
+              snapshot.value as Map<dynamic, dynamic>;
+          final List<AppGroup> groups = groupsMap.values.map((value) {
+            return AppGroup.fromJson(Map<String, dynamic>.from(value));
+          }).toList();
+          logger.i("Streamed ${groups.length} groups of type: $type");
+          return groups;
+        } else {
+          logger.i('No groups found for type: $type');
+          return [];
+        }
+      });
+    });
+  }
+
   Future<DatabaseReference?> _resolveReference(GroupType type) async {
     try {
       final dbRef = await _firebaseHelper.databaseReference;

@@ -28,6 +28,7 @@ class AppGroupList extends StatelessWidget {
         title: Text(titleBarMessage),
       ),
       body: FutureBuilder<List<AppGroup>>(
+        // TODO switch to StreamBuilder to update the list in real time
         future: groupService.getGroups(listType.toGroupType()),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
