@@ -39,6 +39,7 @@ class AddGroupScreen extends StatelessWidget {
                 if (groupName.isNotEmpty) {
                   final newGroup = AppGroup(name: groupName, type: groupType);
                   appGroupService.saveGroup(newGroup);
+                  // TODO beware of the new group not appearing in the list going back
                   Navigator.pop(context);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(

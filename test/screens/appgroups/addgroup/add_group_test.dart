@@ -11,7 +11,7 @@ import 'package:reward_raven/screens/appgroups/addgroup/add_group.dart';
 
 import 'add_group_test.mocks.dart';
 
-@GenerateMocks([AppGroupService])
+@GenerateMocks([AppGroupService, NavigatorObserver])
 void main() {
   AppGroupService appGroupService = MockAppGroupService();
 
@@ -70,7 +70,33 @@ void main() {
     verify(appGroupService.saveGroup(appGroup)).called(1);
   });
 
-  // TODO if name is empty cannot save and popup is shown
+  testWidgets('returns to previous screen when button is pressed',
+      (WidgetTester tester) async {
+    final mockObserver = MockNavigatorObserver();
+    when(mockObserver.navigator).thenReturn(null);
 
-  // TODO return to previous screen when button is pressed
+    await tester.pumpWidget(MaterialApp(
+      home: AddGroupScreen(groupType: GroupType.positive),
+      navigatorObservers: [mockObserver],
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', ''),
+      ],
+    ));
+
+    // Enter text into the TextField
+    await tester.enterText(find.byType(TextField), 'New Group');
+
+    // Tap the Add Group button
+    await tester.tap(find.widgetWithText(ElevatedButton, 'Add Group'));
+    await tester.pumpAndSettle();
+
+    // Verify that a pop navigation event has occurred
+    verify(mockObserver.didPop(any, any));
+  });
 }
