@@ -103,4 +103,14 @@ class MockAppGroupRepository extends _i1.Mock
         ),
         returnValue: _i4.Future<List<_i5.AppGroup>>.value(<_i5.AppGroup>[]),
       ) as _i4.Future<List<_i5.AppGroup>>);
+
+  @override
+  _i4.Stream<List<_i5.AppGroup>> streamGroups(_i5.GroupType? type) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #streamGroups,
+          [type],
+        ),
+        returnValue: _i4.Stream<List<_i5.AppGroup>>.empty(),
+      ) as _i4.Stream<List<_i5.AppGroup>>);
 }

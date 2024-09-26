@@ -61,7 +61,7 @@ void main() {
       ];
 
       when(mockRepository.streamGroups(groupType))
-          .thenAnswer((_) => Stream.value(groups));
+          .thenAnswer((_) => Stream<List<AppGroup>>.value(groups));
 
       final result = appGroupService.streamGroups(groupType);
 

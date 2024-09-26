@@ -82,4 +82,14 @@ class MockAppGroupService extends _i1.Mock implements _i2.AppGroupService {
         ),
         returnValue: _i3.Future<List<_i4.AppGroup>>.value(<_i4.AppGroup>[]),
       ) as _i3.Future<List<_i4.AppGroup>>);
+
+  @override
+  _i3.Stream<List<_i4.AppGroup>> streamGroups(_i4.GroupType? type) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #streamGroups,
+          [type],
+        ),
+        returnValue: _i3.Stream<List<_i4.AppGroup>>.empty(),
+      ) as _i3.Stream<List<_i4.AppGroup>>);
 }
