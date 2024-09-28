@@ -33,6 +33,7 @@ void main() {
     test('addListedApp adds a listed app successfully', () async {
       when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
       when(mockDatabaseReference.set(any)).thenAnswer((_) => Future.value());
+      when(mockDatabaseReference.path).thenReturn('testPath');
 
       await listedAppRepository.saveListedApp(listedApp);
 

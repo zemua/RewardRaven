@@ -17,8 +17,11 @@ class AppGroupRepository {
     try {
       final ref = await _resolveReference(group.type);
       final newChildRef = ref?.push();
-      await newChildRef?.set(group.toJson());
-      logger.i("Saved group to node: ${newChildRef?.key}");
+      logger.d("Saving group to node: ${newChildRef?.path}");
+      await newChildRef
+          ?.set(group.toJson())
+          .timeout(const Duration(seconds: 10));
+      logger.d("Saved group to node: ${newChildRef?.path}");
     } catch (e) {
       logger.e('Failed to save group: $e');
     }
@@ -27,7 +30,10 @@ class AppGroupRepository {
   Future<void> updateGroup(String key, AppGroup group) async {
     try {
       final ref = await _resolveReference(group.type);
-      await ref?.child(key).update(group.toJson());
+      await ref
+          ?.child(key)
+          .update(group.toJson())
+          .timeout(const Duration(seconds: 10));
       logger.i("Updated group with id: ${group.type}.$key");
     } catch (e) {
       logger.e('Failed to update ${group.type}.$key group: $e');
@@ -79,7 +85,7 @@ class AppGroupRepository {
 
   Stream<List<AppGroup>> streamGroups(GroupType type) {
     return _resolveReference(type).asStream().asyncExpand((ref) {
-      return ref!.onValue.map((event) {
+      return ref!.onValue.timeout(const Duration(seconds: 10)).map((event) {
         final snapshot = event.snapshot;
         if (snapshot.value != null) {
           final Map<dynamic, dynamic> groupsMap =

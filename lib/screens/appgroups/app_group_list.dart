@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -33,9 +35,15 @@ class AppGroupList extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(
-                child: Text(
-                    '${AppLocalizations.of(context)!.error}: ${snapshot.error}'));
+            if (snapshot.error is TimeoutException) {
+              return Center(
+                  child: Text(
+                      AppLocalizations.of(context)!.noElementsOrNetworkError));
+            } else {
+              return Center(
+                  child: Text(
+                      '${AppLocalizations.of(context)!.error}: ${snapshot.error}'));
+            }
           } else {
             final groups = snapshot.data ?? [];
             return ListView.builder(

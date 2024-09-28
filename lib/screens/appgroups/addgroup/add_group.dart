@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 
 import '../../../db/entity/app_group.dart';
 import '../../../db/service/app_group_service.dart';
@@ -12,6 +13,8 @@ class AddGroupScreen extends StatelessWidget {
   final AppGroupService appGroupService = locator<AppGroupService>();
 
   final GroupType groupType;
+
+  final _logger = Logger();
 
   AddGroupScreen({super.key, required this.groupType})
       : _groupNameController = TextEditingController();
@@ -38,8 +41,8 @@ class AddGroupScreen extends StatelessWidget {
                 final groupName = _groupNameController.text;
                 if (groupName.isNotEmpty) {
                   final newGroup = AppGroup(name: groupName, type: groupType);
+                  _logger.i("Saving group: $newGroup");
                   appGroupService.saveGroup(newGroup);
-                  // TODO beware of the new group not appearing in the list going back
                   Navigator.pop(context);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(

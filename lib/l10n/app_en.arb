@@ -21,5 +21,6 @@
   "noGroupsFound": "No groups found",
   "groupName": "Group Name",
   "addGroup": "Add Group",
-  "groupNameEmpty": "Group name cannot be empty"
+  "groupNameEmpty": "Group name cannot be empty",
+  "noElementsOrNetworkError": "No elements or network error"
 }

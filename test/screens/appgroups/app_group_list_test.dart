@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -69,6 +71,24 @@ void main() {
       await tester.pump(); // Rebuild the widget with the error
 
       expect(find.textContaining('Failed to fetch groups'), findsOneWidget);
+    });
+
+    testWidgets('displays no groups found when timeout exception',
+        (WidgetTester tester) async {
+      final mockGroupsService = MockAppGroupService();
+      locator.registerSingleton<AppGroupService>(mockGroupsService);
+      when(mockGroupsService.streamGroups(GroupType.positive)).thenAnswer(
+          (_) => Stream.error(TimeoutException('Failed to fetch groups')));
+
+      await tester.pumpWidget(createLocalizationTestableWidget(
+          const AppGroupList(
+              listType: AppGroupListType.positive,
+              titleBarMessage: "Title Bar Message")));
+
+      await tester.pump(); // Rebuild the widget with the error
+
+      expect(
+          find.textContaining('No elements or network error'), findsOneWidget);
     });
 
     testWidgets('displays blank screen when no groups are returned',

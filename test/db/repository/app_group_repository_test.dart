@@ -34,6 +34,7 @@ void main() {
       when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
       when(mockDatabaseReference.push()).thenReturn(mockDatabaseReference);
       when(mockDatabaseReference.set(any)).thenAnswer((_) => Future.value());
+      when(mockDatabaseReference.path).thenReturn('testPath');
 
       await appGroupRepository.saveGroup(appGroup);
 

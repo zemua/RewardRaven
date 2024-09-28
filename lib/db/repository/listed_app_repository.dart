@@ -18,7 +18,8 @@ class ListedAppRepository {
   Future<void> saveListedApp(ListedApp app) async {
     try {
       final ref = await _resolveReference(app);
-      await ref?.set(app.toJson());
+      logger.d("Saving listed app to: ${ref?.path}");
+      await ref?.set(app.toJson()).timeout(const Duration(seconds: 10));
       logger.d("Saved listed app: ${app.platform} ${app.identifier}");
     } catch (e) {
       logger.e('Failed to save listed app: $e');
@@ -28,7 +29,7 @@ class ListedAppRepository {
   Future<void> updateListedApp(ListedApp app) async {
     try {
       final ref = await _resolveReference(app);
-      await ref?.update(app.toJson());
+      await ref?.update(app.toJson()).timeout(const Duration(seconds: 10));
       logger.d("Updated listed app: ${app.platform} ${app.identifier}");
     } catch (e) {
       logger.e('Failed to update listed app: $e');
@@ -38,7 +39,7 @@ class ListedAppRepository {
   Future<void> deleteListedApp(ListedApp app) async {
     try {
       final ref = await _resolveReference(app);
-      await ref?.remove();
+      await ref?.remove().timeout(const Duration(seconds: 10));
       logger.d("Deleted listed app: ${app.platform} ${app.identifier}");
     } catch (e) {
       logger.e('Failed to delete listed app: $e');
