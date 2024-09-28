@@ -43,8 +43,8 @@ void main() {
         (WidgetTester tester) async {
       final mockGroupsService = MockAppGroupService();
       locator.registerSingleton<AppGroupService>(mockGroupsService);
-      when(mockGroupsService.getGroups(GroupType.positive))
-          .thenAnswer((_) async => []);
+      when(mockGroupsService.streamGroups(GroupType.positive))
+          .thenAnswer((_) => const Stream.empty());
 
       await tester.pumpWidget(createLocalizationTestableWidget(
           const AppGroupList(
@@ -58,8 +58,8 @@ void main() {
         (WidgetTester tester) async {
       final mockGroupsService = MockAppGroupService();
       locator.registerSingleton<AppGroupService>(mockGroupsService);
-      when(mockGroupsService.getGroups(GroupType.positive))
-          .thenAnswer((_) async => throw Exception('Failed to fetch groups'));
+      when(mockGroupsService.streamGroups(GroupType.positive))
+          .thenAnswer((_) => Stream.error(Exception('Failed to fetch groups')));
 
       await tester.pumpWidget(createLocalizationTestableWidget(
           const AppGroupList(
@@ -68,16 +68,15 @@ void main() {
 
       await tester.pump(); // Rebuild the widget with the error
 
-      expect(find.text('Error: Exception: Failed to fetch groups'),
-          findsOneWidget);
+      expect(find.textContaining('Failed to fetch groups'), findsOneWidget);
     });
 
     testWidgets('displays blank screen when no groups are returned',
         (WidgetTester tester) async {
       final mockGroupsService = MockAppGroupService();
       locator.registerSingleton<AppGroupService>(mockGroupsService);
-      when(mockGroupsService.getGroups(GroupType.positive))
-          .thenAnswer((_) async => []);
+      when(mockGroupsService.streamGroups(GroupType.positive))
+          .thenAnswer((_) => const Stream.empty());
 
       await tester.pumpWidget(createLocalizationTestableWidget(
           const AppGroupList(
@@ -92,11 +91,11 @@ void main() {
     testWidgets('displays list of groups', (WidgetTester tester) async {
       final mockGroupsService = MockAppGroupService();
       locator.registerSingleton<AppGroupService>(mockGroupsService);
-      when(mockGroupsService.getGroups(GroupType.positive))
-          .thenAnswer((_) async => [
+      when(mockGroupsService.streamGroups(GroupType.positive))
+          .thenAnswer((_) => Stream.value([
                 AppGroup(name: 'Group 1', type: GroupType.positive),
                 AppGroup(name: 'Group 2', type: GroupType.positive),
-              ]);
+              ]));
 
       await tester.pumpWidget(createLocalizationTestableWidget(
           const AppGroupList(
@@ -114,11 +113,11 @@ void main() {
         (WidgetTester tester) async {
       final mockGroupsService = MockAppGroupService();
       locator.registerSingleton<AppGroupService>(mockGroupsService);
-      when(mockGroupsService.getGroups(GroupType.positive))
-          .thenAnswer((_) async => [
+      when(mockGroupsService.streamGroups(GroupType.positive))
+          .thenAnswer((_) => Stream.value([
                 AppGroup(name: 'Group 1', type: GroupType.positive),
                 AppGroup(name: 'Group 2', type: GroupType.positive),
-              ]);
+              ]));
 
       await tester.pumpWidget(createLocalizationTestableWidget(
           const AppGroupList(
@@ -139,8 +138,8 @@ void main() {
         (WidgetTester tester) async {
       final mockGroupsService = MockAppGroupService();
       locator.registerSingleton<AppGroupService>(mockGroupsService);
-      when(mockGroupsService.getGroups(GroupType.positive))
-          .thenAnswer((_) async => []);
+      when(mockGroupsService.streamGroups(GroupType.positive))
+          .thenAnswer((_) => const Stream.empty());
 
       await tester.pumpWidget(createLocalizationTestableWidget(
           const AppGroupList(

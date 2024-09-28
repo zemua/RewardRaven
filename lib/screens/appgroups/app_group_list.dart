@@ -27,9 +27,8 @@ class AppGroupList extends StatelessWidget {
       appBar: AppBar(
         title: Text(titleBarMessage),
       ),
-      body: FutureBuilder<List<AppGroup>>(
-        // TODO switch to StreamBuilder to update the list in real time
-        future: groupService.getGroups(listType.toGroupType()),
+      body: StreamBuilder<List<AppGroup>>(
+        stream: groupService.streamGroups(listType.toGroupType()),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -38,7 +37,7 @@ class AppGroupList extends StatelessWidget {
                 child: Text(
                     '${AppLocalizations.of(context)!.error}: ${snapshot.error}'));
           } else {
-            final groups = snapshot.data!;
+            final groups = snapshot.data ?? [];
             return ListView.builder(
               itemCount: groups.length,
               itemBuilder: (context, index) {

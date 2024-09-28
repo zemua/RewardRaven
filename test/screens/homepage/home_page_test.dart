@@ -95,4 +95,12 @@ class MockAppGroupService extends Mock implements AppGroupService {
       AppGroup(name: 'Group 2', type: type),
     ];
   }
+
+  @override
+  Stream<List<AppGroup>> streamGroups(GroupType type) {
+    return Stream.value([
+      AppGroup(name: 'Group 1', type: type),
+      AppGroup(name: 'Group 2', type: type),
+    ]);
+  }
 }
