@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:logger/logger.dart';
 import 'package:reward_raven/db/entity/app_group.dart';
@@ -16,12 +18,12 @@ class AppGroupRepository {
   Future<void> saveGroup(AppGroup group) async {
     try {
       final ref = await _resolveReference(group.type);
-      final newChildRef = ref?.push();
-      logger.d("Saving group to node: ${newChildRef?.path}");
+      final newChildRef = ref.push();
+      logger.d("Saving group to node: ${newChildRef.path}");
       await newChildRef
-          ?.set(group.toJson())
+          .set(group.toJson())
           .timeout(const Duration(seconds: 10));
-      logger.d("Saved group to node: ${newChildRef?.path}");
+      logger.d("Saved group to node: ${newChildRef.path}");
     } catch (e) {
       logger.e('Failed to save group: $e');
     }
@@ -31,7 +33,7 @@ class AppGroupRepository {
     try {
       final ref = await _resolveReference(group.type);
       await ref
-          ?.child(key)
+          .child(key)
           .update(group.toJson())
           .timeout(const Duration(seconds: 10));
       logger.i("Updated group with id: ${group.type}.$key");
@@ -44,11 +46,11 @@ class AppGroupRepository {
     try {
       final ref = await _resolveReference(type);
       final dbEvent =
-          await ref?.child(key).once().timeout(const Duration(seconds: 10));
-      final DataSnapshot? snapshot = dbEvent?.snapshot;
-      if (snapshot?.value != null) {
+          await ref.child(key).once().timeout(const Duration(seconds: 10));
+      final DataSnapshot snapshot = dbEvent.snapshot;
+      if (snapshot.value != null) {
         final Map<String, dynamic> groupMap =
-            Map<String, dynamic>.from(snapshot?.value as Map);
+            Map<String, dynamic>.from(snapshot.value as Map);
         final AppGroup group = AppGroup.fromJson(groupMap);
         logger.i("Retrieved group with key: $key of type: $type");
         return group;
@@ -64,11 +66,11 @@ class AppGroupRepository {
   Future<List<AppGroup>> getGroups(GroupType type) async {
     try {
       final ref = await _resolveReference(type);
-      final dbEvent = await ref?.once().timeout(const Duration(seconds: 10));
-      final DataSnapshot? snapshot = dbEvent?.snapshot;
-      if (snapshot?.value != null) {
+      final dbEvent = await ref.once().timeout(const Duration(seconds: 10));
+      final DataSnapshot snapshot = dbEvent.snapshot;
+      if (snapshot.value != null) {
         final Map<dynamic, dynamic> groupsMap =
-            snapshot?.value as Map<dynamic, dynamic>;
+            snapshot.value as Map<dynamic, dynamic>;
         final List<AppGroup> groups = groupsMap.values.map((value) {
           return AppGroup.fromJson(Map<String, dynamic>.from(value));
         }).toList();
@@ -84,8 +86,21 @@ class AppGroupRepository {
   }
 
   Stream<List<AppGroup>> streamGroups(GroupType type) {
+    logger.d('Streaming groups of type: $type');
     return _resolveReference(type).asStream().asyncExpand((ref) {
-      return ref!.onValue.timeout(const Duration(seconds: 10)).map((event) {
+      logger.d('Resolved reference at: ${ref.path}');
+      final completer = Completer<void>();
+      return ref.onValue.timeout(const Duration(seconds: 10),
+          onTimeout: (sink) {
+        if (!completer.isCompleted) {
+          completer.completeError(
+              TimeoutException('Timeout while streaming groups'));
+        }
+      }).map((event) {
+        if (!completer.isCompleted) {
+          completer.complete();
+        }
+        logger.d('Received event: $event');
         final snapshot = event.snapshot;
         if (snapshot.value != null) {
           final Map<dynamic, dynamic> groupsMap =
@@ -103,7 +118,7 @@ class AppGroupRepository {
     });
   }
 
-  Future<DatabaseReference?> _resolveReference(GroupType type) async {
+  Future<DatabaseReference> _resolveReference(GroupType type) async {
     try {
       final dbRef = await _firebaseHelper.databaseReference;
       return dbRef
