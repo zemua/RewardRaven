@@ -17,6 +17,11 @@ class FirebaseHelper {
 
   Future<void> _loadDatabase() async {
     try {
+      // TODO fix for get app list
+      /* Firestore can't be acceded from a different thread than it own at the first write operation
+       because is the time when the reference to the local db is created, keep in mind that Firestore
+        runs all their operations asynchronously(they don't block the calling thread) but their callbacks
+         are called on the main looper */
       _database.setPersistenceEnabled(true);
       _database.setPersistenceCacheSizeBytes(90000000); // cache size 90MB
 

@@ -48,7 +48,9 @@ class AppList extends StatelessWidget {
             return ListView.builder(
               itemCount: apps.length,
               itemBuilder: (context, index) {
-                return AppListItem(app: apps[index], listType: listType);
+                return AppListItem(
+                    app: apps[index],
+                    listType: listType); // TODO is running not in main thread
               },
             );
           }
