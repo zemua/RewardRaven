@@ -17,8 +17,7 @@ class FirebaseHelper {
 
   Future<void> _loadDatabase() async {
     try {
-      // TODO figure out how to enable persistence when connected to the external db without errors
-      //_database.setPersistenceEnabled(true);
+      _database.setPersistenceEnabled(true);
       _database.setPersistenceCacheSizeBytes(90000000); // cache size 90MB
 
       _databaseReference = _database.ref(_databasePath);
