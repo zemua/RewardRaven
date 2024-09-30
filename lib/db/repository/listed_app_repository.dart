@@ -56,11 +56,11 @@ class ListedAppRepository {
       );
       final ref = await _resolveReference(app);
       final dbEvent = await ref.once().timeout(const Duration(seconds: 10));
-      final DataSnapshot? snapshot = dbEvent.snapshot;
-      if (snapshot?.value != null) {
+      final DataSnapshot snapshot = dbEvent.snapshot;
+      if (snapshot.value != null) {
         logger.d("Got listed app from: ${ref.path}");
         return ListedApp.fromJson(
-            Map<String, dynamic>.from(snapshot?.value as Map));
+            Map<String, dynamic>.from(snapshot.value as Map));
       } else {
         logger.d('Listed app not found: $platform $identifier');
       }
@@ -69,6 +69,32 @@ class ListedAppRepository {
       rethrow;
     }
     return null;
+  }
+
+  Future<Map<String, ListedApp>> getListedAppsByName(String platform) async {
+    try {
+      final dbRef = await _firebaseHelper.databaseReference;
+      final ref = dbRef
+          .child(sanitizeDbPath(DbCollection.listedApps.name))
+          .child(sanitizeDbPath(platform));
+      final dbEvent = await ref.once().timeout(const Duration(seconds: 10));
+      final DataSnapshot snapshot = dbEvent.snapshot;
+      if (snapshot.value != null) {
+        final Map<String, dynamic> appsMap =
+            snapshot.value as Map<String, dynamic>;
+        final Map<String, ListedApp> apps = appsMap.map((key, value) {
+          final app = ListedApp.fromJson(Map<String, dynamic>.from(value));
+          return MapEntry(app.identifier, app);
+        });
+        logger.i("Retrieved ${apps.length} listed apps of platform: $platform");
+        return apps;
+      } else {
+        logger.i('No listed apps found for platform: $platform');
+      }
+    } catch (e) {
+      logger.e('Failed to get listed apps: $e');
+    }
+    return {};
   }
 
   Future<DatabaseReference> _resolveReference(ListedApp app) async {
