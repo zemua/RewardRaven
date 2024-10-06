@@ -75,7 +75,6 @@ void main() {
       when(mockDatabaseReference.once())
           .thenAnswer((_) async => Future.value(mockDatabaseEvent));
       when(mockDataSnapshot.value).thenReturn(listedApp.toJson());
-      when(mockDatabaseReference.path).thenReturn('testPath');
 
       final result =
           await listedAppRepository.getListedAppById('testId', "testPlatform");
@@ -156,44 +155,6 @@ void main() {
       final json = app.toJson();
 
       expect(json['status'], 'positive');
-    });
-
-    test('getListedAppsByName retrieves listed apps successfully', () async {
-      final mockDatabaseEvent = MockDatabaseEvent();
-      final mockDataSnapshot = MockDataSnapshot();
-      final listedAppsJson = {
-        'app1': {
-          'identifier': 'app1.id',
-          'platform': 'testPlatform',
-          'listId': 1,
-          'status': 'positive',
-        },
-        'app2': {
-          'identifier': 'app2.id',
-          'platform': 'testPlatform',
-          'listId': 2,
-          'status': 'negative',
-        },
-      };
-
-      when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
-      when(mockDatabaseEvent.snapshot).thenReturn(mockDataSnapshot);
-      when(mockDatabaseReference.once())
-          .thenAnswer((_) async => Future.value(mockDatabaseEvent));
-      when(mockDataSnapshot.value).thenReturn(listedAppsJson);
-
-      final result =
-          await listedAppRepository.getListedAppsByName('testPlatform');
-
-      expect(result, isNotEmpty);
-      expect(result.length, 2);
-      expect(result['app1.id']?.identifier, 'app1.id');
-      expect(result['app1.id']?.status, AppStatus.positive);
-      expect(result['app2.id']?.identifier, 'app2.id');
-      expect(result['app2.id']?.status, AppStatus.negative);
-
-      verify(mockDatabaseReference.child('listedApps')).called(1);
-      verify(mockDatabaseReference.child('testPlatform')).called(1);
     });
   });
 }

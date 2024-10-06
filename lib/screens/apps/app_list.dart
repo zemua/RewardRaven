@@ -27,7 +27,6 @@ class AppList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appsFetcher = locator<AppsFetcher>();
-    final ListedAppService appService = locator<ListedAppService>();
     return Scaffold(
       appBar: AppBar(
         title: Text(titleBarMessage),
@@ -59,41 +58,6 @@ class AppList extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget buildDeprecated(BuildContext context) {
-  final appsFetcher = locator<AppsFetcher>();
-  return Scaffold(
-    appBar: AppBar(
-      //title: Text(titleBarMessage),
-      title: const Text('Title Bar Message'),
-    ),
-    body: FutureBuilder<List<AppInfo>>(
-      future: appsFetcher.fetchInstalledApps(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(
-              child: Text(
-                  '${AppLocalizations.of(context)!.error}: ${snapshot.error}'));
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Center(child: Text(AppLocalizations.of(context)!.noAppsFound));
-        } else {
-          final apps = snapshot.data!;
-          return ListView.builder(
-            itemCount: apps.length,
-            itemBuilder: (context, index) {
-              return AppListItem(
-                  app: apps[index],
-                  listType: AppListType
-                      .positive); // TODO is running not in main thread
-            },
-          );
-        }
-      },
-    ),
-  );
 }
 
 class AppListItem extends StatefulWidget {
