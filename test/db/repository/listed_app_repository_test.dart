@@ -75,6 +75,7 @@ void main() {
       when(mockDatabaseReference.once())
           .thenAnswer((_) async => Future.value(mockDatabaseEvent));
       when(mockDataSnapshot.value).thenReturn(listedApp.toJson());
+      when(mockDatabaseReference.path).thenReturn('testPath');
 
       final result =
           await listedAppRepository.getListedAppById('testId', "testPlatform");

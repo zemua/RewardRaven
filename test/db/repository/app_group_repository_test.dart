@@ -120,6 +120,7 @@ void main() {
       when(mockDataSnapshot.value).thenReturn({
         'group1': appGroup.toJson(),
       });
+      when(mockDatabaseReference.path).thenReturn('testPath');
 
       final stream = appGroupRepository.streamGroups(GroupType.positive);
 
