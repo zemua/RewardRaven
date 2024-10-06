@@ -38,7 +38,7 @@ void main() async {
     }
   }
 
-  setupLocator();
+  _setupLocator();
   runApp(const RewardRavenApp());
 }
 
@@ -60,7 +60,7 @@ class RewardRavenApp extends StatelessWidget {
   }
 }
 
-void setupLocator() {
+void _setupLocator() {
   locator.registerSingleton<PlatformWrapper>(PlatformWrapperImpl());
 
   if (!kIsWeb) {
