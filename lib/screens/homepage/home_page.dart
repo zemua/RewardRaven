@@ -104,7 +104,16 @@ class HomePage extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          print('Negative groups button pressed');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AppGroupList(
+                                listType: AppGroupListType.negative,
+                                titleBarMessage: AppLocalizations.of(context)!
+                                    .negativeGroups,
+                              ),
+                            ),
+                          );
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,

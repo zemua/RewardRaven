@@ -38,7 +38,7 @@ void main() {
       expect(find.byType(AppGroupList), findsOneWidget);
     });
 
-    testWidgets('prints message on negative apps button press',
+    testWidgets('navigates to negative apps list on negative apps button press',
         (WidgetTester tester) async {
       await tester.pumpWidget(const RewardRavenApp());
       await tester.tap(find.text('Negative Apps'));
@@ -46,12 +46,13 @@ void main() {
       expect(find.byType(AppList), findsOneWidget);
     });
 
-    testWidgets('prints message on negative groups button press',
+    testWidgets(
+        'navigates to negative groups list on negative groups button press',
         (WidgetTester tester) async {
       await tester.pumpWidget(const RewardRavenApp());
       await tester.tap(find.text('Negative Groups'));
-      await tester.pump();
-      // Check console output for the message
+      await tester.pumpAndSettle();
+      expect(find.byType(AppGroupList), findsOneWidget);
     });
 
     testWidgets('prints message on random checks button press',

@@ -95,6 +95,7 @@ class AppGroupRepository {
         if (!completer.isCompleted) {
           completer.completeError(
               TimeoutException('Timeout while streaming groups'));
+          sink.addError(TimeoutException('Timeout while streaming groups'));
         }
       }).map((event) {
         if (!completer.isCompleted) {
