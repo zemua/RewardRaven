@@ -32,6 +32,7 @@ class AppList extends StatelessWidget {
         title: Text(titleBarMessage),
       ),
       body: FutureBuilder<List<AppInfo>>(
+        // TODO maybe change to stream?
         future: appsFetcher.fetchInstalledApps(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
