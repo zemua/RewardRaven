@@ -51,6 +51,7 @@ class AppGroupList extends StatelessWidget {
               itemBuilder: (context, index) {
                 final group = groups[index];
                 return ListTile(
+                  // TODO update look to feel touchable and on touch go to edit the group screen
                   title: Text(group.name),
                 );
               },
