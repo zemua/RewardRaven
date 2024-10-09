@@ -12,6 +12,7 @@ import 'package:reward_raven/db/service/app_group_service.dart';
 import 'package:reward_raven/screens/appgroups/addgroup/add_group.dart';
 import 'package:reward_raven/screens/appgroups/app_group_list.dart';
 import 'package:reward_raven/screens/appgroups/app_group_list_type.dart';
+import 'package:reward_raven/screens/appgroups/editgroup/edit_group.dart';
 
 import 'app_group_list_test.mocks.dart';
 
@@ -174,6 +175,31 @@ void main() {
 
       // Verify that AddGroupScreen is displayed
       expect(find.byType(AddGroupScreen), findsOneWidget);
+    });
+
+    testWidgets('navigates to EditGroupScreen when a ListTile is clicked',
+        (WidgetTester tester) async {
+      final mockGroupsService = MockAppGroupService();
+      locator.registerSingleton<AppGroupService>(mockGroupsService);
+      when(mockGroupsService.streamGroups(GroupType.positive))
+          .thenAnswer((_) => Stream.value([
+                AppGroup(name: 'Group 1', type: GroupType.positive),
+                AppGroup(name: 'Group 2', type: GroupType.positive),
+              ]));
+
+      await tester.pumpWidget(createLocalizationTestableWidget(
+          const AppGroupList(
+              listType: AppGroupListType.positive,
+              titleBarMessage: "Title Bar Message")));
+
+      await tester.pump(); // Rebuild the widget with the data
+
+      // Tap the first ListTile
+      await tester.tap(find.text('Group 1'));
+      await tester.pumpAndSettle(); // Wait for the navigation to complete
+
+      // Verify that EditGroupScreen is displayed
+      expect(find.byType(EditGroupScreen), findsOneWidget);
     });
   });
 }

@@ -8,6 +8,7 @@ import '../../db/entity/app_group.dart';
 import '../../db/service/app_group_service.dart';
 import 'addgroup/add_group.dart';
 import 'app_group_list_type.dart';
+import 'editgroup/edit_group.dart';
 
 final GetIt locator = GetIt.instance;
 
@@ -50,9 +51,21 @@ class AppGroupList extends StatelessWidget {
               itemCount: groups.length,
               itemBuilder: (context, index) {
                 final group = groups[index];
-                return ListTile(
-                  // TODO update look to feel touchable and on touch go to edit the group screen
-                  title: Text(group.name),
+                return Card(
+                  elevation: 2.0,
+                  margin: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 16.0),
+                  child: ListTile(
+                    title: Text(group.name),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditGroupScreen(group: group),
+                        ),
+                      );
+                    },
+                  ),
                 );
               },
             );
