@@ -26,13 +26,13 @@ void main() {
     });
 
     test('saveGroup adds group to repository', () async {
-      final group = AppGroup(name: 'Test Group', type: GroupType.positive);
+      const group = AppGroup(name: 'Test Group', type: GroupType.positive);
       await appGroupService.saveGroup(group);
       verify(mockRepository.saveGroup(group)).called(1);
     });
 
     test('updateGroup updates group in repository', () async {
-      final group = AppGroup(name: 'Updated Group', type: GroupType.positive);
+      const group = AppGroup(name: 'Updated Group', type: GroupType.positive);
       const key = 'test_key';
       await appGroupService.updateGroup(key, group);
       verify(mockRepository.updateGroup(key, group)).called(1);
@@ -41,8 +41,8 @@ void main() {
     test('getGroups retrieves groups from repository', () async {
       const groupType = GroupType.positive;
       final groups = [
-        AppGroup(name: 'Group 1', type: groupType),
-        AppGroup(name: 'Group 2', type: groupType),
+        const AppGroup(name: 'Group 1', type: groupType),
+        const AppGroup(name: 'Group 2', type: groupType),
       ];
 
       when(mockRepository.getGroups(groupType)).thenAnswer((_) async => groups);
@@ -56,8 +56,8 @@ void main() {
     test('streamGroups streams groups from repository', () {
       const groupType = GroupType.positive;
       final groups = [
-        AppGroup(name: 'Group 1', type: groupType),
-        AppGroup(name: 'Group 2', type: groupType),
+        const AppGroup(name: 'Group 1', type: groupType),
+        const AppGroup(name: 'Group 2', type: groupType),
       ];
 
       when(mockRepository.streamGroups(groupType))

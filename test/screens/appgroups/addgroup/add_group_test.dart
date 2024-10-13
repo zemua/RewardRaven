@@ -65,7 +65,7 @@ void main() {
     await tester.tap(find.widgetWithText(ElevatedButton, 'Add Group'));
     await tester.pump();
 
-    final appGroup = AppGroup(name: 'New Group', type: GroupType.positive);
+    const appGroup = AppGroup(name: 'New Group', type: GroupType.positive);
     // Verify that group save was called with the correct argument
     verify(appGroupService.saveGroup(appGroup)).called(1);
   });

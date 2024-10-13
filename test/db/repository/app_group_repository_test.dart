@@ -24,7 +24,7 @@ void main() {
   });
 
   group('AppGroupRepository', () {
-    final appGroup = AppGroup(
+    const appGroup = AppGroup(
       name: 'testName',
       type: GroupType.positive,
       preventClose: true,

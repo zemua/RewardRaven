@@ -24,7 +24,7 @@ void main() {
   });
 
   group('ListedAppRepository', () {
-    final listedApp = ListedApp(
+    const listedApp = ListedApp(
         identifier: 'testId',
         platform: 'testPlatform',
         listId: 3,
@@ -146,7 +146,7 @@ void main() {
     });
 
     test('toJson should correctly serialize status', () {
-      final app = ListedApp(
+      const app = ListedApp(
         identifier: 'app1',
         platform: 'android',
         listId: 1,

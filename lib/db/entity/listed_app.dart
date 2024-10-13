@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 
 class ListedApp extends Equatable {
-  String identifier;
-  String platform;
-  AppStatus status;
-  int? listId;
+  final String identifier;
+  final String platform;
+  final AppStatus status;
+  final int? listId;
 
-  ListedApp({
+  const ListedApp({
     required this.identifier,
     required this.platform,
     required this.status,

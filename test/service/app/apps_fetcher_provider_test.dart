@@ -50,7 +50,6 @@ void main() {
     test('fetchInstalledApps returns empty list on non-Android platforms',
         () async {
       MockPlatformWrapper mockPlatformWrapper = MockPlatformWrapper();
-      MockAndroidAppsFetcher mockAndroidAppsFetcher = MockAndroidAppsFetcher();
       locator.registerSingleton<PlatformWrapper>(mockPlatformWrapper);
       locator.registerSingleton<EmptyAppsFetcher>(EmptyAppsFetcher());
       when(mockPlatformWrapper.isAndroid()).thenReturn(false);

@@ -56,11 +56,11 @@ class ListedAppRepository {
       );
       final ref = await _resolveReference(app);
       final dbEvent = await ref.once().timeout(const Duration(seconds: 10));
-      final DataSnapshot? snapshot = dbEvent.snapshot;
-      if (snapshot?.value != null) {
+      final DataSnapshot snapshot = dbEvent.snapshot;
+      if (snapshot.value != null) {
         logger.d("Got listed app from: ${ref.path}");
         return ListedApp.fromJson(
-            Map<String, dynamic>.from(snapshot?.value as Map));
+            Map<String, dynamic>.from(snapshot.value as Map));
       } else {
         logger.d('Listed app not found: $platform $identifier');
       }

@@ -1,15 +1,15 @@
 import 'package:equatable/equatable.dart';
 
 class AppGroup extends Equatable {
-  String name;
-  GroupType type;
-  bool? preventClose;
+  final String name;
+  final GroupType type;
+  final bool? preventClose;
 
-  AppGroup({
+  const AppGroup({
     required this.name,
     required this.type,
     this.preventClose,
-  }) : assert(type != null, 'type cannot be null');
+  });
 
   @override
   List<Object?> get props => [name, type, preventClose];

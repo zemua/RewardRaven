@@ -30,28 +30,28 @@ void main() {
 
   group('ListedAppService', () {
     test('addListedApp adds app to repository', () async {
-      final app = ListedApp(
+      const app = ListedApp(
           identifier: 'test', platform: 'android', status: AppStatus.positive);
       await listedAppService.saveListedApp(app);
       verify(mockRepository.saveListedApp(app)).called(1);
     });
 
     test('updateListedApp updates app in repository', () async {
-      final app = ListedApp(
+      const app = ListedApp(
           identifier: 'test', platform: 'android', status: AppStatus.positive);
       await listedAppService.updateListedApp(app);
       verify(mockRepository.updateListedApp(app)).called(1);
     });
 
     test('deleteListedApp deletes app from repository', () async {
-      final app = ListedApp(
+      const app = ListedApp(
           identifier: 'test', platform: 'android', status: AppStatus.positive);
       await listedAppService.deleteListedApp(app);
       verify(mockRepository.deleteListedApp(app)).called(1);
     });
 
     test('getListedAppById returns app if found', () async {
-      final app = ListedApp(
+      const app = ListedApp(
           identifier: 'test', platform: 'android', status: AppStatus.positive);
       when(mockRepository.getListedAppById('test', 'android'))
           .thenAnswer((_) async => app);
@@ -69,7 +69,7 @@ void main() {
     });
 
     test('fetchStatus returns status if app found', () async {
-      final app = ListedApp(
+      const app = ListedApp(
           identifier: 'test', platform: 'android', status: AppStatus.positive);
       when(mockRepository.getListedAppById('test', 'android'))
           .thenAnswer((_) async => app);

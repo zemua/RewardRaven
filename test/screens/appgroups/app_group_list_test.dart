@@ -114,8 +114,8 @@ void main() {
       locator.registerSingleton<AppGroupService>(mockGroupsService);
       when(mockGroupsService.streamGroups(GroupType.positive))
           .thenAnswer((_) => Stream.value([
-                AppGroup(name: 'Group 1', type: GroupType.positive),
-                AppGroup(name: 'Group 2', type: GroupType.positive),
+                const AppGroup(name: 'Group 1', type: GroupType.positive),
+                const AppGroup(name: 'Group 2', type: GroupType.positive),
               ]));
 
       await tester.pumpWidget(createLocalizationTestableWidget(
@@ -136,8 +136,8 @@ void main() {
       locator.registerSingleton<AppGroupService>(mockGroupsService);
       when(mockGroupsService.streamGroups(GroupType.positive))
           .thenAnswer((_) => Stream.value([
-                AppGroup(name: 'Group 1', type: GroupType.positive),
-                AppGroup(name: 'Group 2', type: GroupType.positive),
+                const AppGroup(name: 'Group 1', type: GroupType.positive),
+                const AppGroup(name: 'Group 2', type: GroupType.positive),
               ]));
 
       await tester.pumpWidget(createLocalizationTestableWidget(
@@ -183,8 +183,8 @@ void main() {
       locator.registerSingleton<AppGroupService>(mockGroupsService);
       when(mockGroupsService.streamGroups(GroupType.positive))
           .thenAnswer((_) => Stream.value([
-                AppGroup(name: 'Group 1', type: GroupType.positive),
-                AppGroup(name: 'Group 2', type: GroupType.positive),
+                const AppGroup(name: 'Group 1', type: GroupType.positive),
+                const AppGroup(name: 'Group 2', type: GroupType.positive),
               ]));
 
       await tester.pumpWidget(createLocalizationTestableWidget(
