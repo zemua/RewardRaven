@@ -71,6 +71,35 @@ class ListedAppRepository {
     return null;
   }
 
+  Future<List<ListedApp>> getListedAppsByStatus(
+      AppStatus status, String platform) async {
+    try {
+      final dbRef = await _firebaseHelper.databaseReference;
+      final ref = dbRef
+          .child(sanitizeDbPath(DbCollection.listedApps.name))
+          .child(sanitizeDbPath(platform));
+      final dbEvent = await ref.once().timeout(const Duration(seconds: 10));
+      final DataSnapshot snapshot = dbEvent.snapshot;
+      if (snapshot.value != null) {
+        final Map<dynamic, dynamic> appsMap =
+            snapshot.value as Map<dynamic, dynamic>;
+        final List<ListedApp> apps = appsMap.values
+            .map((value) {
+              return ListedApp.fromJson(Map<String, dynamic>.from(value));
+            })
+            .where((app) => app.status == status)
+            .toList();
+        logger.i("Retrieved ${apps.length} listed apps with status: $status");
+        return apps;
+      } else {
+        logger.i('No listed apps found with status: $status');
+      }
+    } catch (e) {
+      logger.e('Failed to get listed apps by status: $e');
+    }
+    return [];
+  }
+
   Future<DatabaseReference> _resolveReference(ListedApp app) async {
     try {
       if (app.identifier.isEmpty || app.platform.isEmpty) {

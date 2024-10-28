@@ -5,6 +5,7 @@ import 'package:mockito/mockito.dart';
 import 'package:reward_raven/db/entity/listed_app.dart';
 import 'package:reward_raven/db/repository/listed_app_repository.dart';
 import 'package:reward_raven/db/service/listed_app_service.dart';
+import 'package:reward_raven/screens/apps/app_list_type.dart';
 import 'package:reward_raven/service/platform_wrapper.dart';
 
 import 'listed_app_service_test.mocks.dart';
@@ -84,6 +85,21 @@ void main() {
       when(mockPlatformWrapper.platformName).thenReturn('android');
       final result = await listedAppService.fetchStatus('test');
       expect(result, AppStatus.unknown);
+    });
+
+    test('fetchListedAppsByType returns apps of specified type', () async {
+      const app1 = ListedApp(
+          identifier: 'test1', platform: 'android', status: AppStatus.positive);
+      const app2 = ListedApp(
+          identifier: 'test2', platform: 'android', status: AppStatus.positive);
+      const listType = AppListType.positive;
+
+      when(mockRepository.getListedAppsByStatus(AppStatus.positive, 'android'))
+          .thenAnswer((_) async => [app1, app2]);
+      when(mockPlatformWrapper.platformName).thenReturn('android');
+
+      final result = await listedAppService.fetchListedAppsByType(listType);
+      expect(result, [app1, app2]);
     });
   });
 }

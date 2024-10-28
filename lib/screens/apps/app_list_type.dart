@@ -20,6 +20,15 @@ extension ListTypeExtension on AppListType {
         return [AppStatus.positive, AppStatus.depends, AppStatus.neutral];
     }
   }
+
+  AppStatus get appStatus {
+    switch (this) {
+      case AppListType.positive:
+        return AppStatus.positive;
+      case AppListType.negative:
+        return AppStatus.negative;
+    }
+  }
 }
 
 AppStatus getTargetApp(AppListType listType) {

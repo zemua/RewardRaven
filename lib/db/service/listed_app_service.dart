@@ -1,4 +1,5 @@
 import '../../main.dart';
+import '../../screens/apps/app_list_type.dart';
 import '../../service/platform_wrapper.dart';
 import '../entity/listed_app.dart';
 import '../repository/listed_app_repository.dart';
@@ -24,6 +25,11 @@ class ListedAppService {
   Future<ListedApp?> getListedAppById(String identifier) async {
     return await _repository.getListedAppById(
         identifier, _platformWrapper.platformName);
+  }
+
+  Future<List<ListedApp>> fetchListedAppsByType(AppListType listType) async {
+    return await _repository.getListedAppsByStatus(
+        listType.appStatus, _platformWrapper.platformName);
   }
 
   Future<AppStatus> fetchStatus(String identifier) async {

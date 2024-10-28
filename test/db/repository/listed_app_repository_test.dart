@@ -157,5 +157,46 @@ void main() {
 
       expect(json['status'], 'positive');
     });
+
+    test('getListedAppsByStatus retrieves listed apps by status successfully',
+        () async {
+      final mockDatabaseEvent = MockDatabaseEvent();
+      final mockDataSnapshot = MockDataSnapshot();
+      final listedAppJson = {
+        'identifier': 'testId',
+        'platform': 'testPlatform',
+        'listId': 3,
+        'status': 'positive',
+      };
+      final anotherAppJson = {
+        'identifier': 'anotherid',
+        'platform': 'testPlatform',
+        'listId': 4,
+        'status': 'negative',
+      };
+      final listedApp = ListedApp.fromJson(listedAppJson);
+      final appsMap = {
+        'app1': listedAppJson,
+        'app2': anotherAppJson,
+      };
+
+      when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
+      when(mockDatabaseEvent.snapshot).thenReturn(mockDataSnapshot);
+      when(mockDatabaseReference.once())
+          .thenAnswer((_) async => Future.value(mockDatabaseEvent));
+      when(mockDataSnapshot.value).thenReturn(appsMap);
+
+      final result = await listedAppRepository.getListedAppsByStatus(
+          AppStatus.positive, "testPlatform");
+
+      expect(result, isNotEmpty);
+      expect(result.length, 1);
+      expect(result.first.platform, listedApp.platform);
+      expect(result.first.identifier, listedApp.identifier);
+      expect(result.first.status, listedApp.status);
+      expect(result.first.listId, listedApp.listId);
+
+      verify(mockDatabaseReference.child('listedApps')).called(1);
+    });
   });
 }

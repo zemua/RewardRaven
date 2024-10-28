@@ -61,7 +61,8 @@ class AppGroupList extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => EditGroupScreen(group: group),
+                          builder: (context) => EditGroupScreen(
+                              group: group, listType: listType.toAppListType()),
                         ),
                       );
                     },

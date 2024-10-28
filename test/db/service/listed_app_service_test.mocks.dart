@@ -125,4 +125,20 @@ class MockListedAppRepository extends _i1.Mock
         ),
         returnValue: _i6.Future<_i7.ListedApp?>.value(),
       ) as _i6.Future<_i7.ListedApp?>);
+
+  @override
+  _i6.Future<List<_i7.ListedApp>> getListedAppsByStatus(
+    _i7.AppStatus? status,
+    String? platform,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getListedAppsByStatus,
+          [
+            status,
+            platform,
+          ],
+        ),
+        returnValue: _i6.Future<List<_i7.ListedApp>>.value(<_i7.ListedApp>[]),
+      ) as _i6.Future<List<_i7.ListedApp>>);
 }
