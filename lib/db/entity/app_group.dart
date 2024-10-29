@@ -1,11 +1,13 @@
 import 'package:equatable/equatable.dart';
 
 class AppGroup extends Equatable {
+  final String? id;
   final String name;
   final GroupType type;
   final bool? preventClose;
 
   const AppGroup({
+    this.id,
     required this.name,
     required this.type,
     this.preventClose,
@@ -14,11 +16,13 @@ class AppGroup extends Equatable {
   @override
   List<Object?> get props => [name, type, preventClose];
 
-  factory AppGroup.fromJson(Map<String, dynamic> json) {
+  factory AppGroup.fromJson(
+      {required Map<String, dynamic> json, required String id}) {
     return AppGroup(
       name: json['name'],
       type: _parseAppGroupListType(json['type']),
       preventClose: json['preventClose'] ?? false,
+      id: id,
     );
   }
 
@@ -34,6 +38,7 @@ class AppGroup extends Equatable {
       'name': name,
       'type': type.toString().split('.').last,
       'preventClose': preventClose ?? false,
+      'id': id,
     };
   }
 }

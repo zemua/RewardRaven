@@ -51,7 +51,7 @@ class AppGroupRepository {
       if (snapshot.value != null) {
         final Map<String, dynamic> groupMap =
             Map<String, dynamic>.from(snapshot.value as Map);
-        final AppGroup group = AppGroup.fromJson(groupMap);
+        final AppGroup group = AppGroup.fromJson(json: groupMap, id: key);
         logger.i("Retrieved group with key: $key of type: $type");
         return group;
       } else {
@@ -71,8 +71,9 @@ class AppGroupRepository {
       if (snapshot.value != null) {
         final Map<dynamic, dynamic> groupsMap =
             snapshot.value as Map<dynamic, dynamic>;
-        final List<AppGroup> groups = groupsMap.values.map((value) {
-          return AppGroup.fromJson(Map<String, dynamic>.from(value));
+        final List<AppGroup> groups = groupsMap.entries.map((entry) {
+          return AppGroup.fromJson(
+              json: Map<String, dynamic>.from(entry.value), id: entry.key);
         }).toList();
         logger.i("Retrieved ${groups.length} groups of type: $type");
         return groups;
@@ -106,8 +107,9 @@ class AppGroupRepository {
         if (snapshot.value != null) {
           final Map<dynamic, dynamic> groupsMap =
               snapshot.value as Map<dynamic, dynamic>;
-          final List<AppGroup> groups = groupsMap.values.map((value) {
-            return AppGroup.fromJson(Map<String, dynamic>.from(value));
+          final List<AppGroup> groups = groupsMap.entries.map((entry) {
+            return AppGroup.fromJson(
+                json: Map<String, dynamic>.from(entry.value), id: entry.key);
           }).toList();
           logger.i("Streamed ${groups.length} groups of type: $type");
           return groups;

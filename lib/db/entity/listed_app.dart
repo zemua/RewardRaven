@@ -4,7 +4,7 @@ class ListedApp extends Equatable {
   final String identifier;
   final String platform;
   final AppStatus status;
-  final int? listId;
+  final String? listId;
 
   const ListedApp({
     required this.identifier,
@@ -49,6 +49,15 @@ class ListedApp extends Equatable {
     return status != null
         ? status.toString().split('.').last
         : AppStatus.unknown.toString().split('.').last;
+  }
+
+  copyWith({String? listId}) {
+    return ListedApp(
+      identifier: identifier,
+      platform: platform,
+      status: status,
+      listId: listId,
+    );
   }
 }
 
