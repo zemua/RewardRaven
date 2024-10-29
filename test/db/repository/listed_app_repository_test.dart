@@ -27,7 +27,7 @@ void main() {
     const listedApp = ListedApp(
         identifier: 'testId',
         platform: 'testPlatform',
-        listId: 3,
+        listId: "3",
         status: AppStatus.positive);
 
     test('addListedApp adds a listed app successfully', () async {
@@ -110,7 +110,7 @@ void main() {
       final json = {
         'identifier': 'app1',
         'platform': 'android',
-        'listId': 1,
+        'listId': "1",
         'status': null,
       };
 
@@ -123,7 +123,7 @@ void main() {
       final json = {
         'identifier': 'app1',
         'platform': 'android',
-        'listId': 1,
+        'listId': "1",
         'status': 'positive',
       };
 
@@ -136,7 +136,7 @@ void main() {
       final json = {
         'identifier': 'app1',
         'platform': 'android',
-        'listId': 1,
+        'listId': "1",
         'status': 'POSITIVE',
       };
 
@@ -149,7 +149,7 @@ void main() {
       const app = ListedApp(
         identifier: 'app1',
         platform: 'android',
-        listId: 1,
+        listId: "1",
         status: AppStatus.positive,
       );
 
@@ -165,13 +165,13 @@ void main() {
       final listedAppJson = {
         'identifier': 'testId',
         'platform': 'testPlatform',
-        'listId': 3,
+        'listId': "3",
         'status': 'positive',
       };
       final anotherAppJson = {
         'identifier': 'anotherid',
         'platform': 'testPlatform',
-        'listId': 4,
+        'listId': "4",
         'status': 'negative',
       };
       final listedApp = ListedApp.fromJson(listedAppJson);

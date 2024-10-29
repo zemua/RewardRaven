@@ -9,7 +9,6 @@ import '../../../db/entity/app_group.dart';
 import '../../../db/entity/listed_app.dart';
 import '../../../db/service/listed_app_service.dart';
 import '../../../service/app/apps_fetcher.dart';
-import '../../../service/platform_wrapper.dart';
 import '../../apps/app_list_type.dart';
 
 final GetIt locator = GetIt.instance;
@@ -40,8 +39,10 @@ class EditGroupScreen extends StatelessWidget {
         body: TabBarView(
           children: [
             Center(child: _buildAppList(group, listType)),
-            Center(child: Text('Random checks included in this group')),
-            Center(child: Text('Options for this group')),
+            Center(
+                child: Text(
+                    'Random checks included in this group')), // TODO implement tab
+            Center(child: Text('Options for this group')), // TODO implement tab
           ],
         ),
       ),
@@ -81,14 +82,19 @@ FutureBuilder<List<AppInfo>> _buildAppList(
             } else {
               final listedApps = dbSnapshot.data!;
               final filteredApps = listedApps
-                  .where((app) => apps.any(
-                      (listedApp) => listedApp.packageName == app.identifier))
+                  .map((app) => apps
+                      .where((listedApp) =>
+                          listedApp.packageName == app.identifier)
+                      .map((listedApp) => MapEntry(app, listedApp)))
+                  .expand((pair) => pair)
                   .toList();
               return ListView.builder(
                 itemCount: filteredApps.length,
                 itemBuilder: (context, index) {
                   return GroupAppItem(
-                      app: filteredApps[index], listId: group.id!);
+                      listedApp: filteredApps[index].key,
+                      appInfo: filteredApps[index].value,
+                      listId: group.id!);
                 },
               );
             }
@@ -100,11 +106,13 @@ FutureBuilder<List<AppInfo>> _buildAppList(
 }
 
 class GroupAppItem extends StatefulWidget {
-  final ListedApp app;
+  final ListedApp listedApp;
+  final AppInfo appInfo;
   final String listId;
 
   const GroupAppItem({
-    required this.app,
+    required this.listedApp,
+    required this.appInfo,
     required this.listId,
     super.key,
   });
@@ -114,8 +122,6 @@ class GroupAppItem extends StatefulWidget {
 }
 
 class GroupAppItemState extends State<GroupAppItem> {
-  final PlatformWrapper _platformWrapper = locator<PlatformWrapper>();
-
   bool _isSwitched = false;
   bool _isDisabled = false;
   final ListedAppService _service = locator<ListedAppService>();
@@ -128,16 +134,22 @@ class GroupAppItemState extends State<GroupAppItem> {
 
   Future<void> _loadSwitchValue() async {
     setState(() {
-      _isSwitched = widget.listId == widget.app.listId;
-      _isDisabled =
-          widget.app.listId != null && widget.app.listId != widget.listId;
+      _isSwitched = widget.listId == widget.listedApp.listId;
+      _isDisabled = widget.listedApp.listId != null &&
+          widget.listedApp.listId != widget.listId;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(widget.app.identifier),
+      leading: Image.memory(
+        widget.appInfo.icon!,
+        errorBuilder: (context, error, stackTrace) {
+          return const Icon(Icons.image_not_supported);
+        },
+      ),
+      title: Text(widget.appInfo.name),
       trailing: Switch(
         value: _isSwitched,
         onChanged: _isDisabled
@@ -147,7 +159,7 @@ class GroupAppItemState extends State<GroupAppItem> {
                   _isSwitched = value;
                 });
                 final listId = value ? widget.listId : null;
-                final listedApp = widget.app.copyWith(
+                final listedApp = widget.listedApp.copyWith(
                   listId: listId,
                 );
                 await _service.updateListedApp(listedApp);

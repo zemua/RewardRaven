@@ -104,6 +104,12 @@ class AppListItemState extends State<AppListItem> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      leading: Image.memory(
+        widget.app.icon!,
+        errorBuilder: (context, error, stackTrace) {
+          return const Icon(Icons.image_not_supported);
+        },
+      ),
       title: Text(widget.app.name),
       trailing: Switch(
         value: _isSwitched,
