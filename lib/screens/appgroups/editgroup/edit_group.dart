@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:installed_apps/app_info.dart';
+import 'package:logger/logger.dart';
 
 import '../../../db/entity/app_group.dart';
 import '../../../db/entity/listed_app.dart';
@@ -17,8 +18,7 @@ class EditGroupScreen extends StatelessWidget {
   final AppListType listType;
   final AppGroup group;
 
-  const EditGroupScreen(
-      {required this.group, required this.listType, super.key});
+  EditGroupScreen({required this.group, required this.listType, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -122,6 +122,8 @@ class GroupAppItem extends StatefulWidget {
 }
 
 class GroupAppItemState extends State<GroupAppItem> {
+  final Logger _logger = Logger();
+
   bool _isSwitched = false;
   bool _isDisabled = false;
   final ListedAppService _service = locator<ListedAppService>();
@@ -146,7 +148,9 @@ class GroupAppItemState extends State<GroupAppItem> {
       leading: Image.memory(
         widget.appInfo.icon!,
         errorBuilder: (context, error, stackTrace) {
-          return const Icon(Icons.image_not_supported);
+          _logger.e(
+              'Error loading image: $error - context: $context - stack trace: $stackTrace');
+          return const Icon(Icons.apps);
         },
       ),
       title: Text(widget.appInfo.name),

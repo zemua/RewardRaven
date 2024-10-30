@@ -18,7 +18,7 @@ class AppList extends StatelessWidget {
   final AppListType listType;
   final String titleBarMessage;
 
-  const AppList({
+  AppList({
     required this.listType,
     required this.titleBarMessage,
     super.key,
@@ -107,7 +107,9 @@ class AppListItemState extends State<AppListItem> {
       leading: Image.memory(
         widget.app.icon!,
         errorBuilder: (context, error, stackTrace) {
-          return const Icon(Icons.image_not_supported);
+          _logger.e(
+              'Error loading image: $error - context: $context - stack trace: $stackTrace');
+          return const Icon(Icons.apps);
         },
       ),
       title: Text(widget.app.name),

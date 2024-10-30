@@ -50,7 +50,7 @@ void main() {
       locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
       when(mockAppsFetcher.fetchInstalledApps()).thenAnswer((_) async => []);
 
-      await tester.pumpWidget(createLocalizationTestableWidget(const AppList(
+      await tester.pumpWidget(createLocalizationTestableWidget(AppList(
           listType: AppListType.positive,
           titleBarMessage: "Title Bar Message")));
 
@@ -64,7 +64,7 @@ void main() {
       when(mockAppsFetcher.fetchInstalledApps())
           .thenAnswer((_) async => throw Exception('Failed to fetch apps'));
 
-      await tester.pumpWidget(createLocalizationTestableWidget(const AppList(
+      await tester.pumpWidget(createLocalizationTestableWidget(AppList(
           listType: AppListType.positive,
           titleBarMessage: "Title Bar Message")));
       await tester.pump();
@@ -79,7 +79,7 @@ void main() {
       locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
       when(mockAppsFetcher.fetchInstalledApps()).thenAnswer((_) async => []);
 
-      await tester.pumpWidget(createLocalizationTestableWidget(const AppList(
+      await tester.pumpWidget(createLocalizationTestableWidget(AppList(
           listType: AppListType.positive,
           titleBarMessage: "Title Bar Message")));
       await tester.pump();
@@ -117,7 +117,7 @@ void main() {
       when(mockListedAppService.fetchStatus(any))
           .thenAnswer((_) async => AppStatus.neutral);
 
-      await tester.pumpWidget(createLocalizationTestableWidget(const AppList(
+      await tester.pumpWidget(createLocalizationTestableWidget(AppList(
           listType: AppListType.positive,
           titleBarMessage: "Title Bar Message")));
       await tester.pump();
@@ -150,7 +150,7 @@ void main() {
       when(mockListedAppService.fetchStatus(any))
           .thenAnswer((_) async => AppStatus.negative);
 
-      await tester.pumpWidget(createLocalizationTestableWidget(const AppList(
+      await tester.pumpWidget(createLocalizationTestableWidget(AppList(
           listType: AppListType.positive,
           titleBarMessage: "Title Bar Message")));
       await tester.pump();
@@ -185,7 +185,7 @@ void main() {
       when(mockListedAppService.fetchStatus(any))
           .thenAnswer((_) async => AppStatus.positive);
 
-      await tester.pumpWidget(createLocalizationTestableWidget(const AppList(
+      await tester.pumpWidget(createLocalizationTestableWidget(AppList(
           listType: AppListType.positive,
           titleBarMessage: "Title Bar Message")));
       await tester.pump();
