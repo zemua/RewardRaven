@@ -18,7 +18,8 @@ class EditGroupScreen extends StatelessWidget {
   final AppListType listType;
   final AppGroup group;
 
-  EditGroupScreen({required this.group, required this.listType, super.key});
+  const EditGroupScreen(
+      {required this.group, required this.listType, super.key});
 
   @override
   Widget build(BuildContext context) {
