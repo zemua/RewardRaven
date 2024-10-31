@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:installed_apps/app_info.dart';
@@ -13,6 +12,7 @@ import 'package:reward_raven/screens/appgroups/editgroup/edit_group.dart';
 import 'package:reward_raven/screens/apps/app_list_type.dart';
 import 'package:reward_raven/service/app/apps_fetcher.dart';
 
+import '../../../test_utils/localization_testable.dart';
 import 'edit_group_test.mocks.dart';
 
 @GenerateMocks([AppsFetcher, ListedAppService])
@@ -71,17 +71,12 @@ void main() {
           .thenAnswer((_) async => testListedApps);
 
       // Build the EditGroupScreen widget
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: EditGroupScreen(
-            group: AppGroup(
-                name: 'Test Group',
-                id: 'testGroupId',
-                type: GroupType.positive),
-            listType: AppListType.positive,
-          ),
-        ),
-      );
+      await tester
+          .pumpWidget(createLocalizationTestableWidget(const EditGroupScreen(
+        group: AppGroup(
+            name: 'Test Group', id: 'testGroupId', type: GroupType.positive),
+        listType: AppListType.positive,
+      )));
 
       // Verify that the TabBar contains the 'Apps' tab
       expect(find.text('Apps'), findsOneWidget);
