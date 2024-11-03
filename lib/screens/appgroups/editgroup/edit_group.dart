@@ -145,6 +145,8 @@ class GroupAppItemState extends State<GroupAppItem> {
 
   @override
   Widget build(BuildContext context) {
+    _logger.d('Building app item for ${widget.appInfo.name} with icon: '
+        '${widget.appInfo.icon}');
     return ListTile(
       leading: Image.memory(
         widget.appInfo.icon!,
