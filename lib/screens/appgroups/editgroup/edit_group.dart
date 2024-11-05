@@ -24,7 +24,7 @@ class EditGroupScreen extends StatelessWidget {
             tabs: [
               Tab(text: AppLocalizations.of(context)!.apps),
               Tab(text: AppLocalizations.of(context)!.randomChecks),
-              Tab(text: AppLocalizations.of(context)!.options),
+              Tab(text: AppLocalizations.of(context)!.conditions),
             ],
           ),
         ),

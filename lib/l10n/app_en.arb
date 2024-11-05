@@ -5,6 +5,7 @@
     "description": "The title of the app"
   },
   "apps": "Apps",
+  "conditions": "Conditions",
   "editGroup": "Edit Group",
   "error": "Error",
   "groupName": "Group Name",
