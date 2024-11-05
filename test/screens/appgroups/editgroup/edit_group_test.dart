@@ -22,10 +22,10 @@ void main() {
   final mockAppFetcher = MockAppsFetcher();
   final mockListedAppService = MockListedAppService();
 
-  setUp(() {
-    locator.registerSingleton<AppsFetcher>(mockAppFetcher);
-    locator.registerSingleton<ListedAppService>(mockListedAppService);
+  locator.registerSingleton<AppsFetcher>(mockAppFetcher);
+  locator.registerSingleton<ListedAppService>(mockListedAppService);
 
+  setUp(() {
     // Define the test data
     final testApps = [
       AppInfo(
