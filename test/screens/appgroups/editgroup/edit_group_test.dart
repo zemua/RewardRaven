@@ -10,6 +10,7 @@ import 'package:reward_raven/db/entity/app_group.dart';
 import 'package:reward_raven/db/entity/listed_app.dart';
 import 'package:reward_raven/db/service/listed_app_service.dart';
 import 'package:reward_raven/screens/appgroups/editgroup/edit_group.dart';
+import 'package:reward_raven/screens/appgroups/editgroup/tabs/group_app_list.dart';
 import 'package:reward_raven/screens/apps/app_list_type.dart';
 import 'package:reward_raven/service/app/apps_fetcher.dart';
 
