@@ -1,13 +1,19 @@
 import 'package:installed_apps/app_info.dart';
 import 'package:installed_apps/installed_apps.dart';
+import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../apps_fetcher.dart';
 
 class AndroidAppsFetcher implements AppsFetcher {
+  final _logger = Logger();
+
   @override
   Future<List<AppInfo>> fetchInstalledApps() async {
     List<AppInfo> apps = await InstalledApps.getInstalledApps();
+
+    _logger.d(
+        'Fetched ${apps.length} apps: ${apps.map((app) => app.name).toList()}');
 
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String currentPackageName = packageInfo.packageName;
