@@ -10,7 +10,7 @@ class AndroidAppsFetcher implements AppsFetcher {
 
   @override
   Future<List<AppInfo>> fetchInstalledApps() async {
-    List<AppInfo> apps = await InstalledApps.getInstalledApps();
+    List<AppInfo> apps = await InstalledApps.getInstalledApps(false, true);
 
     _logger.d(
         'Fetched ${apps.length} apps: ${apps.map((app) => app.name).toList()}');
