@@ -26,6 +26,8 @@ class AppList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO add button for android to show/hide system apps
+    // TODO add search field to filter results by app name
     final appsFetcher = locator<AppsFetcher>();
     return Scaffold(
       appBar: AppBar(
