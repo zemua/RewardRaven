@@ -159,8 +159,17 @@ void main() {
               100)); // wait for the _loadSwitchValue method to complete
 
       final switcher = find.byType(Switch);
-      expect(switcher, findsOneWidget);
-      expect(tester.widget<Switch>(switcher).onChanged, isNull);
+      expect(
+          switcher,
+          findsNWidgets(
+              2)); // one is the switch to enable system apps visibility
+      expect(
+          find.descendant(
+              of: find.ancestor(
+                  of: find.text('App 1'), matching: find.byType(ListTile)),
+              matching: find.byWidgetPredicate(
+                  (widget) => widget is Switch && widget.onChanged == null)),
+          findsOneWidget);
     });
 
     testWidgets('displays switch as enabled if app status is in getEnabledApp',
@@ -194,8 +203,17 @@ void main() {
               100)); // wait for the _loadSwitchValue method to complete
 
       final switcher = find.byType(Switch);
-      expect(switcher, findsOneWidget);
-      expect(tester.widget<Switch>(switcher).onChanged, isNotNull);
+      expect(
+          switcher,
+          findsNWidgets(
+              2)); // one is the switch to enable system apps visibility
+      expect(
+          find.descendant(
+              of: find.ancestor(
+                  of: find.text('App 1'), matching: find.byType(ListTile)),
+              matching: find.byWidgetPredicate(
+                  (widget) => widget is Switch && widget.onChanged != null)),
+          findsOneWidget);
     });
   });
 }

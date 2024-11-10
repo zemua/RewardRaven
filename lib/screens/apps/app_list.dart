@@ -14,28 +14,58 @@ import '../../service/platform_wrapper.dart';
 
 final GetIt locator = GetIt.instance;
 
-class AppList extends StatelessWidget {
+// TODO add search field to filter results by app name
+class AppList extends StatefulWidget {
   final AppListType listType;
   final String titleBarMessage;
 
-  AppList({
+  const AppList({
     required this.listType,
     required this.titleBarMessage,
     super.key,
   });
 
   @override
+  AppListState createState() => AppListState();
+}
+
+class AppListState extends State<AppList> {
+  late Future<List<AppInfo>> _futureApps;
+  bool _isSwitched = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _futureApps = locator<AppsFetcher>().fetchInstalledApps();
+  }
+
+  void _reloadApps({required bool showAll}) {
+    setState(() {
+      // TODO conditionally call AppsFetcher functions
+      _futureApps = locator<AppsFetcher>().fetchInstalledApps();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // TODO add button for android to show/hide system apps
-    // TODO add search field to filter results by app name
-    final appsFetcher = locator<AppsFetcher>();
     return Scaffold(
       appBar: AppBar(
-        title: Text(titleBarMessage),
+        title: Text(widget.titleBarMessage),
+        actions: [
+          const Icon(Icons.visibility),
+          Switch(
+            value: _isSwitched,
+            onChanged: (value) {
+              setState(() {
+                _isSwitched = value;
+              });
+              _reloadApps(showAll: value);
+            },
+          ),
+        ],
       ),
       body: FutureBuilder<List<AppInfo>>(
-        // TODO maybe change to stream?
-        future: appsFetcher.fetchInstalledApps(),
+        future: _futureApps,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -51,7 +81,7 @@ class AppList extends StatelessWidget {
             return ListView.builder(
               itemCount: apps.length,
               itemBuilder: (context, index) {
-                return AppListItem(app: apps[index], listType: listType);
+                return AppListItem(app: apps[index], listType: widget.listType);
               },
             );
           }
