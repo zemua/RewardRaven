@@ -32,17 +32,19 @@ class AppList extends StatefulWidget {
 class AppListState extends State<AppList> {
   late Future<List<AppInfo>> _futureApps;
   bool _isSwitched = false;
+  final AppsFetcher appsFetcher = locator<AppsFetcher>();
 
   @override
   void initState() {
     super.initState();
-    _futureApps = locator<AppsFetcher>().fetchInstalledApps();
+    _futureApps = appsFetcher.fetchInstalledApps();
   }
 
   void _reloadApps({required bool showAll}) {
     setState(() {
-      // TODO conditionally call AppsFetcher functions
-      _futureApps = locator<AppsFetcher>().fetchInstalledApps();
+      _futureApps = showAll
+          ? appsFetcher.fetchAllApps()
+          : appsFetcher.fetchInstalledApps();
     });
   }
 
@@ -51,18 +53,20 @@ class AppListState extends State<AppList> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.titleBarMessage),
-        actions: [
-          const Icon(Icons.visibility),
-          Switch(
-            value: _isSwitched,
-            onChanged: (value) {
-              setState(() {
-                _isSwitched = value;
-              });
-              _reloadApps(showAll: value);
-            },
-          ),
-        ],
+        actions: appsFetcher.hasHiddenApps()
+            ? [
+                const Icon(Icons.visibility),
+                Switch(
+                  value: _isSwitched,
+                  onChanged: (value) {
+                    setState(() {
+                      _isSwitched = value;
+                    });
+                    _reloadApps(showAll: value);
+                  },
+                ),
+              ]
+            : [],
       ),
       body: FutureBuilder<List<AppInfo>>(
         future: _futureApps,

@@ -41,6 +41,24 @@ class MockAppsFetcher extends _i1.Mock implements _i2.AppsFetcher {
         ),
         returnValue: _i3.Future<List<_i4.AppInfo>>.value(<_i4.AppInfo>[]),
       ) as _i3.Future<List<_i4.AppInfo>>);
+
+  @override
+  _i3.Future<List<_i4.AppInfo>> fetchAllApps() => (super.noSuchMethod(
+        Invocation.method(
+          #fetchAllApps,
+          [],
+        ),
+        returnValue: _i3.Future<List<_i4.AppInfo>>.value(<_i4.AppInfo>[]),
+      ) as _i3.Future<List<_i4.AppInfo>>);
+
+  @override
+  bool hasHiddenApps() => (super.noSuchMethod(
+        Invocation.method(
+          #hasHiddenApps,
+          [],
+        ),
+        returnValue: false,
+      ) as bool);
 }
 
 /// A class which mocks [ListedAppService].

@@ -26,4 +26,14 @@ class AppsFetcherProvider implements AppsFetcher {
   Future<List<AppInfo>> fetchInstalledApps() {
     return appsFetcher.fetchInstalledApps();
   }
+
+  @override
+  Future<List<AppInfo>> fetchAllApps() {
+    return appsFetcher.fetchAllApps();
+  }
+
+  @override
+  bool hasHiddenApps() {
+    return appsFetcher.hasHiddenApps();
+  }
 }

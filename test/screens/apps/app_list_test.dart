@@ -49,6 +49,7 @@ void main() {
       final mockAppsFetcher = MockAppsFetcher();
       locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
       when(mockAppsFetcher.fetchInstalledApps()).thenAnswer((_) async => []);
+      when(mockAppsFetcher.hasHiddenApps()).thenReturn(true);
 
       await tester.pumpWidget(createLocalizationTestableWidget(AppList(
           listType: AppListType.positive,
@@ -63,6 +64,7 @@ void main() {
       locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
       when(mockAppsFetcher.fetchInstalledApps())
           .thenAnswer((_) async => throw Exception('Failed to fetch apps'));
+      when(mockAppsFetcher.hasHiddenApps()).thenReturn(true);
 
       await tester.pumpWidget(createLocalizationTestableWidget(AppList(
           listType: AppListType.positive,
@@ -78,6 +80,7 @@ void main() {
       final mockAppsFetcher = MockAppsFetcher();
       locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
       when(mockAppsFetcher.fetchInstalledApps()).thenAnswer((_) async => []);
+      when(mockAppsFetcher.hasHiddenApps()).thenReturn(true);
 
       await tester.pumpWidget(createLocalizationTestableWidget(AppList(
           listType: AppListType.positive,
@@ -112,6 +115,7 @@ void main() {
       final mockAppsFetcher = MockAppsFetcher();
       locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
       when(mockAppsFetcher.fetchInstalledApps()).thenAnswer((_) async => apps);
+      when(mockAppsFetcher.hasHiddenApps()).thenReturn(true);
       final mockListedAppService = MockListedAppService();
       locator.registerSingleton<ListedAppService>(mockListedAppService);
       when(mockListedAppService.fetchStatus(any))
@@ -145,6 +149,7 @@ void main() {
       final mockAppsFetcher = MockAppsFetcher();
       locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
       when(mockAppsFetcher.fetchInstalledApps()).thenAnswer((_) async => apps);
+      when(mockAppsFetcher.hasHiddenApps()).thenReturn(true);
       final mockListedAppService = MockListedAppService();
       locator.registerSingleton<ListedAppService>(mockListedAppService);
       when(mockListedAppService.fetchStatus(any))
@@ -189,6 +194,7 @@ void main() {
       final mockAppsFetcher = MockAppsFetcher();
       locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
       when(mockAppsFetcher.fetchInstalledApps()).thenAnswer((_) async => apps);
+      when(mockAppsFetcher.hasHiddenApps()).thenReturn(true);
       final mockListedAppService = MockListedAppService();
       locator.registerSingleton<ListedAppService>(mockListedAppService);
       when(mockListedAppService.fetchStatus(any))

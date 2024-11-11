@@ -86,6 +86,16 @@ class MockAppsFetcher extends Mock implements AppsFetcher {
   Future<List<AppInfo>> fetchInstalledApps() async {
     return [];
   }
+
+  @override
+  Future<List<AppInfo>> fetchAllApps() async {
+    return [];
+  }
+
+  @override
+  bool hasHiddenApps() {
+    return true;
+  }
 }
 
 class MockAppGroupService extends Mock implements AppGroupService {

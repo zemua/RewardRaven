@@ -10,6 +10,19 @@ class AndroidAppsFetcher implements AppsFetcher {
 
   @override
   Future<List<AppInfo>> fetchInstalledApps() async {
+    List<AppInfo> apps = await InstalledApps.getInstalledApps(true, true);
+
+    _logger.d(
+        'Fetched ${apps.length} apps: ${apps.map((app) => app.name).toList()}');
+
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String currentPackageName = packageInfo.packageName;
+
+    return apps.where((app) => app.packageName != currentPackageName).toList();
+  }
+
+  @override
+  Future<List<AppInfo>> fetchAllApps() async {
     List<AppInfo> apps = await InstalledApps.getInstalledApps(false, true);
 
     _logger.d(
@@ -19,5 +32,10 @@ class AndroidAppsFetcher implements AppsFetcher {
     String currentPackageName = packageInfo.packageName;
 
     return apps.where((app) => app.packageName != currentPackageName).toList();
+  }
+
+  @override
+  bool hasHiddenApps() {
+    return true;
   }
 }

@@ -68,4 +68,22 @@ class MockAndroidAppsFetcher extends _i1.Mock
         ),
         returnValue: _i5.Future<List<_i6.AppInfo>>.value(<_i6.AppInfo>[]),
       ) as _i5.Future<List<_i6.AppInfo>>);
+
+  @override
+  _i5.Future<List<_i6.AppInfo>> fetchAllApps() => (super.noSuchMethod(
+        Invocation.method(
+          #fetchAllApps,
+          [],
+        ),
+        returnValue: _i5.Future<List<_i6.AppInfo>>.value(<_i6.AppInfo>[]),
+      ) as _i5.Future<List<_i6.AppInfo>>);
+
+  @override
+  bool hasHiddenApps() => (super.noSuchMethod(
+        Invocation.method(
+          #hasHiddenApps,
+          [],
+        ),
+        returnValue: false,
+      ) as bool);
 }
