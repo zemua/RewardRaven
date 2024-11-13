@@ -33,6 +33,8 @@ class AppListState extends State<AppList> {
   late Future<List<AppInfo>> _futureApps;
   bool _isSwitched = false;
   final AppsFetcher appsFetcher = locator<AppsFetcher>();
+  String _searchQuery = '';
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -48,17 +50,45 @@ class AppListState extends State<AppList> {
     });
   }
 
+  void _filterApps(String query) {
+    setState(() {
+      _searchQuery = query;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.titleBarMessage),
+        /* title: TextField(
+          controller: _searchController,
+          decoration: InputDecoration(
+            hintText: AppLocalizations.of(context)!.search,
+            border: InputBorder.none,
+          ),
+          onChanged: _filterApps,
+        ),
         actions: appsFetcher.hasHiddenApps()
             ? [
                 const Icon(Icons.visibility),
                 Switch(
                   value: _isSwitched,
                   onChanged: (value) {
+                    setState(() {
+                      _isSwitched = value;
+                    });
+                    _reloadApps(showAll: value);
+                  },
+                ),
+              ]
+            : [], */
+        title: Text(widget.titleBarMessage),
+        actions: appsFetcher.hasHiddenApps()
+            ? [
+                const Icon(Icons.visibility),
+                Switch(
+                  value: _isSwitched,
+                  onChanged: (value) { // TODO unit test this
                     setState(() {
                       _isSwitched = value;
                     });
@@ -81,6 +111,17 @@ class AppListState extends State<AppList> {
             return Center(
                 child: Text(AppLocalizations.of(context)!.noAppsFound));
           } else {
+            /* final apps = snapshot.data!
+                .where((app) => app.name
+                    .toLowerCase()
+                    .contains(_searchQuery.toLowerCase()))
+                .toList();
+            return ListView.builder(
+              itemCount: apps.length,
+              itemBuilder: (context, index) {
+                return AppListItem(app: apps[index], listType: widget.listType);
+              },
+            ); */
             final apps = snapshot.data!;
             return ListView.builder(
               itemCount: apps.length,
