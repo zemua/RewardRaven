@@ -12,6 +12,8 @@ import 'editgroup/edit_group.dart';
 
 final GetIt locator = GetIt.instance;
 
+// TODO verify system apps are listed
+// TODO first fetch apps from db, then one-by-one from the system using id, instead of fetching all at once
 class AppGroupList extends StatelessWidget {
   final String titleBarMessage;
   final AppGroupListType listType;
