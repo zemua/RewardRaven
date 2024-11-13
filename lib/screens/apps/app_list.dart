@@ -14,7 +14,6 @@ import '../../service/platform_wrapper.dart';
 
 final GetIt locator = GetIt.instance;
 
-// TODO add search field to filter results by app name
 class AppList extends StatefulWidget {
   final AppListType listType;
   final String titleBarMessage;
@@ -60,35 +59,14 @@ class AppListState extends State<AppList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        /* title: TextField(
-          controller: _searchController,
-          decoration: InputDecoration(
-            hintText: AppLocalizations.of(context)!.search,
-            border: InputBorder.none,
-          ),
-          onChanged: _filterApps,
-        ),
-        actions: appsFetcher.hasHiddenApps()
-            ? [
-                const Icon(Icons.visibility),
-                Switch(
-                  value: _isSwitched,
-                  onChanged: (value) {
-                    setState(() {
-                      _isSwitched = value;
-                    });
-                    _reloadApps(showAll: value);
-                  },
-                ),
-              ]
-            : [], */
         title: Text(widget.titleBarMessage),
         actions: appsFetcher.hasHiddenApps()
             ? [
                 const Icon(Icons.visibility),
                 Switch(
                   value: _isSwitched,
-                  onChanged: (value) { // TODO unit test this
+                  onChanged: (value) {
+                    // TODO unit test this
                     setState(() {
                       _isSwitched = value;
                     });
@@ -98,39 +76,49 @@ class AppListState extends State<AppList> {
               ]
             : [],
       ),
-      body: FutureBuilder<List<AppInfo>>(
-        future: _futureApps,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(
-                child: Text(
-                    '${AppLocalizations.of(context)!.error}: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(
-                child: Text(AppLocalizations.of(context)!.noAppsFound));
-          } else {
-            /* final apps = snapshot.data!
-                .where((app) => app.name
-                    .toLowerCase()
-                    .contains(_searchQuery.toLowerCase()))
-                .toList();
-            return ListView.builder(
-              itemCount: apps.length,
-              itemBuilder: (context, index) {
-                return AppListItem(app: apps[index], listType: widget.listType);
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: AppLocalizations.of(context)!.filter,
+                border: const OutlineInputBorder(),
+              ),
+              onChanged: _filterApps,
+            ),
+          ),
+          Expanded(
+            child: FutureBuilder<List<AppInfo>>(
+              future: _futureApps,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(
+                      child: Text(
+                          '${AppLocalizations.of(context)!.error}: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(
+                      child: Text(AppLocalizations.of(context)!.noAppsFound));
+                } else {
+                  final apps = snapshot.data!
+                      .where((app) => app.name.toLowerCase().contains(
+                          _searchQuery.toLowerCase())) // TODO unit test this
+                      .toList();
+                  return ListView.builder(
+                    itemCount: apps.length,
+                    itemBuilder: (context, index) {
+                      return AppListItem(
+                          app: apps[index], listType: widget.listType);
+                    },
+                  );
+                }
               },
-            ); */
-            final apps = snapshot.data!;
-            return ListView.builder(
-              itemCount: apps.length,
-              itemBuilder: (context, index) {
-                return AppListItem(app: apps[index], listType: widget.listType);
-              },
-            );
-          }
-        },
+            ),
+          ),
+        ],
       ),
     );
   }
