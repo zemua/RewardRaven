@@ -221,5 +221,128 @@ void main() {
                   (widget) => widget is Switch && widget.onChanged != null)),
           findsOneWidget);
     });
+
+    testWidgets('displays list of system apps', (WidgetTester tester) async {
+      locator.registerSingleton<PlatformWrapper>(PlatformWrapperImpl());
+      final apps = [
+        AppInfo(
+          name: 'App 1',
+          icon: Uint8List(0),
+          packageName: 'com.example.app1',
+          versionName: '1.0.0',
+          versionCode: 1,
+          builtWith: BuiltWith.flutter,
+          installedTimestamp: DateTime.now().millisecondsSinceEpoch,
+        ),
+        AppInfo(
+          name: 'App 2',
+          icon: Uint8List(0),
+          packageName: 'com.example.app2',
+          versionName: '1.0.0',
+          versionCode: 1,
+          builtWith: BuiltWith.flutter,
+          installedTimestamp: DateTime.now().millisecondsSinceEpoch,
+        ),
+      ];
+      final systemApps = [
+        AppInfo(
+          name: 'System 1',
+          icon: Uint8List(0),
+          packageName: 'com.example.system1',
+          versionName: '1.0.0',
+          versionCode: 1,
+          builtWith: BuiltWith.flutter,
+          installedTimestamp: DateTime.now().millisecondsSinceEpoch,
+        ),
+        AppInfo(
+          name: 'System 2',
+          icon: Uint8List(0),
+          packageName: 'com.example.system2',
+          versionName: '1.0.0',
+          versionCode: 1,
+          builtWith: BuiltWith.flutter,
+          installedTimestamp: DateTime.now().millisecondsSinceEpoch,
+        ),
+      ];
+
+      final mockAppsFetcher = MockAppsFetcher();
+      locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
+      when(mockAppsFetcher.fetchInstalledApps()).thenAnswer((_) async => apps);
+      when(mockAppsFetcher.fetchAllApps()).thenAnswer((_) async => systemApps);
+      when(mockAppsFetcher.hasHiddenApps()).thenReturn(true);
+      final mockListedAppService = MockListedAppService();
+      locator.registerSingleton<ListedAppService>(mockListedAppService);
+      when(mockListedAppService.fetchStatus(any))
+          .thenAnswer((_) async => AppStatus.neutral);
+
+      await tester.pumpWidget(createLocalizationTestableWidget(AppList(
+          listType: AppListType.positive,
+          titleBarMessage: "Title Bar Message")));
+      await tester.pump();
+
+      expect(find.byType(ListTile), findsNWidgets(2));
+      expect(find.text('App 1'), findsOneWidget);
+      expect(find.text('App 2'), findsOneWidget);
+      expect(find.text('System 1'), findsNothing);
+      expect(find.text('Systen 2'), findsNothing);
+
+      await tester.tap(find.byKey(const Key('appListSwitch')));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ListTile), findsNWidgets(2));
+      expect(find.text('App 1'), findsNothing);
+      expect(find.text('App 2'), findsNothing);
+      expect(find.text('System 1'), findsOneWidget);
+      expect(find.text('System 2'), findsOneWidget);
+    });
+
+    testWidgets('filters apps by entered text', (WidgetTester tester) async {
+      locator.registerSingleton<PlatformWrapper>(PlatformWrapperImpl());
+      final apps = [
+        AppInfo(
+          name: 'App 1 asd',
+          icon: Uint8List(0),
+          packageName: 'com.example.app1',
+          versionName: '1.0.0',
+          versionCode: 1,
+          builtWith: BuiltWith.flutter,
+          installedTimestamp: DateTime.now().millisecondsSinceEpoch,
+        ),
+        AppInfo(
+          name: 'App 2 fgh',
+          icon: Uint8List(0),
+          packageName: 'com.example.app2',
+          versionName: '1.0.0',
+          versionCode: 1,
+          builtWith: BuiltWith.flutter,
+          installedTimestamp: DateTime.now().millisecondsSinceEpoch,
+        ),
+      ];
+
+      final mockAppsFetcher = MockAppsFetcher();
+      locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
+      when(mockAppsFetcher.fetchInstalledApps()).thenAnswer((_) async => apps);
+      when(mockAppsFetcher.hasHiddenApps()).thenReturn(true);
+      final mockListedAppService = MockListedAppService();
+      locator.registerSingleton<ListedAppService>(mockListedAppService);
+      when(mockListedAppService.fetchStatus(any))
+          .thenAnswer((_) async => AppStatus.neutral);
+
+      await tester.pumpWidget(createLocalizationTestableWidget(AppList(
+          listType: AppListType.positive,
+          titleBarMessage: "Title Bar Message")));
+      await tester.pump();
+
+      expect(find.byType(ListTile), findsNWidgets(2));
+      expect(find.text('App 1 asd'), findsOneWidget);
+      expect(find.text('App 2 fgh'), findsOneWidget);
+
+      await tester.enterText(find.byKey(const Key('filterField')), 'asd');
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ListTile), findsNWidgets(1));
+      expect(find.text('App 1 asd'), findsOneWidget);
+      expect(find.text('App 2 fgh'), findsNothing);
+    });
   });
 }

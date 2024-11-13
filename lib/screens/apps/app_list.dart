@@ -80,9 +80,9 @@ class AppListState extends State<AppList> {
     return [
       const Icon(Icons.visibility),
       Switch(
+        key: const Key('appListSwitch'),
         value: _isSwitched,
         onChanged: (value) {
-          // TODO unit test this
           setState(() {
             _isSwitched = value;
           });
@@ -94,6 +94,7 @@ class AppListState extends State<AppList> {
 
   TextField _buildFilterField() {
     return TextField(
+      key: const Key('filterField'),
       controller: _searchController,
       decoration: InputDecoration(
         hintText: AppLocalizations.of(context)!.filter,
@@ -117,9 +118,8 @@ class AppListState extends State<AppList> {
           return Center(child: Text(AppLocalizations.of(context)!.noAppsFound));
         } else {
           final apps = snapshot.data!
-              .where((app) => app.name
-                  .toLowerCase()
-                  .contains(_searchQuery.toLowerCase())) // TODO unit test this
+              .where((app) =>
+                  app.name.toLowerCase().contains(_searchQuery.toLowerCase()))
               .toList();
           return ListView.builder(
             itemCount: apps.length,
