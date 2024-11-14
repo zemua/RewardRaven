@@ -9,8 +9,8 @@ import 'package:reward_raven/db/repository/app_group_repository.dart';
 import 'package:reward_raven/screens/homepage/home_page.dart';
 import 'package:reward_raven/service/app/apps_fetcher.dart';
 import 'package:reward_raven/service/app/apps_fetcher_provider.dart';
-import 'package:reward_raven/service/app/impl/ampty_apps_fetcher.dart';
 import 'package:reward_raven/service/app/impl/android_apps_fetcher.dart';
+import 'package:reward_raven/service/app/impl/empty_apps_fetcher.dart';
 import 'package:reward_raven/service/impl/platform_wrapper_impl.dart';
 import 'package:reward_raven/service/platform_wrapper.dart';
 

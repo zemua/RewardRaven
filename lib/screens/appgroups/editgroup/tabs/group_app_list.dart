@@ -12,12 +12,10 @@ import '../../../apps/app_list_type.dart';
 
 final GetIt locator = GetIt.instance;
 
-FutureBuilder<List<AppInfo>> buildAppList(
+FutureBuilder<List<GroupAppItem>> buildAppList(
     AppGroup group, AppListType listType) {
-  final appsFetcher = locator<AppsFetcher>();
-  final listedAppService = locator<ListedAppService>();
-  return FutureBuilder<List<AppInfo>>(
-    future: appsFetcher.fetchInstalledApps(),
+  return FutureBuilder<List<GroupAppItem>>(
+    future: _fetchSavedApps(listType, group),
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
         return const Center(child: CircularProgressIndicator());
@@ -28,43 +26,43 @@ FutureBuilder<List<AppInfo>> buildAppList(
       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
         return Center(child: Text(AppLocalizations.of(context)!.noAppsFound));
       } else {
-        final apps = snapshot.data!;
-        return FutureBuilder<List<ListedApp>>(
-          future: listedAppService.fetchListedAppsByType(listType),
-          builder: (context, dbSnapshot) {
-            if (dbSnapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (dbSnapshot.hasError) {
-              return Center(
-                  child: Text(
-                      '${AppLocalizations.of(context)!.error}: ${dbSnapshot.error}'));
-            } else if (!dbSnapshot.hasData || dbSnapshot.data!.isEmpty) {
-              return Center(
-                  child: Text(AppLocalizations.of(context)!.noAppsFound));
-            } else {
-              final listedApps = dbSnapshot.data!;
-              final filteredApps = listedApps
-                  .map((app) => apps
-                      .where((listedApp) =>
-                          listedApp.packageName == app.identifier)
-                      .map((listedApp) => MapEntry(app, listedApp)))
-                  .expand((pair) => pair)
-                  .toList();
-              return ListView.builder(
-                itemCount: filteredApps.length,
-                itemBuilder: (context, index) {
-                  return GroupAppItem(
-                      listedApp: filteredApps[index].key,
-                      appInfo: filteredApps[index].value,
-                      listId: group.id!);
-                },
-              );
-            }
+        final groupApps = snapshot.data!;
+        return ListView.builder(
+          itemCount: groupApps.length,
+          itemBuilder: (context, index) {
+            return GroupAppItem(
+                listedApp: groupApps[index].listedApp,
+                appInfo: groupApps[index].appInfo,
+                listId: group.id!);
           },
         );
       }
     },
   );
+}
+
+Future<List<GroupAppItem>> _fetchSavedApps(
+    AppListType listType, AppGroup group) async {
+  final listedAppService = locator<ListedAppService>();
+  final appsFetcher = locator<AppsFetcher>();
+
+  List<ListedApp> listedApps =
+      await listedAppService.fetchListedAppsByType(listType);
+
+  return (await Future.wait(listedApps.map((app) async {
+    final appInfo = await appsFetcher.fetchApp(app.identifier);
+    if (appInfo != null) {
+      return MapEntry(app, appInfo);
+    }
+    return null;
+  })))
+      .where((entry) => entry != null)
+      .map((entry) => GroupAppItem(
+            listedApp: entry!.key,
+            appInfo: entry.value,
+            listId: group.id!,
+          ))
+      .toList();
 }
 
 class GroupAppItem extends StatefulWidget {

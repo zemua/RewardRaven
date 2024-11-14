@@ -4,8 +4,8 @@ import 'package:installed_apps/app_info.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:reward_raven/service/app/apps_fetcher_provider.dart';
-import 'package:reward_raven/service/app/impl/ampty_apps_fetcher.dart';
 import 'package:reward_raven/service/app/impl/android_apps_fetcher.dart';
+import 'package:reward_raven/service/app/impl/empty_apps_fetcher.dart';
 import 'package:reward_raven/service/platform_wrapper.dart';
 
 import 'apps_fetcher_provider_test.mocks.dart';

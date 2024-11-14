@@ -17,4 +17,9 @@ class EmptyAppsFetcher implements AppsFetcher {
   bool hasHiddenApps() {
     return false;
   }
+
+  @override
+  Future<AppInfo?> fetchApp(String packageName) {
+    return Future.value(null);
+  }
 }

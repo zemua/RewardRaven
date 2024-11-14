@@ -38,4 +38,9 @@ class AndroidAppsFetcher implements AppsFetcher {
   bool hasHiddenApps() {
     return true;
   }
+
+  @override
+  Future<AppInfo?> fetchApp(String packageName) {
+    return InstalledApps.getAppInfo(packageName);
+  }
 }

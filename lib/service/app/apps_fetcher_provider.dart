@@ -3,8 +3,8 @@ import 'package:installed_apps/app_info.dart';
 import 'package:reward_raven/service/platform_wrapper.dart';
 
 import 'apps_fetcher.dart';
-import 'impl/ampty_apps_fetcher.dart';
 import 'impl/android_apps_fetcher.dart';
+import 'impl/empty_apps_fetcher.dart';
 
 final GetIt locator = GetIt.instance;
 
@@ -35,5 +35,10 @@ class AppsFetcherProvider implements AppsFetcher {
   @override
   bool hasHiddenApps() {
     return appsFetcher.hasHiddenApps();
+  }
+
+  @override
+  Future<AppInfo?> fetchApp(String packageName) {
+    return appsFetcher.fetchApp(packageName);
   }
 }
