@@ -54,6 +54,15 @@ class MockAppsFetcher extends _i1.Mock implements _i2.AppsFetcher {
       ) as _i3.Future<List<_i4.AppInfo>>);
 
   @override
+  _i3.Future<_i4.AppInfo?> fetchApp(String? packageName) => (super.noSuchMethod(
+        Invocation.method(
+          #fetchApp,
+          [packageName],
+        ),
+        returnValue: _i3.Future<_i4.AppInfo?>.value(),
+      ) as _i3.Future<_i4.AppInfo?>);
+
+  @override
   bool hasHiddenApps() => (super.noSuchMethod(
         Invocation.method(
           #hasHiddenApps,

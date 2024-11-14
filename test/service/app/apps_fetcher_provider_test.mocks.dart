@@ -86,4 +86,13 @@ class MockAndroidAppsFetcher extends _i1.Mock
         ),
         returnValue: false,
       ) as bool);
+
+  @override
+  _i5.Future<_i6.AppInfo?> fetchApp(String? packageName) => (super.noSuchMethod(
+        Invocation.method(
+          #fetchApp,
+          [packageName],
+        ),
+        returnValue: _i5.Future<_i6.AppInfo?>.value(),
+      ) as _i5.Future<_i6.AppInfo?>);
 }

@@ -12,6 +12,8 @@ import '../../../apps/app_list_type.dart';
 
 final GetIt locator = GetIt.instance;
 
+final _logger = Logger();
+
 FutureBuilder<List<GroupAppItem>> buildAppList(
     AppGroup group, AppListType listType) {
   return FutureBuilder<List<GroupAppItem>>(
@@ -20,6 +22,7 @@ FutureBuilder<List<GroupAppItem>> buildAppList(
       if (snapshot.connectionState == ConnectionState.waiting) {
         return const Center(child: CircularProgressIndicator());
       } else if (snapshot.hasError) {
+        _logger.e('Error loading apps: ${snapshot.error}');
         return Center(
             child: Text(
                 '${AppLocalizations.of(context)!.error}: ${snapshot.error}'));
@@ -30,10 +33,7 @@ FutureBuilder<List<GroupAppItem>> buildAppList(
         return ListView.builder(
           itemCount: groupApps.length,
           itemBuilder: (context, index) {
-            return GroupAppItem(
-                listedApp: groupApps[index].listedApp,
-                appInfo: groupApps[index].appInfo,
-                listId: group.id!);
+            return groupApps[index];
           },
         );
       }

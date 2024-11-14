@@ -94,6 +94,16 @@ void main() {
     when(mockAppFetcher.fetchInstalledApps()).thenAnswer((_) async => testApps);
     when(mockListedAppService.fetchListedAppsByType(AppListType.positive))
         .thenAnswer((_) async => testListedApps);
+    when(mockAppFetcher.fetchApp(testApps[0].packageName))
+        .thenAnswer((_) async => testApps[0]);
+    when(mockAppFetcher.fetchApp(testApps[1].packageName))
+        .thenAnswer((_) async => testApps[1]);
+    when(mockAppFetcher.fetchApp(testApps[2].packageName))
+        .thenAnswer((_) async => testApps[2]);
+    when(mockAppFetcher.fetchApp(testApps[3].packageName))
+        .thenAnswer((_) async => testApps[3]);
+    when(mockAppFetcher.fetchApp('com.example.appXXX'))
+        .thenAnswer((_) async => null);
   });
 
   group('EditGroup Screen Tests', () {
