@@ -107,7 +107,8 @@ void main() {
 
     // Act
     final result = await groupConditionRepository.getGroupConditionByIds(
-        'testConditionedGroupId', 'testConditionalGroupId');
+        conditionedGroupId: 'testConditionedGroupId',
+        conditionalGroupId: 'testConditionalGroupId');
 
     // Assert
     expect(result, isNotNull);
@@ -119,5 +120,62 @@ void main() {
     verify(mockDatabaseReference.child('groupConditions')).called(1);
     verify(mockDatabaseReference.child('testConditionedGroupId')).called(1);
     verify(mockDatabaseReference.child('testConditionalGroupId')).called(1);
+  });
+
+  test(
+      'getAllGroupConditionsByConditionedGroupId retrieves all group conditions successfully',
+      () async {
+    // Arrange
+    const conditionedGroupId = 'testConditionedGroupId';
+    const groupCondition1 = GroupCondition(
+      conditionedGroupId: conditionedGroupId,
+      conditionalGroupId: 'testConditionalGroupId1',
+      usedTime: Duration(hours: 1),
+      duringLastDays: 7,
+    );
+    const groupCondition2 = GroupCondition(
+      conditionedGroupId: conditionedGroupId,
+      conditionalGroupId: 'testConditionalGroupId2',
+      usedTime: Duration(hours: 2),
+      duringLastDays: 8,
+    );
+    final conditionsMap = {
+      groupCondition1.conditionalGroupId: groupCondition1.toJson(),
+      groupCondition2.conditionalGroupId: groupCondition2.toJson(),
+    };
+
+    final mockDatabaseEvent = MockDatabaseEvent();
+    final mockDataSnapshot = MockDataSnapshot();
+    when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
+    when(mockDatabaseReference.child(conditionedGroupId))
+        .thenReturn(mockDatabaseReference);
+    when(mockDatabaseEvent.snapshot).thenReturn(mockDataSnapshot);
+    when(mockDatabaseReference.once())
+        .thenAnswer((_) async => Future.value(mockDatabaseEvent));
+    when(mockDataSnapshot.value).thenReturn(conditionsMap);
+    when(mockDatabaseReference.path).thenReturn('testPath');
+
+    // Act
+    final result =
+        await groupConditionRepository.getGroupConditions(conditionedGroupId);
+
+    // Assert
+    expect(result, isNotNull);
+    expect(result.length, 2);
+    expect(result[0].conditionedGroupId, groupCondition1.conditionedGroupId);
+    expect(result[0].conditionalGroupId, groupCondition1.conditionalGroupId);
+    expect(result[0].usedTime, groupCondition1.usedTime);
+    expect(result[0].duringLastDays, groupCondition1.duringLastDays);
+    expect(result[1].conditionedGroupId, groupCondition2.conditionedGroupId);
+    expect(result[1].conditionalGroupId, groupCondition2.conditionalGroupId);
+    expect(result[1].usedTime, groupCondition2.usedTime);
+    expect(result[1].duringLastDays, groupCondition2.duringLastDays);
+
+    verify(mockDatabaseReference.child('groupConditions')).called(1);
+    verify(mockDatabaseReference.child(conditionedGroupId)).called(1);
+    verifyNever(
+        mockDatabaseReference.child(groupCondition1.conditionalGroupId));
+    verifyNever(
+        mockDatabaseReference.child(groupCondition2.conditionalGroupId));
   });
 }
