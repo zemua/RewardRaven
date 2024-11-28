@@ -8,7 +8,6 @@ import '../entity/collections.dart';
 import '../entity/group_condition.dart';
 import '../helper/firebase_helper.dart';
 
-// TODO unit test
 class GroupConditionRepository {
   final FirebaseHelper _firebaseHelper = locator.get<FirebaseHelper>();
 

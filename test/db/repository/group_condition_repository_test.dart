@@ -64,7 +64,60 @@ void main() {
     verify(mockDatabaseReference.child('testConditionedGroupId')).called(1);
     verify(mockDatabaseReference.child('testConditionalGroupId')).called(1);
     verify(mockDatabaseReference.update(groupCondition.toJson())).called(1);
+  });
 
-    fail("Not implemented");
+  test('deleteGroupCondition deletes a group condition successfully', () async {
+    // Arrange
+    const groupCondition = GroupCondition(
+      conditionedGroupId: 'testConditionedGroupId',
+      conditionalGroupId: 'testConditionalGroupId',
+      usedTime: Duration(hours: 1),
+      duringLastDays: 7,
+    );
+    when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
+    when(mockDatabaseReference.remove()).thenAnswer((_) => Future.value());
+
+    // Act
+    await groupConditionRepository.deleteGroupCondition(groupCondition);
+
+    // Assert
+    verify(mockDatabaseReference.child('groupConditions')).called(1);
+    verify(mockDatabaseReference.child('testConditionedGroupId')).called(1);
+    verify(mockDatabaseReference.child('testConditionalGroupId')).called(1);
+    verify(mockDatabaseReference.remove()).called(1);
+  });
+
+  test('getGroupConditionByIds retrieves a group condition successfully',
+      () async {
+    // Arrange
+    const groupCondition = GroupCondition(
+      conditionedGroupId: 'testConditionedGroupId',
+      conditionalGroupId: 'testConditionalGroupId',
+      usedTime: Duration(hours: 1),
+      duringLastDays: 7,
+    );
+    final mockDatabaseEvent = MockDatabaseEvent();
+    final mockDataSnapshot = MockDataSnapshot();
+    when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
+    when(mockDatabaseEvent.snapshot).thenReturn(mockDataSnapshot);
+    when(mockDatabaseReference.once())
+        .thenAnswer((_) async => Future.value(mockDatabaseEvent));
+    when(mockDataSnapshot.value).thenReturn(groupCondition.toJson());
+    when(mockDatabaseReference.path).thenReturn('testPath');
+
+    // Act
+    final result = await groupConditionRepository.getGroupConditionByIds(
+        'testConditionedGroupId', 'testConditionalGroupId');
+
+    // Assert
+    expect(result, isNotNull);
+    expect(result?.conditionedGroupId, groupCondition.conditionedGroupId);
+    expect(result?.conditionalGroupId, groupCondition.conditionalGroupId);
+    expect(result?.usedTime, groupCondition.usedTime);
+    expect(result?.duringLastDays, groupCondition.duringLastDays);
+
+    verify(mockDatabaseReference.child('groupConditions')).called(1);
+    verify(mockDatabaseReference.child('testConditionedGroupId')).called(1);
+    verify(mockDatabaseReference.child('testConditionalGroupId')).called(1);
   });
 }
