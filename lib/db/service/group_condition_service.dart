@@ -9,8 +9,10 @@ class GroupConditionService {
   final GroupConditionRepository _repository =
       locator<GroupConditionRepository>();
 
-  Future<GroupCondition?> getGroupCondition(
-      String conditionedGroupId, String conditionalGroupId) async {
+  Future<GroupCondition?> getGroupCondition({
+    required String conditionedGroupId,
+    required String conditionalGroupId,
+  }) async {
     try {
       return await _repository.getGroupConditionByIds(
           conditionedGroupId: conditionedGroupId,
@@ -21,9 +23,10 @@ class GroupConditionService {
     }
   }
 
-  Future<List<GroupCondition>> getGroupConditions(String groupId) async {
+  Future<List<GroupCondition>> getGroupConditions(
+      String conditionedGroupId) async {
     try {
-      return await _repository.getGroupConditions(groupId);
+      return await _repository.getGroupConditions(conditionedGroupId);
     } catch (e) {
       _logger.e('Error while getting group conditions: $e');
       rethrow;
