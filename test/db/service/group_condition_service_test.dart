@@ -65,8 +65,91 @@ void main() {
       expect(result, isNull);
     });
 
-    test('should perform some action', () async {
-      fail("Not yet implemented");
+    test('getGroupConditions returns a list of GroupConditions when found',
+        () async {
+      const conditionedGroupId = 'conditionedGroup1';
+      final expectedGroupConditions = [
+        const GroupCondition(
+          conditionedGroupId: conditionedGroupId,
+          conditionalGroupId: 'conditionalGroup1',
+          usedTime: Duration(hours: 1),
+          duringLastDays: 7,
+        ),
+        const GroupCondition(
+          conditionedGroupId: conditionedGroupId,
+          conditionalGroupId: 'conditionalGroup2',
+          usedTime: Duration(hours: 2),
+          duringLastDays: 5,
+        ),
+      ];
+
+      when(mockGroupConditionRepository.getGroupConditions(conditionedGroupId))
+          .thenAnswer((_) async => expectedGroupConditions);
+
+      final result =
+          await groupConditionService.getGroupConditions(conditionedGroupId);
+
+      expect(result, equals(expectedGroupConditions));
+    });
+
+    test(
+        'getGroupConditions returns an empty list when no conditions are found',
+        () async {
+      const conditionedGroupId = 'conditionedGroup1';
+
+      when(mockGroupConditionRepository.getGroupConditions(conditionedGroupId))
+          .thenAnswer((_) async => []);
+
+      final result =
+          await groupConditionService.getGroupConditions(conditionedGroupId);
+
+      expect(result, isEmpty);
+    });
+
+    test('saveGroupCondition saves a group condition successfully', () async {
+      const groupCondition = GroupCondition(
+        conditionedGroupId: 'testConditionedGroupId',
+        conditionalGroupId: 'testConditionalGroupId',
+        usedTime: Duration(hours: 1),
+        duringLastDays: 7,
+      );
+      when(mockGroupConditionRepository.saveGroupCondition(groupCondition))
+          .thenAnswer((_) => Future.value());
+      await groupConditionService.saveGroupCondition(groupCondition);
+      verify(mockGroupConditionRepository.saveGroupCondition(groupCondition))
+          .called(1);
+    });
+
+    test('updateGroupCondition updates a group condition successfully',
+        () async {
+      const groupCondition = GroupCondition(
+        conditionedGroupId: 'testConditionedGroupId',
+        conditionalGroupId: 'testConditionalGroupId',
+        usedTime: Duration(hours: 1),
+        duringLastDays: 7,
+      );
+      when(mockGroupConditionRepository.updateGroupCondition(groupCondition))
+          .thenAnswer((_) => Future.value());
+      await groupConditionService.updateGroupCondition(groupCondition);
+      verify(mockGroupConditionRepository.updateGroupCondition(groupCondition))
+          .called(1);
+    });
+
+    test('deleteGroupCondition deletes a group condition successfully',
+        () async {
+      const groupCondition = GroupCondition(
+        conditionedGroupId: 'testConditionedGroupId',
+        conditionalGroupId: 'testConditionalGroupId',
+        usedTime: Duration(hours: 1),
+        duringLastDays: 7,
+      );
+      when(mockGroupConditionRepository.deleteGroupCondition(groupCondition))
+          .thenAnswer((_) => Future.value());
+
+      await groupConditionService.deleteGroupCondition(groupCondition);
+
+      verify(mockGroupConditionRepository.deleteGroupCondition(groupCondition))
+          .called(1);
     });
   });
 }
