@@ -14,9 +14,10 @@ import 'package:reward_raven/screens/appgroups/editgroup/tabs/group_app_list.dar
 import 'package:reward_raven/screens/apps/app_list_type.dart';
 import 'package:reward_raven/service/app/apps_fetcher.dart';
 
-import '../../../test_utils/localization_testable.dart';
-import 'edit_group_test.mocks.dart';
+import '../../../../test_utils/localization_testable.dart';
+import 'group_app_list_test.mocks.dart';
 
+// TODO move file to tabs folder for apps
 @GenerateMocks([AppsFetcher, ListedAppService])
 void main() {
   final locator = GetIt.instance;
