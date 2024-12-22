@@ -9,16 +9,19 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:reward_raven/db/entity/app_group.dart';
 import 'package:reward_raven/db/service/app_group_service.dart';
+import 'package:reward_raven/db/service/group_condition_service.dart';
 import 'package:reward_raven/db/service/listed_app_service.dart';
 import 'package:reward_raven/screens/appgroups/addgroup/add_group.dart';
 import 'package:reward_raven/screens/appgroups/app_group_list.dart';
 import 'package:reward_raven/screens/appgroups/app_group_list_type.dart';
 import 'package:reward_raven/screens/appgroups/editgroup/edit_group.dart';
+import 'package:reward_raven/screens/apps/app_list_type.dart';
 import 'package:reward_raven/service/app/apps_fetcher.dart';
 
 import 'app_group_list_test.mocks.dart';
 
-@GenerateMocks([AppsFetcher, ListedAppService, AppGroupService])
+@GenerateMocks(
+    [AppsFetcher, ListedAppService, AppGroupService, GroupConditionService])
 void main() {
   final GetIt locator = GetIt.instance;
 
@@ -187,6 +190,10 @@ void main() {
       locator.registerSingleton<ListedAppService>(mockListedAppService);
       final mockAppsFetcher = MockAppsFetcher();
       locator.registerSingleton<AppsFetcher>(mockAppsFetcher);
+      final mockGroupConditionService = MockGroupConditionService();
+      locator
+          .registerSingleton<GroupConditionService>(mockGroupConditionService);
+
       when(mockGroupsService.streamGroups(GroupType.positive))
           .thenAnswer((_) => Stream.value([
                 const AppGroup(name: 'Group 1', type: GroupType.positive),
@@ -194,6 +201,9 @@ void main() {
               ]));
 
       when(mockAppsFetcher.fetchInstalledApps()).thenAnswer((_) async => []);
+
+      when(mockListedAppService.fetchListedAppsByType(AppListType.positive))
+          .thenAnswer((_) async => []);
 
       await tester.pumpWidget(createLocalizationTestableWidget(
           const AppGroupList(

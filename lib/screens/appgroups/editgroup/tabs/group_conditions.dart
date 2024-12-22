@@ -26,7 +26,8 @@ FutureBuilder<List<GroupConditionItem>> buildConditionsList(
             child: Text(
                 '${AppLocalizations.of(context)!.error}: ${snapshot.error}'));
       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-        return Center(child: Text(AppLocalizations.of(context)!.noAppsFound));
+        return Center(
+            child: Text(AppLocalizations.of(context)!.noConditionsFound));
       } else {
         final groupApps = snapshot.data!;
         return ListView.builder(
@@ -42,8 +43,11 @@ FutureBuilder<List<GroupConditionItem>> buildConditionsList(
 
 Future<List<GroupConditionItem>> _fetchSavedConditions(
     AppListType listType, AppGroup group) async {
+  if (group.id == null) {
+    return [];
+  }
+
   final groupConditionService = locator<GroupConditionService>();
-  final groupService = locator<AppGroupService>();
 
   final conditions = await groupConditionService.getGroupConditions(group.id!);
   return (await mapConditionList(conditions, listType)).toList();
@@ -104,7 +108,6 @@ class GroupAppItemState extends State<GroupConditionItem> {
   final Logger _logger = Logger();
 
   late bool _areConditionsMet;
-  final GroupConditionService _service = locator<GroupConditionService>();
 
   @override
   void initState() {

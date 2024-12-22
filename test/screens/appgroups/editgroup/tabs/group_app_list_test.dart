@@ -8,6 +8,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:reward_raven/db/entity/app_group.dart';
 import 'package:reward_raven/db/entity/listed_app.dart';
+import 'package:reward_raven/db/service/group_condition_service.dart';
 import 'package:reward_raven/db/service/listed_app_service.dart';
 import 'package:reward_raven/screens/appgroups/editgroup/edit_group.dart';
 import 'package:reward_raven/screens/appgroups/editgroup/tabs/group_app_list.dart';
@@ -19,13 +20,18 @@ import 'group_app_list_test.mocks.dart';
 
 // TODO move file to tabs folder for apps
 @GenerateMocks([AppsFetcher, ListedAppService])
+@GenerateNiceMocks([
+  MockSpec<GroupConditionService>(),
+])
 void main() {
   final locator = GetIt.instance;
   final mockAppFetcher = MockAppsFetcher();
   final mockListedAppService = MockListedAppService();
+  final mockGroupConditionService = MockGroupConditionService();
 
   locator.registerSingleton<AppsFetcher>(mockAppFetcher);
   locator.registerSingleton<ListedAppService>(mockListedAppService);
+  locator.registerSingleton<GroupConditionService>(mockGroupConditionService);
 
   setUp(() {
     // Define the test data

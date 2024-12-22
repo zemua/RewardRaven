@@ -1,10 +1,91 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
+import 'package:reward_raven/db/entity/app_group.dart';
+import 'package:reward_raven/db/service/app_group_service.dart';
 import 'package:reward_raven/db/service/group_condition_service.dart';
+import 'package:reward_raven/db/service/listed_app_service.dart';
+import 'package:reward_raven/screens/appgroups/editgroup/edit_group.dart';
+import 'package:reward_raven/screens/apps/app_list_type.dart';
+import 'package:reward_raven/service/app/apps_fetcher.dart';
+
+import '../../../../test_utils/localization_testable.dart';
+import 'group_conditions_test.mocks.dart';
 
 @GenerateMocks([GroupConditionService])
+@GenerateNiceMocks([
+  MockSpec<AppsFetcher>(),
+  MockSpec<ListedAppService>(),
+  MockSpec<AppGroupService>(),
+])
 void main() {
-  testWidgets('test', (tester) async {
-    fail("TODO");
+  final locator = GetIt.instance;
+  final mockGroupConditionService = MockGroupConditionService();
+  final mockAppFetcher = MockAppsFetcher();
+  final mockListedAppService = MockListedAppService();
+
+  locator.registerSingleton<GroupConditionService>(mockGroupConditionService);
+  locator.registerSingleton<AppsFetcher>(mockAppFetcher);
+  locator.registerSingleton<ListedAppService>(mockListedAppService);
+
+  setUp(() {});
+
+  group('EditGroup Screen Tests', () {
+    testWidgets(
+        'shows "noConditionsFound" when no conditions retrieved from GroupConditionService',
+        (WidgetTester tester) async {
+      // Reply to call with delay to check loading spinner
+      when(mockGroupConditionService.getGroupConditions(any))
+          .thenAnswer((_) async => []);
+
+      // Act
+      await tester
+          .pumpWidget(createLocalizationTestableWidget(const EditGroupScreen(
+        group: AppGroup(
+            name: 'Test Group', id: 'testGroupId', type: GroupType.positive),
+        listType: AppListType.positive,
+      )));
+
+      // Verify that the TabBar contains the 'Conditions' tab
+      expect(find.text('Conditions'), findsOneWidget);
+
+      // Tap on the 'Conditions' tab
+      await tester.tap(find.text('Conditions'));
+      await tester.pumpAndSettle();
+
+      // Assert
+      expect(find.text("No conditions found"), findsOneWidget);
+    });
+
+    testWidgets('shows conditions retrieved from GroupConditionService',
+        (WidgetTester tester) async {
+      // Reply to call with delay to check loading spinner
+      fail("update stub to return list of conditions");
+      when(mockGroupConditionService.getGroupConditions(any))
+          .thenAnswer((_) async => []);
+
+      // Act
+      await tester
+          .pumpWidget(createLocalizationTestableWidget(const EditGroupScreen(
+        group: AppGroup(
+            name: 'Test Group', id: 'testGroupId', type: GroupType.positive),
+        listType: AppListType.positive,
+      )));
+
+      // Verify that the TabBar contains the 'Conditions' tab
+      expect(find.text('Conditions'), findsOneWidget);
+
+      // Tap on the 'Conditions' tab
+      await tester.tap(find.text('Conditions'));
+      await tester.pumpAndSettle();
+
+      // Assert
+      expect(find.text("No conditions found"), findsOneWidget);
+    });
+
+    testWidgets('test', (tester) async {
+      fail("TODO");
+    });
   });
 }

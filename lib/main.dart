@@ -6,6 +6,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:reward_raven/db/helper/firebase_helper.dart';
 import 'package:reward_raven/db/repository/app_group_repository.dart';
+import 'package:reward_raven/db/repository/group_condition_repository.dart';
+import 'package:reward_raven/db/service/group_condition_service.dart';
 import 'package:reward_raven/screens/homepage/home_page.dart';
 import 'package:reward_raven/service/app/apps_fetcher.dart';
 import 'package:reward_raven/service/app/apps_fetcher_provider.dart';
@@ -74,4 +76,7 @@ void _setupLocator() {
   locator.registerSingleton<ListedAppService>(ListedAppService());
   locator.registerSingleton<AppGroupRepository>(AppGroupRepository());
   locator.registerSingleton<AppGroupService>(AppGroupService());
+  locator
+      .registerSingleton<GroupConditionRepository>(GroupConditionRepository());
+  locator.registerSingleton<GroupConditionService>(GroupConditionService());
 }

@@ -5,9 +5,16 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
 
+import 'package:installed_apps/app_info.dart' as _i6;
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:reward_raven/db/entity/app_group.dart' as _i11;
 import 'package:reward_raven/db/entity/group_condition.dart' as _i4;
+import 'package:reward_raven/db/entity/listed_app.dart' as _i8;
+import 'package:reward_raven/db/service/app_group_service.dart' as _i10;
 import 'package:reward_raven/db/service/group_condition_service.dart' as _i2;
+import 'package:reward_raven/db/service/listed_app_service.dart' as _i7;
+import 'package:reward_raven/screens/apps/app_list_type.dart' as _i9;
+import 'package:reward_raven/service/app/apps_fetcher.dart' as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -92,4 +99,194 @@ class MockGroupConditionService extends _i1.Mock
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
       ) as _i3.Future<void>);
+}
+
+/// A class which mocks [AppsFetcher].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockAppsFetcher extends _i1.Mock implements _i5.AppsFetcher {
+  @override
+  _i3.Future<List<_i6.AppInfo>> fetchInstalledApps() => (super.noSuchMethod(
+        Invocation.method(
+          #fetchInstalledApps,
+          [],
+        ),
+        returnValue: _i3.Future<List<_i6.AppInfo>>.value(<_i6.AppInfo>[]),
+        returnValueForMissingStub:
+            _i3.Future<List<_i6.AppInfo>>.value(<_i6.AppInfo>[]),
+      ) as _i3.Future<List<_i6.AppInfo>>);
+
+  @override
+  _i3.Future<List<_i6.AppInfo>> fetchAllApps() => (super.noSuchMethod(
+        Invocation.method(
+          #fetchAllApps,
+          [],
+        ),
+        returnValue: _i3.Future<List<_i6.AppInfo>>.value(<_i6.AppInfo>[]),
+        returnValueForMissingStub:
+            _i3.Future<List<_i6.AppInfo>>.value(<_i6.AppInfo>[]),
+      ) as _i3.Future<List<_i6.AppInfo>>);
+
+  @override
+  _i3.Future<_i6.AppInfo?> fetchApp(String? packageName) => (super.noSuchMethod(
+        Invocation.method(
+          #fetchApp,
+          [packageName],
+        ),
+        returnValue: _i3.Future<_i6.AppInfo?>.value(),
+        returnValueForMissingStub: _i3.Future<_i6.AppInfo?>.value(),
+      ) as _i3.Future<_i6.AppInfo?>);
+
+  @override
+  bool hasHiddenApps() => (super.noSuchMethod(
+        Invocation.method(
+          #hasHiddenApps,
+          [],
+        ),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+}
+
+/// A class which mocks [ListedAppService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockListedAppService extends _i1.Mock implements _i7.ListedAppService {
+  @override
+  _i3.Future<void> saveListedApp(_i8.ListedApp? app) => (super.noSuchMethod(
+        Invocation.method(
+          #saveListedApp,
+          [app],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> updateListedApp(_i8.ListedApp? app) => (super.noSuchMethod(
+        Invocation.method(
+          #updateListedApp,
+          [app],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> deleteListedApp(_i8.ListedApp? app) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteListedApp,
+          [app],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<_i8.ListedApp?> getListedAppById(String? identifier) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getListedAppById,
+          [identifier],
+        ),
+        returnValue: _i3.Future<_i8.ListedApp?>.value(),
+        returnValueForMissingStub: _i3.Future<_i8.ListedApp?>.value(),
+      ) as _i3.Future<_i8.ListedApp?>);
+
+  @override
+  _i3.Future<List<_i8.ListedApp>> fetchListedAppsByType(
+          _i9.AppListType? listType) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchListedAppsByType,
+          [listType],
+        ),
+        returnValue: _i3.Future<List<_i8.ListedApp>>.value(<_i8.ListedApp>[]),
+        returnValueForMissingStub:
+            _i3.Future<List<_i8.ListedApp>>.value(<_i8.ListedApp>[]),
+      ) as _i3.Future<List<_i8.ListedApp>>);
+
+  @override
+  _i3.Future<_i8.AppStatus> fetchStatus(String? identifier) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchStatus,
+          [identifier],
+        ),
+        returnValue: _i3.Future<_i8.AppStatus>.value(_i8.AppStatus.positive),
+        returnValueForMissingStub:
+            _i3.Future<_i8.AppStatus>.value(_i8.AppStatus.positive),
+      ) as _i3.Future<_i8.AppStatus>);
+}
+
+/// A class which mocks [AppGroupService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockAppGroupService extends _i1.Mock implements _i10.AppGroupService {
+  @override
+  _i3.Future<void> saveGroup(_i11.AppGroup? group) => (super.noSuchMethod(
+        Invocation.method(
+          #saveGroup,
+          [group],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> updateGroup(
+    String? key,
+    _i11.AppGroup? group,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateGroup,
+          [
+            key,
+            group,
+          ],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<_i11.AppGroup?> getGroup(
+    _i11.GroupType? type,
+    String? key,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getGroup,
+          [
+            type,
+            key,
+          ],
+        ),
+        returnValue: _i3.Future<_i11.AppGroup?>.value(),
+        returnValueForMissingStub: _i3.Future<_i11.AppGroup?>.value(),
+      ) as _i3.Future<_i11.AppGroup?>);
+
+  @override
+  _i3.Future<List<_i11.AppGroup>> getGroups(_i11.GroupType? type) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getGroups,
+          [type],
+        ),
+        returnValue: _i3.Future<List<_i11.AppGroup>>.value(<_i11.AppGroup>[]),
+        returnValueForMissingStub:
+            _i3.Future<List<_i11.AppGroup>>.value(<_i11.AppGroup>[]),
+      ) as _i3.Future<List<_i11.AppGroup>>);
+
+  @override
+  _i3.Stream<List<_i11.AppGroup>> streamGroups(_i11.GroupType? type) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #streamGroups,
+          [type],
+        ),
+        returnValue: _i3.Stream<List<_i11.AppGroup>>.empty(),
+        returnValueForMissingStub: _i3.Stream<List<_i11.AppGroup>>.empty(),
+      ) as _i3.Stream<List<_i11.AppGroup>>);
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:reward_raven/screens/appgroups/editgroup/tabs/group_app_list.dart';
+import 'package:reward_raven/screens/appgroups/editgroup/tabs/group_conditions.dart';
 
 import '../../../db/entity/app_group.dart';
 import '../../apps/app_list_type.dart';
@@ -34,7 +35,9 @@ class EditGroupScreen extends StatelessWidget {
             Center(
                 child: Text(
                     'Random checks included in this group')), // TODO implement tab
-            Center(child: Text('Options for this group')), // TODO implement tab
+            Center(
+                child:
+                    buildConditionsList(group, listType)), // TODO implement tab
           ],
         ),
       ),
