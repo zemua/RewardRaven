@@ -1,16 +1,22 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+
+import '../../../../db/entity/app_group.dart';
+import '../../../../db/entity/group_condition.dart';
+import '../../../../db/service/app_group_service.dart';
+import '../../../../db/service/group_condition_service.dart';
+import '../../../apps/app_list_type.dart';
 
 final GetIt locator = GetIt.instance;
 
 final _logger = Logger();
 
-// TODO test
-/*
 FutureBuilder<List<GroupConditionItem>> buildConditionsList(
     AppGroup group, AppListType listType) {
-  return FutureBuilder<List<GroupAppItem>>(
-    future: _fetchSavedApps(listType, group),
+  return FutureBuilder<List<GroupConditionItem>>(
+    future: _fetchSavedConditions(listType, group),
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
         return const Center(child: CircularProgressIndicator());
@@ -32,6 +38,44 @@ FutureBuilder<List<GroupConditionItem>> buildConditionsList(
       }
     },
   );
+}
+
+Future<List<GroupConditionItem>> _fetchSavedConditions(
+    AppListType listType, AppGroup group) async {
+  final groupConditionService = locator<GroupConditionService>();
+  final groupService = locator<AppGroupService>();
+
+  final conditions = await groupConditionService.getGroupConditions(group.id!);
+  return (await mapConditionList(conditions, listType)).toList();
+}
+
+Future<Iterable<GroupConditionItem>> mapConditionList(
+    List<GroupCondition> conditions, AppListType listType) async {
+  return await Future.wait(conditions.map((condition) async {
+    return await mapCondition(listType, condition);
+  }));
+}
+
+Future<GroupConditionItem> mapCondition(
+    AppListType listType, GroupCondition condition) async {
+  var conditionedName =
+      await getGroupName(listType, condition.conditionedGroupId);
+  var conditionalName =
+      await getGroupName(listType, condition.conditionalGroupId);
+  return GroupConditionItem(
+    conditionedGroupId: condition.conditionedGroupId,
+    conditionedGroupName: conditionedName,
+    conditionalGroupId: condition.conditionalGroupId,
+    conditionalGroupName: conditionalName,
+    usedTime: condition.usedTime,
+    duringLastDays: condition.duringLastDays,
+  );
+}
+
+Future<String> getGroupName(AppListType listType, String groupId) async {
+  final groupService = locator<AppGroupService>();
+  AppGroup? group = await groupService.getGroup(listType.groupType, groupId);
+  return group?.name ?? '';
 }
 
 class GroupConditionItem extends StatefulWidget {
@@ -59,54 +103,38 @@ class GroupConditionItem extends StatefulWidget {
 class GroupAppItemState extends State<GroupConditionItem> {
   final Logger _logger = Logger();
 
-  bool _isSwitched = false;
-  bool _isDisabled = false;
+  late bool _areConditionsMet;
   final GroupConditionService _service = locator<GroupConditionService>();
 
   @override
   void initState() {
     super.initState();
-    _loadSwitchValue();
+    _configureState();
   }
 
-  Future<void> _loadSwitchValue() async {
+  Future<void> _configureState() async {
     setState(() {
-      _isSwitched = widget.listId == widget.listedApp.listId;
-      _isDisabled = widget.listedApp.listId != null &&
-          widget.listedApp.listId != widget.listId;
+      // TODO check if conditions are met and set color of the button to green/red according to theme
+      _areConditionsMet = true;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    _logger.d('Building app item for ${widget.appInfo.name} with icon: '
-        '${widget.appInfo.icon}');
+    _logger.d(
+        'Building app item for ${widget.conditionalGroupName} for ${widget.usedTime.inHours} hours in the last ${widget.duringLastDays} days');
     return ListTile(
-      leading: Image.memory(
-        widget.appInfo.icon!,
-        errorBuilder: (context, error, stackTrace) {
-          _logger.e(
-              'Error loading image: $error - context: $context - stack trace: $stackTrace');
-          return const Icon(Icons.apps);
-        },
-      ),
-      title: Text(widget.appInfo.name),
-      trailing: Switch(
-        value: _isSwitched,
-        onChanged: _isDisabled
-            ? null
-            : (value) async {
-                setState(() {
-                  _isSwitched = value;
-                });
-                final listId = value ? widget.listId : null;
-                final listedApp = widget.listedApp.copyWith(
-                  listId: listId,
-                );
-                await _service.updateListedApp(listedApp);
-              },
+      trailing: ElevatedButton(
+        onPressed: () {}, // TODO open screen to edit condition
+        child: Text(
+          '${widget.conditionalGroupName} for ${widget.usedTime.inHours} hours in the last ${widget.duringLastDays} days',
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: _areConditionsMet
+              ? Theme.of(context).colorScheme.primary
+              : Theme.of(context).colorScheme.error,
+        ),
       ),
     );
   }
 }
-*/

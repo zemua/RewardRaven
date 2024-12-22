@@ -1,3 +1,5 @@
+import 'package:reward_raven/db/entity/app_group.dart';
+
 import '../../db/entity/listed_app.dart';
 
 enum AppListType { positive, negative }
@@ -27,6 +29,15 @@ extension ListTypeExtension on AppListType {
         return AppStatus.positive;
       case AppListType.negative:
         return AppStatus.negative;
+    }
+  }
+
+  GroupType get groupType {
+    switch (this) {
+      case AppListType.positive:
+        return GroupType.positive;
+      case AppListType.negative:
+        return GroupType.negative;
     }
   }
 }
