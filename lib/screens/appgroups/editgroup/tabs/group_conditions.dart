@@ -7,6 +7,7 @@ import '../../../../db/entity/app_group.dart';
 import '../../../../db/entity/group_condition.dart';
 import '../../../../db/service/app_group_service.dart';
 import '../../../../db/service/group_condition_service.dart';
+import '../../../../error/group_not_found_exception.dart';
 import '../../../apps/app_list_type.dart';
 
 final GetIt locator = GetIt.instance;
@@ -55,9 +56,15 @@ Future<List<GroupConditionItem>> _fetchSavedConditions(
 
 Future<Iterable<GroupConditionItem>> mapConditionList(
     List<GroupCondition> conditions, AppListType listType) async {
-  return await Future.wait(conditions.map((condition) async {
-    return await mapCondition(listType, condition);
+  List<GroupConditionItem> items = [];
+  await Future.wait(conditions.map((condition) async {
+    try {
+      items.add(await mapCondition(listType, condition));
+    } on GroupNotFoundException catch (e) {
+      _logger.e('Error loading group conditions: $e');
+    }
   }));
+  return items;
 }
 
 Future<GroupConditionItem> mapCondition(
@@ -79,7 +86,10 @@ Future<GroupConditionItem> mapCondition(
 Future<String> getGroupName(AppListType listType, String groupId) async {
   final groupService = locator<AppGroupService>();
   AppGroup? group = await groupService.getGroup(listType.groupType, groupId);
-  return group?.name ?? '';
+  if (group == null) {
+    throw GroupNotFoundException('Group with id $groupId not found');
+  }
+  return group.name;
 }
 
 class GroupConditionItem extends StatefulWidget {

@@ -221,6 +221,10 @@ class MockAppGroupService extends _i1.Mock implements _i8.AppGroupService {
 /// See the documentation for Mockito's code generation for more information.
 class MockGroupConditionService extends _i1.Mock
     implements _i10.GroupConditionService {
+  MockGroupConditionService() {
+    _i1.throwOnMissingStub(this);
+  }
+
   @override
   _i3.Future<_i11.GroupCondition?> getGroupCondition({
     required String? conditionedGroupId,
@@ -236,7 +240,6 @@ class MockGroupConditionService extends _i1.Mock
           },
         ),
         returnValue: _i3.Future<_i11.GroupCondition?>.value(),
-        returnValueForMissingStub: _i3.Future<_i11.GroupCondition?>.value(),
       ) as _i3.Future<_i11.GroupCondition?>);
 
   @override
@@ -248,8 +251,6 @@ class MockGroupConditionService extends _i1.Mock
           [conditionedGroupId],
         ),
         returnValue: _i3.Future<List<_i11.GroupCondition>>.value(
-            <_i11.GroupCondition>[]),
-        returnValueForMissingStub: _i3.Future<List<_i11.GroupCondition>>.value(
             <_i11.GroupCondition>[]),
       ) as _i3.Future<List<_i11.GroupCondition>>);
 

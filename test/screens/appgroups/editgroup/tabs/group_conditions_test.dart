@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:reward_raven/db/entity/app_group.dart';
+import 'package:reward_raven/db/entity/group_condition.dart';
 import 'package:reward_raven/db/service/app_group_service.dart';
 import 'package:reward_raven/db/service/group_condition_service.dart';
 import 'package:reward_raven/db/service/listed_app_service.dart';
@@ -24,10 +25,12 @@ void main() {
   final mockGroupConditionService = MockGroupConditionService();
   final mockAppFetcher = MockAppsFetcher();
   final mockListedAppService = MockListedAppService();
+  final mockAppGroupService = MockAppGroupService();
 
   locator.registerSingleton<GroupConditionService>(mockGroupConditionService);
   locator.registerSingleton<AppsFetcher>(mockAppFetcher);
   locator.registerSingleton<ListedAppService>(mockListedAppService);
+  locator.registerSingleton<AppGroupService>(mockAppGroupService);
 
   setUp(() {});
 
@@ -61,9 +64,42 @@ void main() {
     testWidgets('shows conditions retrieved from GroupConditionService',
         (WidgetTester tester) async {
       // Reply to call with delay to check loading spinner
-      fail("update stub to return list of conditions");
       when(mockGroupConditionService.getGroupConditions(any))
-          .thenAnswer((_) async => []);
+          .thenAnswer((_) async => [
+                const GroupCondition(
+                    conditionedGroupId: 'testGroupId',
+                    conditionalGroupId: 'conditionalGroupId1',
+                    usedTime: Duration(minutes: 11),
+                    duringLastDays: 1),
+                const GroupCondition(
+                    conditionedGroupId: 'testGroupId',
+                    conditionalGroupId: 'conditionalGroupId2',
+                    usedTime: Duration(minutes: 41),
+                    duringLastDays: 2),
+              ]);
+
+      when(mockAppGroupService.getGroup(GroupType.positive, 'testGroupId'))
+          .thenAnswer((_) async => const AppGroup(
+                name: 'Test Conditioned Group',
+                id: 'testGroupId',
+                type: GroupType.positive,
+              ));
+
+      when(mockAppGroupService.getGroup(
+              GroupType.positive, 'conditionalGroupId1'))
+          .thenAnswer((_) async => const AppGroup(
+                name: 'Test Conditional Group1',
+                id: 'conditionalGroupId1',
+                type: GroupType.positive,
+              ));
+
+      when(mockAppGroupService.getGroup(
+              GroupType.positive, 'conditionalGroupId2'))
+          .thenAnswer((_) async => const AppGroup(
+                name: 'Test Conditional Group2',
+                id: 'conditionalGroupId2',
+                type: GroupType.positive,
+              ));
 
       // Act
       await tester
@@ -82,6 +118,8 @@ void main() {
 
       // Assert
       expect(find.text("No conditions found"), findsOneWidget);
+
+      fail("Not yet implemented");
     });
 
     testWidgets('test', (tester) async {
