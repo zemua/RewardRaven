@@ -140,7 +140,7 @@ class GroupAppItemState extends State<GroupConditionItem> {
       title: TextButton(
         onPressed: () {}, // TODO open screen to edit condition
         child: Text(
-          '${widget.conditionalGroupName} for ${widget.usedTime.inHours}:${widget.usedTime.inMinutes} in the last ${widget.duringLastDays} days',
+          '${widget.conditionalGroupName} for ${widget.usedTime.inHours}:${widget.usedTime.inMinutes} in the last ${widget.duringLastDays} days', // TODO add localization language
           style: TextStyle(
             color: _areConditionsMet
                 ? Theme.of(context).colorScheme.primary
