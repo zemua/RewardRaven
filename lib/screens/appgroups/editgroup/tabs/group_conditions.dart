@@ -169,6 +169,8 @@ class GroupAppItemState extends State<GroupConditionItem> {
   Widget build(BuildContext context) {
     _logger.d(
         'Building app item for ${widget.conditionalGroupName} for ${widget.usedTime.inHours}:${widget.usedTime.inMinutes} in the last ${widget.duringLastDays} days');
+    _logger.d(
+        '${widget.conditionalGroupName} ${AppLocalizations.of(context)!.forString} ${widget.usedTime.inHours}:${widget.usedTime.inMinutes} ${AppLocalizations.of(context)!.inTheLast} ${widget.duringLastDays} ${AppLocalizations.of(context)!.days}');
     return ListTile(
       title: TextButton(
         onPressed: () {}, // TODO open screen to edit condition
