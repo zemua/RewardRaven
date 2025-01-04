@@ -135,17 +135,17 @@ class GroupAppItemState extends State<GroupConditionItem> {
   @override
   Widget build(BuildContext context) {
     _logger.d(
-        'Building app item for ${widget.conditionalGroupName} for ${widget.usedTime.inHours} hours in the last ${widget.duringLastDays} days');
+        'Building app item for ${widget.conditionalGroupName} for ${widget.usedTime.inHours}:${widget.usedTime.inMinutes} in the last ${widget.duringLastDays} days');
     return ListTile(
-      trailing: ElevatedButton(
+      title: TextButton(
         onPressed: () {}, // TODO open screen to edit condition
         child: Text(
-          '${widget.conditionalGroupName} for ${widget.usedTime.inHours} hours in the last ${widget.duringLastDays} days',
-        ),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: _areConditionsMet
-              ? Theme.of(context).colorScheme.primary
-              : Theme.of(context).colorScheme.error,
+          '${widget.conditionalGroupName} for ${widget.usedTime.inHours}:${widget.usedTime.inMinutes} in the last ${widget.duringLastDays} days',
+          style: TextStyle(
+            color: _areConditionsMet
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.error,
+          ),
         ),
       ),
     );

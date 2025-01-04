@@ -117,9 +117,10 @@ void main() {
       await tester.pumpAndSettle();
 
       // Assert
-      expect(find.text("No conditions found"), findsOneWidget);
-
-      fail("Not yet implemented");
+      expect(find.text("Test Conditional Group1 for 0:11 in the last 1 days"),
+          findsOneWidget);
+      expect(find.text("Test Conditional Group2 for 0:41 in the last 2 days"),
+          findsOneWidget);
     });
 
     testWidgets('test', (tester) async {
