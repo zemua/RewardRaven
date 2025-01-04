@@ -1,4 +1,5 @@
 {
+  "addCondition": "Add Condition",
   "addGroup": "Add Group",
   "appTitle": "Reward Raven",
   "@appTitle": {
@@ -6,13 +7,16 @@
   },
   "apps": "Apps",
   "conditions": "Conditions",
+  "days": "Days",
   "editGroup": "Edit Group",
   "error": "Error",
   "filter": "Filter",
+  "forString": "for",
   "groupName": "Group Name",
   "groupNameEmpty": "Group name cannot be empty",
   "homePage": "Reward Raven Home Page",
   "installedApps": "Installed Apps",
+  "inTheLast": "in the last",
   "myTimings": "My Timings",
   "negativeApps": "Negative Apps",
   "negativeGroups": "Negative Groups",

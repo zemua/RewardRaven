@@ -22,24 +22,57 @@ FutureBuilder<List<GroupConditionItem>> buildConditionsList(
       if (snapshot.connectionState == ConnectionState.waiting) {
         return const Center(child: CircularProgressIndicator());
       } else if (snapshot.hasError) {
-        _logger.e('Error loading apps: ${snapshot.error}');
+        _logger.e('Error loading conditions: ${snapshot.error}');
         return Center(
             child: Text(
                 '${AppLocalizations.of(context)!.error}: ${snapshot.error}'));
       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-        return Center(
-            child: Text(AppLocalizations.of(context)!.noConditionsFound));
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(AppLocalizations.of(context)!.noConditionsFound),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                addCondition(context, listType);
+              },
+              child: Text(AppLocalizations.of(context)!.addCondition),
+            ),
+          ],
+        );
       } else {
         final groupApps = snapshot.data!;
+        const buttonSpace = 1;
         return ListView.builder(
-          itemCount: groupApps.length,
+          itemCount: groupApps.length + buttonSpace,
           itemBuilder: (context, index) {
-            return groupApps[index];
+            if (index < groupApps.length) {
+              return groupApps[index];
+            } else {
+              return ElevatedButton(
+                onPressed: () {
+                  addCondition(context, listType);
+                }, // TODO implement button action
+                child: Text(AppLocalizations.of(context)!.addCondition),
+              );
+            }
           },
         );
       }
     },
   );
+}
+
+void addCondition(BuildContext context, AppListType listType) {
+  // TODO implement
+  /*Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => AddConditionScreen(
+        groupType: listType.toGroupType(),
+      ),
+    ),
+  );*/
 }
 
 Future<List<GroupConditionItem>> _fetchSavedConditions(
@@ -140,7 +173,7 @@ class GroupAppItemState extends State<GroupConditionItem> {
       title: TextButton(
         onPressed: () {}, // TODO open screen to edit condition
         child: Text(
-          '${widget.conditionalGroupName} for ${widget.usedTime.inHours}:${widget.usedTime.inMinutes} in the last ${widget.duringLastDays} days', // TODO add localization language
+          '${widget.conditionalGroupName} ${AppLocalizations.of(context)!.forString} ${widget.usedTime.inHours}:${widget.usedTime.inMinutes} ${AppLocalizations.of(context)!.inTheLast} ${widget.duringLastDays} ${AppLocalizations.of(context)!.days}',
           style: TextStyle(
             color: _areConditionsMet
                 ? Theme.of(context).colorScheme.primary
