@@ -9,6 +9,7 @@ import '../../../../db/service/app_group_service.dart';
 import '../../../../db/service/group_condition_service.dart';
 import '../../../../error/group_not_found_exception.dart';
 import '../../../apps/app_list_type.dart';
+import 'condition/edit_condition.dart';
 
 final GetIt locator = GetIt.instance;
 
@@ -34,7 +35,7 @@ FutureBuilder<List<GroupConditionItem>> buildConditionsList(
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                addCondition(context, listType);
+                addCondition(context, group);
               },
               child: Text(AppLocalizations.of(context)!.addCondition),
             ),
@@ -51,7 +52,7 @@ FutureBuilder<List<GroupConditionItem>> buildConditionsList(
             } else {
               return ElevatedButton(
                 onPressed: () {
-                  addCondition(context, listType);
+                  addCondition(context, group);
                 }, // TODO implement button action
                 child: Text(AppLocalizations.of(context)!.addCondition),
               );
@@ -63,16 +64,15 @@ FutureBuilder<List<GroupConditionItem>> buildConditionsList(
   );
 }
 
-void addCondition(BuildContext context, AppListType listType) {
-  // TODO implement
-  /*Navigator.push(
+void addCondition(BuildContext context, AppGroup group) {
+  Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => AddConditionScreen(
-        groupType: listType.toGroupType(),
+      builder: (context) => EditCondition(
+        conditionedGroup: group,
       ),
     ),
-  );*/
+  );
 }
 
 Future<List<GroupConditionItem>> _fetchSavedConditions(
@@ -84,15 +84,17 @@ Future<List<GroupConditionItem>> _fetchSavedConditions(
   final groupConditionService = locator<GroupConditionService>();
 
   final conditions = await groupConditionService.getGroupConditions(group.id!);
-  return (await mapConditionList(conditions, listType)).toList();
+  return (await mapConditionList(conditions, listType, group)).toList();
 }
 
 Future<Iterable<GroupConditionItem>> mapConditionList(
-    List<GroupCondition> conditions, AppListType listType) async {
+    List<GroupCondition> conditions,
+    AppListType listType,
+    AppGroup conditionedGroup) async {
   List<GroupConditionItem> items = [];
   await Future.wait(conditions.map((condition) async {
     try {
-      items.add(await mapCondition(listType, condition));
+      items.add(await mapCondition(listType, condition, conditionedGroup));
     } on GroupNotFoundException catch (e) {
       _logger.e('Error loading group conditions: $e');
     }
@@ -100,8 +102,8 @@ Future<Iterable<GroupConditionItem>> mapConditionList(
   return items;
 }
 
-Future<GroupConditionItem> mapCondition(
-    AppListType listType, GroupCondition condition) async {
+Future<GroupConditionItem> mapCondition(AppListType listType,
+    GroupCondition condition, AppGroup conditionedGroup) async {
   var conditionedName =
       await getGroupName(listType, condition.conditionedGroupId);
   var conditionalName =
@@ -113,6 +115,7 @@ Future<GroupConditionItem> mapCondition(
     conditionalGroupName: conditionalName,
     usedTime: condition.usedTime,
     duringLastDays: condition.duringLastDays,
+    conditionedGroup: conditionedGroup,
   );
 }
 
@@ -126,6 +129,7 @@ Future<String> getGroupName(AppListType listType, String groupId) async {
 }
 
 class GroupConditionItem extends StatefulWidget {
+  final AppGroup conditionedGroup;
   final String conditionedGroupId;
   final String conditionedGroupName;
   final String conditionalGroupId;
@@ -141,6 +145,7 @@ class GroupConditionItem extends StatefulWidget {
     required this.usedTime,
     required this.duringLastDays,
     super.key,
+    required this.conditionedGroup,
   });
 
   @override
@@ -173,7 +178,9 @@ class GroupAppItemState extends State<GroupConditionItem> {
         '${widget.conditionalGroupName} ${AppLocalizations.of(context)!.forString} ${widget.usedTime.inHours}:${widget.usedTime.inMinutes} ${AppLocalizations.of(context)!.inTheLast} ${widget.duringLastDays} ${AppLocalizations.of(context)!.days}');
     return ListTile(
       title: TextButton(
-        onPressed: () {}, // TODO open screen to edit condition
+        onPressed: () {
+          addCondition(context, widget.conditionedGroup);
+        },
         child: Text(
           '${widget.conditionalGroupName} ${AppLocalizations.of(context)!.forString} ${widget.usedTime.inHours}:${widget.usedTime.inMinutes} ${AppLocalizations.of(context)!.inTheLast} ${widget.duringLastDays} ${AppLocalizations.of(context)!.days}',
           style: TextStyle(
