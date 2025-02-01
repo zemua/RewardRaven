@@ -53,7 +53,7 @@ FutureBuilder<List<GroupConditionItem>> buildConditionsList(
               return ElevatedButton(
                 onPressed: () {
                   addCondition(context, group);
-                }, // TODO implement button action
+                },
                 child: Text(AppLocalizations.of(context)!.addCondition),
               );
             }

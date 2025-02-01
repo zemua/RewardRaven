@@ -6,8 +6,10 @@
     "description": "The title of the app"
   },
   "apps": "Apps",
+  "conditionalGroup": "Conditional Group",
   "conditions": "Conditions",
   "days": "days",
+  "editCondition": "Edit Condition",
   "editGroup": "Edit Group",
   "error": "Error",
   "filter": "Filter",
