@@ -27,10 +27,6 @@ import 'package:reward_raven/db/service/app_group_service.dart' as _i2;
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockAppGroupService extends _i1.Mock implements _i2.AppGroupService {
-  MockAppGroupService() {
-    _i1.throwOnMissingStub(this);
-  }
-
   @override
   _i3.Future<void> saveGroup(_i4.AppGroup? group) => (super.noSuchMethod(
         Invocation.method(
@@ -72,6 +68,7 @@ class MockAppGroupService extends _i1.Mock implements _i2.AppGroupService {
           ],
         ),
         returnValue: _i3.Future<_i4.AppGroup?>.value(),
+        returnValueForMissingStub: _i3.Future<_i4.AppGroup?>.value(),
       ) as _i3.Future<_i4.AppGroup?>);
 
   @override
@@ -82,6 +79,8 @@ class MockAppGroupService extends _i1.Mock implements _i2.AppGroupService {
           [type],
         ),
         returnValue: _i3.Future<List<_i4.AppGroup>>.value(<_i4.AppGroup>[]),
+        returnValueForMissingStub:
+            _i3.Future<List<_i4.AppGroup>>.value(<_i4.AppGroup>[]),
       ) as _i3.Future<List<_i4.AppGroup>>);
 
   @override
@@ -92,6 +91,7 @@ class MockAppGroupService extends _i1.Mock implements _i2.AppGroupService {
           [type],
         ),
         returnValue: _i3.Stream<List<_i4.AppGroup>>.empty(),
+        returnValueForMissingStub: _i3.Stream<List<_i4.AppGroup>>.empty(),
       ) as _i3.Stream<List<_i4.AppGroup>>);
 }
 
@@ -99,10 +99,6 @@ class MockAppGroupService extends _i1.Mock implements _i2.AppGroupService {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockNavigatorObserver extends _i1.Mock implements _i5.NavigatorObserver {
-  MockNavigatorObserver() {
-    _i1.throwOnMissingStub(this);
-  }
-
   @override
   void didPush(
     _i5.Route<dynamic>? route,
@@ -164,6 +160,22 @@ class MockNavigatorObserver extends _i1.Mock implements _i5.NavigatorObserver {
             #newRoute: newRoute,
             #oldRoute: oldRoute,
           },
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void didChangeTop(
+    _i5.Route<dynamic>? topRoute,
+    _i5.Route<dynamic>? previousTopRoute,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #didChangeTop,
+          [
+            topRoute,
+            previousTopRoute,
+          ],
         ),
         returnValueForMissingStub: null,
       );

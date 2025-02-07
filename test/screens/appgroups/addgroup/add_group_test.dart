@@ -11,7 +11,7 @@ import 'package:reward_raven/screens/appgroups/addgroup/add_group.dart';
 
 import 'add_group_test.mocks.dart';
 
-@GenerateMocks([AppGroupService, NavigatorObserver])
+@GenerateNiceMocks([MockSpec<AppGroupService>(), MockSpec<NavigatorObserver>()])
 void main() {
   AppGroupService appGroupService = MockAppGroupService();
 
