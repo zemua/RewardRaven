@@ -122,9 +122,5 @@ void main() {
       expect(find.text("Test Conditional Group2 for 0:41 in the last 2 days"),
           findsOneWidget);
     });
-
-    testWidgets('tests to be implemented', (tester) async {
-      fail("TODO");
-    });
   });
 }
