@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
@@ -29,6 +30,10 @@ class EditCondition extends StatefulWidget {
 
 class EditConditionState extends State<EditCondition> {
   final _timeController = TextEditingController();
+  final _daysController = TextEditingController();
+
+  int? _selectedDays;
+  Duration? _selectedTime;
 
   Future<void> _pickTime() async {
     final TimeOfDay? newTime = await showTimePicker(
@@ -42,11 +47,16 @@ class EditConditionState extends State<EditCondition> {
       },
     );
     if (newTime != null) {
+      _selectedTime = Duration(hours: newTime.hour, minutes: newTime.minute);
       setState(() {
         _timeController.text =
             '${newTime.hour.toString().padLeft(2, '0')}:${newTime.minute.toString().padLeft(2, '0')}';
       });
     }
+  }
+
+  void _onDaysChanged(String value) {
+    _selectedDays = int.tryParse(value) ?? 0;
   }
 
   @override
@@ -125,7 +135,7 @@ class EditConditionState extends State<EditCondition> {
                                 labelText: 'HH:mm',
                                 isDense: true,
                                 contentPadding: EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 8),
+                                    vertical: 10, horizontal: 0),
                                 border: OutlineInputBorder(),
                               ),
                               readOnly: true,
@@ -139,10 +149,39 @@ class EditConditionState extends State<EditCondition> {
                   ),
                 ),
                 ListTile(
-                  title: TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'In the last XX days',
-                    ),
+                  title: Row(
+                    children: [
+                      const Text('In the last '),
+                      IntrinsicWidth(
+                        child: Baseline(
+                          baseline: 30,
+                          baselineType: TextBaseline.alphabetic,
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(minWidth: 60),
+                            child: TextFormField(
+                              controller: _daysController,
+                              decoration: const InputDecoration(
+                                isDense: true,
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 18),
+                                border: OutlineInputBorder(),
+                                counterText: '',
+                              ),
+                              textAlign: TextAlign.center,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+                              maxLength: 2,
+                              onChanged: (value) {
+                                _onDaysChanged(value);
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                      const Text(' days'),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 40),
