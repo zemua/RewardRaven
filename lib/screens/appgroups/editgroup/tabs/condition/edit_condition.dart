@@ -65,6 +65,7 @@ class EditConditionState extends State<EditCondition> {
     Duration usedTime =
         widget.condition?.usedTime ?? const Duration(minutes: 15);
     int duringLastDays = widget.condition?.duringLastDays ?? 0;
+    final _formKey = GlobalKey<FormState>();
 
     return Scaffold(
       appBar: AppBar(
@@ -94,107 +95,131 @@ class EditConditionState extends State<EditCondition> {
             );
           } else {
             final groups = snapshot.data!;
-            return ListView(
-              children: [
-                ListTile(
-                  title: DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)!.conditionalGroup,
+            return Form(
+                key: _formKey,
+                child: ListView(
+                  children: [
+                    ListTile(
+                      title: DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context)!.conditionalGroup,
+                        ),
+                        value: conditionalGroupId,
+                        onChanged: (String? newValue) {
+                          conditionalGroupId = newValue!;
+                        },
+                        items: groups
+                            .map((group) => group.name)
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        validator: (value) {
+                          // Add your validation logic here
+                          if (value == null || value.isEmpty) {
+                            return '';
+                          }
+                          return null;
+                        },
+                      ),
                     ),
-                    value: conditionalGroupId,
-                    onChanged: (String? newValue) {
-                      conditionalGroupId = newValue!;
-                    },
-                    items: groups
-                        .map((group) => group.name)
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                ListTile(
-                  title: Row(
-                    children: [
-                      const Baseline(
-                        baseline: 30,
-                        baselineType: TextBaseline.alphabetic,
-                        child: Text('Has used '),
-                      ),
-                      IntrinsicWidth(
-                        child: Baseline(
-                          baseline: 40,
-                          baselineType: TextBaseline.alphabetic,
-                          child: ConstrainedBox(
-                            constraints: const BoxConstraints(minWidth: 60),
-                            child: TextFormField(
-                              controller: _timeController,
-                              decoration: const InputDecoration(
-                                labelText: 'HH:mm',
-                                isDense: true,
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 0),
-                                border: OutlineInputBorder(),
+                    ListTile(
+                      title: Row(
+                        children: [
+                          const Baseline(
+                            baseline: 30,
+                            baselineType: TextBaseline.alphabetic,
+                            child: Text('Has used '),
+                          ),
+                          IntrinsicWidth(
+                            child: Baseline(
+                              baseline: 40,
+                              baselineType: TextBaseline.alphabetic,
+                              child: ConstrainedBox(
+                                constraints: const BoxConstraints(minWidth: 60),
+                                child: TextFormField(
+                                  controller: _timeController,
+                                  decoration: const InputDecoration(
+                                    labelText: 'HH:mm',
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 0),
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  readOnly: true,
+                                  textAlign: TextAlign.center,
+                                  onTap: _pickTime,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return '';
+                                    }
+                                    return null;
+                                  },
+                                ),
                               ),
-                              readOnly: true,
-                              textAlign: TextAlign.center,
-                              onTap: _pickTime,
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-                ListTile(
-                  title: Row(
-                    children: [
-                      const Text('In the last '),
-                      IntrinsicWidth(
-                        child: Baseline(
-                          baseline: 30,
-                          baselineType: TextBaseline.alphabetic,
-                          child: ConstrainedBox(
-                            constraints: const BoxConstraints(minWidth: 60),
-                            child: TextFormField(
-                              controller: _daysController,
-                              decoration: const InputDecoration(
-                                isDense: true,
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 18),
-                                border: OutlineInputBorder(),
-                                counterText: '',
+                    ),
+                    ListTile(
+                      title: Row(
+                        children: [
+                          const Text('In the last '),
+                          IntrinsicWidth(
+                            child: Baseline(
+                              baseline: 30,
+                              baselineType: TextBaseline.alphabetic,
+                              child: ConstrainedBox(
+                                constraints: const BoxConstraints(minWidth: 60),
+                                child: TextFormField(
+                                  controller: _daysController,
+                                  decoration: const InputDecoration(
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 18),
+                                    border: OutlineInputBorder(),
+                                    counterText: '',
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  ],
+                                  maxLength: 2,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return '';
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (value) {
+                                    _onDaysChanged(value);
+                                  },
+                                ),
                               ),
-                              textAlign: TextAlign.center,
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly,
-                              ],
-                              maxLength: 2,
-                              onChanged: (value) {
-                                _onDaysChanged(value);
-                              },
                             ),
                           ),
-                        ),
+                          const Text(' days'),
+                        ],
                       ),
-                      const Text(' days'),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 40),
-                ListTile(
-                  title: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Save'),
-                  ),
-                ),
-              ],
-            );
+                    ),
+                    const SizedBox(height: 40),
+                    ListTile(
+                      title: ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            Navigator.pop(context);
+                          }
+                        },
+                        child: const Text('Save'),
+                      ),
+                    ),
+                  ],
+                ));
           }
         },
       ),
