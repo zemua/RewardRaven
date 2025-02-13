@@ -31,14 +31,23 @@ class EditCondition extends StatefulWidget {
 class EditConditionState extends State<EditCondition> {
   final _timeController = TextEditingController();
   final _daysController = TextEditingController();
+  String? _selectedConditionalGroupId;
 
   int? _selectedDays;
   Duration? _selectedTime;
 
   Future<void> _pickTime() async {
+    TimeOfDay? initialTime;
+    if (_selectedTime != null) {
+      initialTime = TimeOfDay(
+          hour: _selectedTime!.inHours, minute: _selectedTime!.inMinutes % 60);
+    } else {
+      initialTime = const TimeOfDay(hour: 0, minute: 15); // Default time
+    }
+
     final TimeOfDay? newTime = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay.now(),
+      initialTime: initialTime,
       builder: (context, child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
@@ -105,9 +114,9 @@ class EditConditionState extends State<EditCondition> {
                           labelText:
                               AppLocalizations.of(context)!.conditionalGroup,
                         ),
-                        value: conditionalGroupId,
+                        value: _selectedConditionalGroupId,
                         onChanged: (String? newValue) {
-                          conditionalGroupId = newValue!;
+                          _selectedConditionalGroupId = newValue;
                         },
                         items: groups
                             .map((group) => group.name)
