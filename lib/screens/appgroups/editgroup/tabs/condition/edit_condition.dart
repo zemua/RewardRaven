@@ -108,130 +108,152 @@ class EditConditionState extends State<EditCondition> {
                 key: formKey,
                 child: ListView(
                   children: [
-                    ListTile(
-                      title: DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
-                          labelText:
-                              AppLocalizations.of(context)!.conditionalGroup,
-                        ),
-                        value: _selectedConditionalGroupId,
-                        onChanged: (String? newValue) {
-                          _selectedConditionalGroupId = newValue;
-                        },
-                        items: groups
-                            .map((group) => group.name)
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        validator: (value) {
-                          // Add your validation logic here
-                          if (value == null || value.isEmpty) {
-                            return '';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    ListTile(
-                      title: Row(
-                        children: [
-                          Baseline(
-                            baseline: 30,
-                            baselineType: TextBaseline.alphabetic,
-                            child: Text(AppLocalizations.of(context)!.hasUsed),
-                          ),
-                          IntrinsicWidth(
-                            child: Baseline(
-                              baseline: 40,
-                              baselineType: TextBaseline.alphabetic,
-                              child: ConstrainedBox(
-                                constraints: const BoxConstraints(minWidth: 60),
-                                child: TextFormField(
-                                  controller: _timeController,
-                                  decoration: InputDecoration(
-                                    labelText:
-                                        AppLocalizations.of(context)!.hhmm,
-                                    isDense: true,
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 0),
-                                    border: const OutlineInputBorder(),
-                                  ),
-                                  readOnly: true,
-                                  textAlign: TextAlign.center,
-                                  onTap: _pickTime,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return '';
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    ListTile(
-                      title: Row(
-                        children: [
-                          Text(AppLocalizations.of(context)!.inTheLast),
-                          IntrinsicWidth(
-                            child: Baseline(
-                              baseline: 30,
-                              baselineType: TextBaseline.alphabetic,
-                              child: ConstrainedBox(
-                                constraints: const BoxConstraints(minWidth: 60),
-                                child: TextFormField(
-                                  controller: _daysController,
-                                  decoration: const InputDecoration(
-                                    isDense: true,
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 18),
-                                    border: OutlineInputBorder(),
-                                    counterText: '',
-                                  ),
-                                  textAlign: TextAlign.center,
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                  ],
-                                  maxLength: 2,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return '';
-                                    }
-                                    return null;
-                                  },
-                                  onChanged: (value) {
-                                    _onDaysChanged(value);
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                          Text(AppLocalizations.of(context)!.days),
-                        ],
-                      ),
-                    ),
+                    _buildConditionalGroupDropdown(context, groups),
+                    _buildUsedTimeField(context),
+                    _buildDaysField(context),
                     const SizedBox(height: 40),
-                    ListTile(
-                      title: ElevatedButton(
-                        onPressed: () {
-                          if (formKey.currentState!.validate()) {
-                            Navigator.pop(context);
-                          }
-                        },
-                        child: Text(AppLocalizations.of(context)!.save),
-                      ),
-                    ),
+                    _buildSaveButton(formKey, context),
                   ],
                 ));
           }
         },
+      ),
+    );
+  }
+
+  ListTile _buildConditionalGroupDropdown(
+      BuildContext context, List<AppGroup> groups) {
+    return ListTile(
+      title: DropdownButtonFormField<String>(
+        decoration: InputDecoration(
+          labelText: AppLocalizations.of(context)!.conditionalGroup,
+        ),
+        value: _selectedConditionalGroupId,
+        onChanged: (String? newValue) {
+          _selectedConditionalGroupId = newValue;
+        },
+        items: groups
+            .map((group) => group.name)
+            .map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+        validator: (value) {
+          // Add your validation logic here
+          if (value == null || value.isEmpty) {
+            return '';
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
+  ListTile _buildUsedTimeField(BuildContext context) {
+    return ListTile(
+      title: Row(
+        children: [
+          Baseline(
+            baseline: 30,
+            baselineType: TextBaseline.alphabetic,
+            child: Text(AppLocalizations.of(context)!.hasUsed),
+          ),
+          IntrinsicWidth(
+            child: Baseline(
+              baseline: 40,
+              baselineType: TextBaseline.alphabetic,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minWidth: 60),
+                  child: TextFormField(
+                    controller: _timeController,
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.hhmm,
+                      isDense: true,
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 0),
+                      border: const OutlineInputBorder(),
+                    ),
+                    readOnly: true,
+                    textAlign: TextAlign.center,
+                    onTap: _pickTime,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return '';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  ListTile _buildDaysField(BuildContext context) {
+    return ListTile(
+      title: Row(
+        children: [
+          Text(AppLocalizations.of(context)!.inTheLast),
+          IntrinsicWidth(
+            child: Baseline(
+              baseline: 30,
+              baselineType: TextBaseline.alphabetic,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minWidth: 60),
+                  child: TextFormField(
+                    controller: _daysController,
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 18),
+                      border: OutlineInputBorder(),
+                      counterText: '',
+                    ),
+                    textAlign: TextAlign.center,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    maxLength: 2,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return '';
+                      }
+                      return null;
+                    },
+                    onChanged: (value) {
+                      _onDaysChanged(value);
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Text(AppLocalizations.of(context)!.days),
+        ],
+      ),
+    );
+  }
+
+  ListTile _buildSaveButton(
+      GlobalKey<FormState> formKey, BuildContext context) {
+    return ListTile(
+      title: ElevatedButton(
+        onPressed: () {
+          if (formKey.currentState!.validate()) {
+            Navigator.pop(context);
+          }
+        },
+        child: Text(AppLocalizations.of(context)!.save),
       ),
     );
   }
