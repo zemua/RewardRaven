@@ -74,7 +74,7 @@ class EditConditionState extends State<EditCondition> {
     Duration usedTime =
         widget.condition?.usedTime ?? const Duration(minutes: 15);
     int duringLastDays = widget.condition?.duringLastDays ?? 0;
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
 
     return Scaffold(
       appBar: AppBar(
@@ -105,7 +105,7 @@ class EditConditionState extends State<EditCondition> {
           } else {
             final groups = snapshot.data!;
             return Form(
-                key: _formKey,
+                key: formKey,
                 child: ListView(
                   children: [
                     ListTile(
@@ -138,10 +138,10 @@ class EditConditionState extends State<EditCondition> {
                     ListTile(
                       title: Row(
                         children: [
-                          const Baseline(
+                          Baseline(
                             baseline: 30,
                             baselineType: TextBaseline.alphabetic,
-                            child: Text('Has used '),
+                            child: Text(AppLocalizations.of(context)!.hasUsed),
                           ),
                           IntrinsicWidth(
                             child: Baseline(
@@ -151,12 +151,13 @@ class EditConditionState extends State<EditCondition> {
                                 constraints: const BoxConstraints(minWidth: 60),
                                 child: TextFormField(
                                   controller: _timeController,
-                                  decoration: const InputDecoration(
-                                    labelText: 'HH:mm',
+                                  decoration: InputDecoration(
+                                    labelText:
+                                        AppLocalizations.of(context)!.hhmm,
                                     isDense: true,
-                                    contentPadding: EdgeInsets.symmetric(
+                                    contentPadding: const EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 0),
-                                    border: OutlineInputBorder(),
+                                    border: const OutlineInputBorder(),
                                   ),
                                   readOnly: true,
                                   textAlign: TextAlign.center,
@@ -177,7 +178,7 @@ class EditConditionState extends State<EditCondition> {
                     ListTile(
                       title: Row(
                         children: [
-                          const Text('In the last '),
+                          Text(AppLocalizations.of(context)!.inTheLast),
                           IntrinsicWidth(
                             child: Baseline(
                               baseline: 30,
@@ -212,7 +213,7 @@ class EditConditionState extends State<EditCondition> {
                               ),
                             ),
                           ),
-                          const Text(' days'),
+                          Text(AppLocalizations.of(context)!.days),
                         ],
                       ),
                     ),
@@ -220,11 +221,11 @@ class EditConditionState extends State<EditCondition> {
                     ListTile(
                       title: ElevatedButton(
                         onPressed: () {
-                          if (_formKey.currentState!.validate()) {
+                          if (formKey.currentState!.validate()) {
                             Navigator.pop(context);
                           }
                         },
-                        child: const Text('Save'),
+                        child: Text(AppLocalizations.of(context)!.save),
                       ),
                     ),
                   ],
