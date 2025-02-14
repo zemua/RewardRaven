@@ -32,6 +32,8 @@ class EditConditionState extends State<EditCondition> {
   final _timeController = TextEditingController();
   final _daysController = TextEditingController();
 
+  late Map<String, AppGroup> groupsMap;
+
   String? _selectedConditionalGroupId;
   int? _selectedDays;
   Duration? _selectedTime;
@@ -103,12 +105,14 @@ class EditConditionState extends State<EditCondition> {
               ],
             );
           } else {
-            final groups = snapshot.data!;
+            groupsMap = snapshot.data!
+                .asMap()
+                .map((index, group) => MapEntry(group.id!, group));
             return Form(
                 key: formKey,
                 child: ListView(
                   children: [
-                    _buildConditionalGroupDropdown(context, groups),
+                    _buildConditionalGroupDropdown(context, groupsMap),
                     _buildUsedTimeField(context),
                     _buildDaysField(context),
                     const SizedBox(height: 40),
@@ -122,7 +126,7 @@ class EditConditionState extends State<EditCondition> {
   }
 
   ListTile _buildConditionalGroupDropdown(
-      BuildContext context, List<AppGroup> groups) {
+      BuildContext context, Map<String, AppGroup> groups) {
     return ListTile(
       title: DropdownButtonFormField<String>(
         decoration: InputDecoration(
@@ -132,12 +136,10 @@ class EditConditionState extends State<EditCondition> {
         onChanged: (String? newValue) {
           _selectedConditionalGroupId = newValue;
         },
-        items: groups
-            .map((group) => group.name)
-            .map<DropdownMenuItem<String>>((String value) {
+        items: groups.keys.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
-            child: Text(value),
+            child: Text(groups[value]!.name),
           );
         }).toList(),
         validator: (value) {
