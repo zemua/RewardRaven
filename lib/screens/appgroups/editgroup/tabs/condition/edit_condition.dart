@@ -31,8 +31,8 @@ class EditCondition extends StatefulWidget {
 class EditConditionState extends State<EditCondition> {
   final _timeController = TextEditingController();
   final _daysController = TextEditingController();
-  String? _selectedConditionalGroupId;
 
+  String? _selectedConditionalGroupId;
   int? _selectedDays;
   Duration? _selectedTime;
 
@@ -250,12 +250,27 @@ class EditConditionState extends State<EditCondition> {
       title: ElevatedButton(
         onPressed: () {
           if (formKey.currentState!.validate()) {
+            _persistCondition();
             Navigator.pop(context);
           }
         },
         child: Text(AppLocalizations.of(context)!.save),
       ),
     );
+  }
+
+  void _persistCondition() {
+    final groupCondition = GroupCondition(
+      conditionedGroupId: widget.conditionedGroup.id!,
+      conditionalGroupId: _selectedConditionalGroupId!,
+      usedTime: _selectedTime!,
+      duringLastDays: _selectedDays!,
+    );
+    if (widget.condition != null) {
+      locator<GroupConditionService>().updateGroupCondition(groupCondition);
+    } else {
+      locator<GroupConditionService>().saveGroupCondition(groupCondition);
+    }
   }
 }
 
