@@ -21,7 +21,7 @@ class GroupCondition extends Equatable {
         duringLastDays,
       ];
 
-  factory GroupCondition.fromJson(Map<String, dynamic> json) {
+  factory GroupCondition.fromJson({required Map<String, dynamic> json}) {
     return GroupCondition(
       conditionedGroupId: json['conditionedGroupId'],
       conditionalGroupId: json['conditionalGroupId'],

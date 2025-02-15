@@ -152,4 +152,9 @@ void main() {
           .called(1);
     });
   });
+
+  test('streamGroupConditions retrieves group conditions successfully',
+      () async {
+    fail("not yet implemented");
+  });
 }

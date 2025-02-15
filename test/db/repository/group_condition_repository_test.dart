@@ -178,4 +178,9 @@ void main() {
     verifyNever(
         mockDatabaseReference.child(groupCondition2.conditionalGroupId));
   });
+
+  test('streamGroupConditions retrieves group conditions successfully',
+      () async {
+    fail("not yet implemented");
+  });
 }

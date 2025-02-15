@@ -33,6 +33,16 @@ class GroupConditionService {
     }
   }
 
+  Stream<List<GroupCondition>> streamGroupConditions(
+      String conditionedGroupId) {
+    try {
+      return _repository.streamGroupConditions(conditionedGroupId);
+    } catch (e) {
+      _logger.e('Error while getting group conditions: $e');
+      rethrow;
+    }
+  }
+
   Future<void> saveGroupCondition(GroupCondition groupCondition) async {
     try {
       await _repository.saveGroupCondition(groupCondition);

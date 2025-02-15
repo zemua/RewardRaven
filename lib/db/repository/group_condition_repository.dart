@@ -61,7 +61,7 @@ class GroupConditionRepository {
       if (snapshot.value != null) {
         logger.d("Got group condition from: ${ref.path}");
         return GroupCondition.fromJson(
-            Map<String, dynamic>.from(snapshot.value as Map));
+            json: Map<String, dynamic>.from(snapshot.value as Map));
       } else {
         logger.d(
             'Group condition not found: $conditionedGroupId $conditionalGroupId');
@@ -83,7 +83,7 @@ class GroupConditionRepository {
             snapshot.value as Map<dynamic, dynamic>;
         final List<GroupCondition> groupConditions = groupConditionsMap.values
             .map((json) =>
-                GroupCondition.fromJson(Map<String, dynamic>.from(json)))
+                GroupCondition.fromJson(json: Map<String, dynamic>.from(json)))
             .toList();
         logger.d("Got group conditions for group $groupId: $groupConditions");
         return groupConditions;
@@ -95,6 +95,43 @@ class GroupConditionRepository {
       rethrow;
     }
     return [];
+  }
+
+  Stream<List<GroupCondition>> streamGroupConditions(String groupId) {
+    logger.d('Streaming conditions of group id: $groupId');
+    return _resolveReferenceById(groupId).asStream().asyncExpand((ref) {
+      logger.d('Resolved reference at: ${ref.path}');
+      final completer = Completer<void>();
+      return ref.onValue.timeout(const Duration(seconds: 10),
+          onTimeout: (sink) {
+        if (!completer.isCompleted) {
+          completer.completeError(
+              TimeoutException('Timeout while streaming conditions'));
+          sink.addError(TimeoutException('Timeout while streaming conditions'));
+        }
+      }).map((event) {
+        if (!completer.isCompleted) {
+          completer.complete();
+        }
+        logger.d('Received event: $event');
+        final snapshot = event.snapshot;
+        if (snapshot.value != null) {
+          final Map<dynamic, dynamic> conditionsMap =
+              snapshot.value as Map<dynamic, dynamic>;
+          final List<GroupCondition> conditions =
+              conditionsMap.entries.map((entry) {
+            return GroupCondition.fromJson(
+                json: Map<String, dynamic>.from(entry.value));
+          }).toList();
+          logger.i(
+              "Streamed ${conditions.length} conditions of group id: $groupId");
+          return conditions;
+        } else {
+          logger.i('No conditions found for group id: $groupId');
+          return [];
+        }
+      });
+    });
   }
 
   Future<DatabaseReference> _resolveReference(GroupCondition condition) async {

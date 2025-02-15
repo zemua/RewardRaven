@@ -15,10 +15,10 @@ final GetIt locator = GetIt.instance;
 
 final _logger = Logger();
 
-FutureBuilder<List<GroupConditionItem>> buildConditionsList(
+StreamBuilder<List<GroupConditionItem>> buildConditionsList(
     AppGroup group, AppListType listType) {
-  return FutureBuilder<List<GroupConditionItem>>(
-    future: _fetchSavedConditions(listType, group),
+  return StreamBuilder<List<GroupConditionItem>>(
+    stream: _fetchSavedConditions(listType, group),
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
         return const Center(child: CircularProgressIndicator());
@@ -75,19 +75,21 @@ void addCondition(BuildContext context, AppGroup group) {
   );
 }
 
-Future<List<GroupConditionItem>> _fetchSavedConditions(
-    AppListType listType, AppGroup group) async {
+Stream<List<GroupConditionItem>> _fetchSavedConditions(
+    AppListType listType, AppGroup group) {
   if (group.id == null) {
-    return [];
+    return const Stream.empty();
   }
 
   final groupConditionService = locator<GroupConditionService>();
 
-  final conditions = await groupConditionService.getGroupConditions(group.id!);
-  return (await mapConditionList(conditions, listType, group)).toList();
+  final conditions = groupConditionService.streamGroupConditions(group.id!);
+  return conditions
+      .asyncMap((cdts) => mapConditionList(cdts, listType, group))
+      .expand((items) => [items]);
 }
 
-Future<Iterable<GroupConditionItem>> mapConditionList(
+Future<List<GroupConditionItem>> mapConditionList(
     List<GroupCondition> conditions,
     AppListType listType,
     AppGroup conditionedGroup) async {
