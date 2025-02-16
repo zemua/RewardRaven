@@ -118,6 +118,7 @@ Future<GroupConditionItem> mapCondition(AppListType listType,
     usedTime: condition.usedTime,
     duringLastDays: condition.duringLastDays,
     conditionedGroup: conditionedGroup,
+    conditionEntity: condition,
   );
 }
 
@@ -138,6 +139,7 @@ class GroupConditionItem extends StatefulWidget {
   final String conditionalGroupName;
   final Duration usedTime;
   final int duringLastDays;
+  final GroupCondition conditionEntity;
 
   const GroupConditionItem({
     required this.conditionedGroupId,
@@ -148,6 +150,7 @@ class GroupConditionItem extends StatefulWidget {
     required this.duringLastDays,
     super.key,
     required this.conditionedGroup,
+    required this.conditionEntity,
   });
 
   @override
@@ -181,15 +184,29 @@ class GroupAppItemState extends State<GroupConditionItem> {
     return ListTile(
       title: TextButton(
         onPressed: () {
-          addCondition(context, widget.conditionedGroup);
+          updateCondition(
+              context, widget.conditionedGroup, widget.conditionEntity);
         },
         child: Text(
-          '${widget.conditionalGroupName} ${AppLocalizations.of(context)!.forString} ${widget.usedTime.inHours}:${widget.usedTime.inMinutes} ${AppLocalizations.of(context)!.inTheLast} ${widget.duringLastDays} ${AppLocalizations.of(context)!.days}',
+          '${widget.conditionalGroupName} ${AppLocalizations.of(context)!.forString} ${widget.usedTime.inHours}:${widget.usedTime.inMinutes % 60} ${AppLocalizations.of(context)!.inTheLast} ${widget.duringLastDays} ${AppLocalizations.of(context)!.days}',
           style: TextStyle(
             color: _areConditionsMet
                 ? Theme.of(context).colorScheme.primary
                 : Theme.of(context).colorScheme.error,
           ),
+        ),
+      ),
+    );
+  }
+
+  void updateCondition(
+      BuildContext context, AppGroup group, GroupCondition condition) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditCondition(
+          conditionedGroup: group,
+          condition: condition,
         ),
       ),
     );

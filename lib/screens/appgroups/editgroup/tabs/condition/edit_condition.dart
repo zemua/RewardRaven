@@ -78,6 +78,17 @@ class EditConditionState extends State<EditCondition> {
     int duringLastDays = widget.condition?.duringLastDays ?? 0;
     final formKey = GlobalKey<FormState>();
 
+    if (_selectedTime == null && widget.condition?.usedTime != null) {
+      _selectedTime = widget.condition!.usedTime;
+      _timeController.text =
+          '${usedTime.inHours.toString().padLeft(2, '0')}:${(usedTime.inMinutes % 60).toString().padLeft(2, '0')}';
+    }
+
+    if (_selectedDays == null && widget.condition?.duringLastDays != null) {
+      _selectedDays = widget.condition!.duringLastDays;
+      _daysController.text = duringLastDays.toString();
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.condition == null
@@ -127,6 +138,10 @@ class EditConditionState extends State<EditCondition> {
 
   ListTile _buildConditionalGroupDropdown(
       BuildContext context, Map<String, AppGroup> groups) {
+    if (_selectedConditionalGroupId == null &&
+        widget.condition?.conditionalGroupId != null) {
+      _selectedConditionalGroupId = widget.condition!.conditionalGroupId;
+    }
     return ListTile(
       title: DropdownButtonFormField<String>(
         decoration: InputDecoration(
