@@ -15,7 +15,15 @@ final GetIt locator = GetIt.instance;
 
 final _logger = Logger();
 
-StreamBuilder<List<GroupConditionItem>> buildConditionsList(
+Builder buildConditionsList(AppGroup group, AppListType listType) {
+  return Builder(
+    builder: (context) {
+      return _buildConditionsList(group, listType);
+    },
+  );
+}
+
+StreamBuilder<List<GroupConditionItem>> _buildConditionsList(
     AppGroup group, AppListType listType) {
   return StreamBuilder<List<GroupConditionItem>>(
     stream: _fetchSavedConditions(listType, group),
