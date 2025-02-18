@@ -205,6 +205,7 @@ class GroupAppItemState extends State<GroupConditionItem> {
                 ),
               ),
               child: Text(
+                // TODO de-duplicate code transforming Duration to String
                 '${widget.conditionalGroupName} ${AppLocalizations.of(context)!.forString} ${widget.usedTime.inHours}:${widget.usedTime.inMinutes % 60} ${AppLocalizations.of(context)!.inTheLast} ${widget.duringLastDays} ${AppLocalizations.of(context)!.days}',
                 style: TextStyle(
                   color: conditionsMet
