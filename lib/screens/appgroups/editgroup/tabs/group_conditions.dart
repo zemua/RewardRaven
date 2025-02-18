@@ -58,11 +58,14 @@ StreamBuilder<List<GroupConditionItem>> _buildConditionsList(
             if (index < groupApps.length) {
               return groupApps[index];
             } else {
-              return ElevatedButton(
-                onPressed: () {
-                  addCondition(context, group);
-                },
-                child: Text(AppLocalizations.of(context)!.addCondition),
+              return Padding(
+                padding: const EdgeInsets.only(top: 26.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    addCondition(context, group);
+                  },
+                  child: Text(AppLocalizations.of(context)!.addCondition),
+                ),
               );
             }
           },
@@ -168,19 +171,9 @@ class GroupConditionItem extends StatefulWidget {
 class GroupAppItemState extends State<GroupConditionItem> {
   final Logger _logger = Logger();
 
-  late bool _areConditionsMet;
-
-  @override
-  void initState() {
-    super.initState();
-    _configureState();
-  }
-
-  Future<void> _configureState() async {
-    setState(() {
-      // TODO check if conditions are met and set color of the button to green/red according to theme
-      _areConditionsMet = true;
-    });
+  Future<bool> _areConditionsMet() async {
+    // TODO check if conditions are met and set color of the button to green/red according to theme
+    return Future.value(true);
   }
 
   @override
@@ -189,21 +182,40 @@ class GroupAppItemState extends State<GroupConditionItem> {
         'Building app item for ${widget.conditionalGroupName} for ${widget.usedTime.inHours}:${widget.usedTime.inMinutes} in the last ${widget.duringLastDays} days');
     _logger.d(
         '${widget.conditionalGroupName} ${AppLocalizations.of(context)!.forString} ${widget.usedTime.inHours}:${widget.usedTime.inMinutes} ${AppLocalizations.of(context)!.inTheLast} ${widget.duringLastDays} ${AppLocalizations.of(context)!.days}');
-    return ListTile(
-      title: TextButton(
-        onPressed: () {
-          updateCondition(
-              context, widget.conditionedGroup, widget.conditionEntity);
-        },
-        child: Text(
-          '${widget.conditionalGroupName} ${AppLocalizations.of(context)!.forString} ${widget.usedTime.inHours}:${widget.usedTime.inMinutes % 60} ${AppLocalizations.of(context)!.inTheLast} ${widget.duringLastDays} ${AppLocalizations.of(context)!.days}',
-          style: TextStyle(
-            color: _areConditionsMet
-                ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).colorScheme.error,
-          ),
-        ),
-      ),
+    return FutureBuilder<bool>(
+      future: _areConditionsMet(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else {
+          bool conditionsMet = snapshot.data ?? false;
+          return ListTile(
+            title: OutlinedButton(
+              onPressed: () {
+                updateCondition(
+                    context, widget.conditionedGroup, widget.conditionEntity);
+              },
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(
+                  color: conditionsMet
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.error,
+                ),
+              ),
+              child: Text(
+                '${widget.conditionalGroupName} ${AppLocalizations.of(context)!.forString} ${widget.usedTime.inHours}:${widget.usedTime.inMinutes % 60} ${AppLocalizations.of(context)!.inTheLast} ${widget.duringLastDays} ${AppLocalizations.of(context)!.days}',
+                style: TextStyle(
+                  color: conditionsMet
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.error,
+                ),
+              ),
+            ),
+          );
+        }
+      },
     );
   }
 
