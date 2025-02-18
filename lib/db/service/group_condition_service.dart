@@ -11,12 +11,11 @@ class GroupConditionService {
 
   Future<GroupCondition?> getGroupCondition({
     required String conditionedGroupId,
-    required String conditionalGroupId,
+    required String conditionId,
   }) async {
     try {
       return await _repository.getGroupConditionByIds(
-          conditionedGroupId: conditionedGroupId,
-          conditionalGroupId: conditionalGroupId);
+          conditionedGroupId: conditionedGroupId, conditionId: conditionId);
     } catch (e) {
       _logger.e('Error while getting group conditions: $e');
       rethrow;

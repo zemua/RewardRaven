@@ -44,7 +44,7 @@ void main() {
 
       final result = await groupConditionService.getGroupCondition(
           conditionedGroupId: conditionedGroupId,
-          conditionalGroupId: conditionalGroupId);
+          conditionId: conditionalGroupId);
 
       expect(result, equals(expectedGroupCondition));
     });
@@ -60,7 +60,7 @@ void main() {
 
       final result = await groupConditionService.getGroupCondition(
           conditionedGroupId: conditionedGroupId,
-          conditionalGroupId: conditionalGroupId);
+          conditionId: conditionalGroupId);
 
       expect(result, isNull);
     });

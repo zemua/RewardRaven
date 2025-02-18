@@ -41,7 +41,7 @@ class MockGroupConditionService extends _i1.Mock
   @override
   _i3.Future<_i4.GroupCondition?> getGroupCondition({
     required String? conditionedGroupId,
-    required String? conditionalGroupId,
+    required String? conditionId,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -49,7 +49,7 @@ class MockGroupConditionService extends _i1.Mock
           [],
           {
             #conditionedGroupId: conditionedGroupId,
-            #conditionalGroupId: conditionalGroupId,
+            #conditionalGroupId: conditionId,
           },
         ),
         returnValue: _i3.Future<_i4.GroupCondition?>.value(),

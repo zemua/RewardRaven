@@ -16,6 +16,9 @@ class GroupConditionRepository {
   GroupConditionRepository();
 
   Future<void> saveGroupCondition(GroupCondition condition) async {
+    if (condition.id != null) {
+      throw Exception('Group condition id cannot be set');
+    }
     try {
       final ref = await _resolveReference(condition);
       logger.d("Saving group condition to: ${ref.path}");
@@ -28,6 +31,9 @@ class GroupConditionRepository {
   }
 
   Future<void> updateGroupCondition(GroupCondition condition) async {
+    if (condition.id == null) {
+      throw Exception('Group condition id cannot be null');
+    }
     try {
       final ref = await _resolveReference(condition);
       await ref.update(condition.toJson()).timeout(const Duration(seconds: 10));
@@ -43,28 +49,28 @@ class GroupConditionRepository {
       final ref = await _resolveReference(condition);
       await ref.remove().timeout(const Duration(seconds: 10));
       logger.d(
-          "Deleted group condition: ${condition.conditionedGroupId} ${condition.conditionalGroupId}");
+          "Deleted group condition: ${condition.conditionedGroupId} ${condition.id}");
     } catch (e) {
       logger.e('Failed to delete group condition: $e');
     }
   }
 
   Future<GroupCondition?> getGroupConditionByIds(
-      {required String conditionedGroupId,
-      required String conditionalGroupId}) async {
+      {required String conditionedGroupId, required String conditionId}) async {
     try {
       final ref = await _resolveReferenceByIds(
-          conditionedGroupId: conditionedGroupId,
-          conditionalGroupId: conditionalGroupId);
+          conditionedGroupId: conditionedGroupId, conditionId: conditionId);
       final dbEvent = await ref.once().timeout(const Duration(seconds: 10));
       final DataSnapshot snapshot = dbEvent.snapshot;
       if (snapshot.value != null) {
         logger.d("Got group condition from: ${ref.path}");
+        GroupCondition groupCondition = GroupCondition.fromJson(
+            json: Map<String, dynamic>.from(snapshot.value as Map));
+        groupCondition.id = snapshot.key;
         return GroupCondition.fromJson(
             json: Map<String, dynamic>.from(snapshot.value as Map));
       } else {
-        logger.d(
-            'Group condition not found: $conditionedGroupId $conditionalGroupId');
+        logger.d('Group condition not found: $conditionedGroupId $conditionId');
       }
     } catch (e) {
       logger.e('Failed to get group condition: $e');
@@ -81,10 +87,13 @@ class GroupConditionRepository {
       if (snapshot.value != null) {
         final Map<dynamic, dynamic> groupConditionsMap =
             snapshot.value as Map<dynamic, dynamic>;
-        final List<GroupCondition> groupConditions = groupConditionsMap.values
-            .map((json) =>
-                GroupCondition.fromJson(json: Map<String, dynamic>.from(json)))
-            .toList();
+        final List<GroupCondition> groupConditions =
+            groupConditionsMap.entries.map((entry) {
+          GroupCondition fetchedCondition = GroupCondition.fromJson(
+              json: Map<String, dynamic>.from(entry.value));
+          fetchedCondition.id = entry.key;
+          return fetchedCondition;
+        }).toList();
         logger.d("Got group conditions for group $groupId: $groupConditions");
         return groupConditions;
       } else {
@@ -120,8 +129,10 @@ class GroupConditionRepository {
               snapshot.value as Map<dynamic, dynamic>;
           final List<GroupCondition> conditions =
               conditionsMap.entries.map((entry) {
-            return GroupCondition.fromJson(
+            GroupCondition fetchedCondition = GroupCondition.fromJson(
                 json: Map<String, dynamic>.from(entry.value));
+            fetchedCondition.id = entry.key;
+            return fetchedCondition;
           }).toList();
           logger.i(
               "Streamed ${conditions.length} conditions of group id: $groupId");
@@ -137,20 +148,22 @@ class GroupConditionRepository {
   Future<DatabaseReference> _resolveReference(GroupCondition condition) async {
     return _resolveReferenceByIds(
         conditionedGroupId: condition.conditionedGroupId,
-        conditionalGroupId: condition.conditionalGroupId);
+        conditionId: condition.id);
   }
 
   Future<DatabaseReference> _resolveReferenceByIds(
       {required String conditionedGroupId,
-      required String conditionalGroupId}) async {
+      required String? conditionId}) async {
     try {
-      if (conditionalGroupId.isEmpty) {
-        throw Exception('Conditional group id cannot be empty');
-      }
       final dbRef = await _resolveReferenceById(conditionedGroupId);
-      logger.d(
-          "Processing group condition node: conditional group $conditionalGroupId");
-      return dbRef.child(sanitizeDbPath(conditionalGroupId));
+      DatabaseReference newNode;
+      if (conditionId == null || conditionId.isEmpty) {
+        newNode = dbRef.push();
+      } else {
+        newNode = dbRef.child(sanitizeDbPath(conditionId));
+      }
+      logger.d("Processing group condition node: conditional group $newNode");
+      return newNode;
     } catch (e) {
       logger.e('Failed to resolve db reference: $e');
       rethrow;

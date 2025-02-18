@@ -1,12 +1,14 @@
 import 'package:equatable/equatable.dart';
 
 class GroupCondition extends Equatable {
+  late String? id;
   final String conditionedGroupId;
   final String conditionalGroupId;
   final Duration usedTime;
   final int duringLastDays;
 
-  const GroupCondition({
+  GroupCondition({
+    this.id,
     required this.conditionedGroupId,
     required this.conditionalGroupId,
     required this.usedTime,
@@ -15,6 +17,7 @@ class GroupCondition extends Equatable {
 
   @override
   List<Object?> get props => [
+        id,
         conditionedGroupId,
         conditionalGroupId,
         usedTime,
@@ -40,12 +43,14 @@ class GroupCondition extends Equatable {
   }
 
   GroupCondition copyWith({
+    String? id,
     String? conditionedGroupId,
     String? conditionalGroupId,
     Duration? usedTime,
     int? duringLastDays,
   }) {
     return GroupCondition(
+      id: id ?? this.id,
       conditionedGroupId: conditionedGroupId ?? this.conditionedGroupId,
       conditionalGroupId: conditionalGroupId ?? this.conditionalGroupId,
       usedTime: usedTime ?? this.usedTime,

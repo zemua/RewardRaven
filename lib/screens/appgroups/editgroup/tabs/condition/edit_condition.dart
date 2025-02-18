@@ -278,6 +278,7 @@ class EditConditionState extends State<EditCondition> {
 
   void _persistCondition() {
     final groupCondition = GroupCondition(
+      id: widget.condition?.id,
       conditionedGroupId: widget.conditionedGroup.id!,
       conditionalGroupId: _selectedConditionalGroupId!,
       usedTime: _selectedTime!,
