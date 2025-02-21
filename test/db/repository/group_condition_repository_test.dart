@@ -25,7 +25,7 @@ void main() {
 
   test('saveGroupCondition saves a group condition successfully', () async {
     // Arrange
-    const groupCondition = GroupCondition(
+    final groupCondition = GroupCondition(
       conditionedGroupId: 'testConditionedGroupId',
       conditionalGroupId: 'testConditionalGroupId',
       usedTime: Duration(hours: 1),
@@ -47,7 +47,7 @@ void main() {
 
   test('updateGroupCondition updates a group condition successfully', () async {
     // Arrange
-    const groupCondition = GroupCondition(
+    final groupCondition = GroupCondition(
       conditionedGroupId: 'testConditionedGroupId',
       conditionalGroupId: 'testConditionalGroupId',
       usedTime: Duration(hours: 1),
@@ -68,7 +68,7 @@ void main() {
 
   test('deleteGroupCondition deletes a group condition successfully', () async {
     // Arrange
-    const groupCondition = GroupCondition(
+    final groupCondition = GroupCondition(
       conditionedGroupId: 'testConditionedGroupId',
       conditionalGroupId: 'testConditionalGroupId',
       usedTime: Duration(hours: 1),
@@ -90,7 +90,7 @@ void main() {
   test('getGroupConditionByIds retrieves a group condition successfully',
       () async {
     // Arrange
-    const groupCondition = GroupCondition(
+    final groupCondition = GroupCondition(
       conditionedGroupId: 'testConditionedGroupId',
       conditionalGroupId: 'testConditionalGroupId',
       usedTime: Duration(hours: 1),
@@ -108,7 +108,7 @@ void main() {
     // Act
     final result = await groupConditionRepository.getGroupConditionByIds(
         conditionedGroupId: 'testConditionedGroupId',
-        conditionalGroupId: 'testConditionalGroupId');
+        conditionId: 'someConditionId');
 
     // Assert
     expect(result, isNotNull);
@@ -127,13 +127,13 @@ void main() {
       () async {
     // Arrange
     const conditionedGroupId = 'testConditionedGroupId';
-    const groupCondition1 = GroupCondition(
+    final groupCondition1 = GroupCondition(
       conditionedGroupId: conditionedGroupId,
       conditionalGroupId: 'testConditionalGroupId1',
       usedTime: Duration(hours: 1),
       duringLastDays: 7,
     );
-    const groupCondition2 = GroupCondition(
+    final groupCondition2 = GroupCondition(
       conditionedGroupId: conditionedGroupId,
       conditionalGroupId: 'testConditionalGroupId2',
       usedTime: Duration(hours: 2),

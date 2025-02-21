@@ -66,12 +66,12 @@ void main() {
       // Reply to call with delay to check loading spinner
       when(mockGroupConditionService.getGroupConditions(any))
           .thenAnswer((_) async => [
-                const GroupCondition(
+                GroupCondition(
                     conditionedGroupId: 'testGroupId',
                     conditionalGroupId: 'conditionalGroupId1',
                     usedTime: Duration(minutes: 11),
                     duringLastDays: 1),
-                const GroupCondition(
+                GroupCondition(
                     conditionedGroupId: 'testGroupId',
                     conditionalGroupId: 'conditionalGroupId2',
                     usedTime: Duration(minutes: 41),
