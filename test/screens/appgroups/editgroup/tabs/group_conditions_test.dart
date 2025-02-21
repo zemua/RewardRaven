@@ -39,8 +39,8 @@ void main() {
         'shows "noConditionsFound" when no conditions retrieved from GroupConditionService',
         (WidgetTester tester) async {
       // Reply to call with delay to check loading spinner
-      when(mockGroupConditionService.getGroupConditions(any))
-          .thenAnswer((_) async => []);
+      when(mockGroupConditionService.streamGroupConditions(any))
+          .thenAnswer((_) => const Stream.empty());
 
       // Act
       await tester
