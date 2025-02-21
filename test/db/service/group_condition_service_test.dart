@@ -151,10 +151,36 @@ void main() {
       verify(mockGroupConditionRepository.deleteGroupCondition(groupCondition))
           .called(1);
     });
-  });
 
-  test('streamGroupConditions retrieves group conditions successfully',
-      () async {
-    fail("not yet implemented");
+    test('streamGroupConditions retrieves group conditions successfully',
+        () async {
+      final groupCondition1 = GroupCondition(
+        conditionedGroupId: 'testConditionedGroupId',
+        conditionalGroupId: 'testConditionalGroupId1',
+        usedTime: Duration(hours: 1),
+        duringLastDays: 7,
+      );
+      final groupCondition2 = GroupCondition(
+        conditionedGroupId: 'testConditionedGroupId',
+        conditionalGroupId: 'testConditionalGroupId2',
+        usedTime: Duration(hours: 2),
+        duringLastDays: 14,
+      );
+      when(mockGroupConditionRepository
+              .streamGroupConditions('testConditionedGroupId'))
+          .thenAnswer((_) => Stream.value([groupCondition1, groupCondition2]));
+
+      final groupConditionsStream =
+          groupConditionService.streamGroupConditions('testConditionedGroupId');
+
+      await for (final groupConditions in groupConditionsStream) {
+        expect(
+            groupConditions,
+            containsAll([
+              groupCondition1,
+              groupCondition2,
+            ]));
+      }
+    });
   });
 }
