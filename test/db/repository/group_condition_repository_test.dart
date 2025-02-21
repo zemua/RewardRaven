@@ -187,8 +187,40 @@ void main() {
         mockDatabaseReference.child(groupCondition2.conditionalGroupId));
   });
 
-  test('streamGroupConditions retrieves group conditions successfully',
-      () async {
-    fail("not yet implemented");
+  test('streamGroupConditions returns a stream of group conditions', () async {
+    // Arrange
+    const groupId = 'test-group-id';
+    final groupConditions = [
+      GroupCondition(
+          id: 'condition-1',
+          conditionedGroupId: groupId,
+          conditionalGroupId: 'conditional-group-id-1',
+          usedTime: const Duration(minutes: 15),
+          duringLastDays: 1),
+      GroupCondition(
+          id: 'condition-2',
+          conditionedGroupId: groupId,
+          conditionalGroupId: 'conditional-group-id-2',
+          usedTime: const Duration(hours: 1),
+          duringLastDays: 7),
+    ];
+
+    final mockDatabaseEvent = MockDatabaseEvent();
+    final mockDataSnapshot = MockDataSnapshot();
+    when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
+    when(mockDatabaseEvent.snapshot).thenReturn(mockDataSnapshot);
+    when(mockDatabaseReference.path).thenReturn('testPath');
+    when(mockDatabaseReference.onValue)
+        .thenAnswer((_) => Stream.value(mockDatabaseEvent));
+    when(mockDataSnapshot.value).thenReturn({
+      'condition-1': groupConditions[0].toJson(),
+      'condition-2': groupConditions[1].toJson(),
+    });
+
+    // Act
+    final stream = groupConditionRepository.streamGroupConditions(groupId);
+
+    // Assert
+    expect(stream, emitsInOrder([groupConditions]));
   });
 }
