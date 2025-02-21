@@ -236,7 +236,7 @@ class MockGroupConditionService extends _i1.Mock
           [],
           {
             #conditionedGroupId: conditionedGroupId,
-            #conditionalGroupId: conditionId,
+            #conditionId: conditionId,
           },
         ),
         returnValue: _i3.Future<_i11.GroupCondition?>.value(),
@@ -253,6 +253,17 @@ class MockGroupConditionService extends _i1.Mock
         returnValue: _i3.Future<List<_i11.GroupCondition>>.value(
             <_i11.GroupCondition>[]),
       ) as _i3.Future<List<_i11.GroupCondition>>);
+
+  @override
+  _i3.Stream<List<_i11.GroupCondition>> streamGroupConditions(
+          String? conditionedGroupId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #streamGroupConditions,
+          [conditionedGroupId],
+        ),
+        returnValue: _i3.Stream<List<_i11.GroupCondition>>.empty(),
+      ) as _i3.Stream<List<_i11.GroupCondition>>);
 
   @override
   _i3.Future<void> saveGroupCondition(_i11.GroupCondition? groupCondition) =>

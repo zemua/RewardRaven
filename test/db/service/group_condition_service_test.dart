@@ -39,12 +39,12 @@ void main() {
 
       when(mockGroupConditionRepository.getGroupConditionByIds(
               conditionedGroupId: conditionedGroupId,
-              conditionalGroupId: conditionalGroupId))
+              conditionId: "someConditionId"))
           .thenAnswer((_) async => expectedGroupCondition);
 
       final result = await groupConditionService.getGroupCondition(
           conditionedGroupId: conditionedGroupId,
-          conditionId: conditionalGroupId);
+          conditionId: "someConditionId");
 
       expect(result, equals(expectedGroupCondition));
     });
@@ -55,12 +55,12 @@ void main() {
 
       when(mockGroupConditionRepository.getGroupConditionByIds(
               conditionedGroupId: conditionedGroupId,
-              conditionalGroupId: conditionalGroupId))
+              conditionId: "someConditionId"))
           .thenAnswer((_) async => null);
 
       final result = await groupConditionService.getGroupCondition(
           conditionedGroupId: conditionedGroupId,
-          conditionId: conditionalGroupId);
+          conditionId: "someConditionId");
 
       expect(result, isNull);
     });
