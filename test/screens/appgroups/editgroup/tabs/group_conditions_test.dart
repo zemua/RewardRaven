@@ -64,8 +64,8 @@ void main() {
     testWidgets('shows conditions retrieved from GroupConditionService',
         (WidgetTester tester) async {
       // Reply to call with delay to check loading spinner
-      when(mockGroupConditionService.getGroupConditions(any))
-          .thenAnswer((_) async => [
+      when(mockGroupConditionService.streamGroupConditions(any))
+          .thenAnswer((_) => Stream.value([
                 GroupCondition(
                     conditionedGroupId: 'testGroupId',
                     conditionalGroupId: 'conditionalGroupId1',
@@ -76,7 +76,7 @@ void main() {
                     conditionalGroupId: 'conditionalGroupId2',
                     usedTime: Duration(minutes: 41),
                     duringLastDays: 2),
-              ]);
+              ]));
 
       when(mockAppGroupService.getGroup(GroupType.positive, 'testGroupId'))
           .thenAnswer((_) async => const AppGroup(
