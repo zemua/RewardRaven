@@ -45,6 +45,9 @@ class GroupConditionRepository {
   }
 
   Future<void> deleteGroupCondition(GroupCondition condition) async {
+    if (condition.id == null) {
+      throw Exception('Group condition id cannot be null');
+    }
     try {
       final ref = await _resolveReference(condition);
       await ref.remove().timeout(const Duration(seconds: 10));
@@ -156,14 +159,14 @@ class GroupConditionRepository {
       required String? conditionId}) async {
     try {
       final dbRef = await _resolveReferenceById(conditionedGroupId);
-      DatabaseReference newNode;
+      DatabaseReference childNode;
       if (conditionId == null || conditionId.isEmpty) {
-        newNode = dbRef.push();
+        childNode = dbRef.push();
       } else {
-        newNode = dbRef.child(sanitizeDbPath(conditionId));
+        childNode = dbRef.child(sanitizeDbPath(conditionId));
       }
-      logger.d("Processing group condition node: conditional group $newNode");
-      return newNode;
+      logger.d("Processing group condition node: conditional group $childNode");
+      return childNode;
     } catch (e) {
       logger.e('Failed to resolve db reference: $e');
       rethrow;

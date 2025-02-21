@@ -32,6 +32,7 @@ void main() {
       duringLastDays: 7,
     );
     when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
+    when(mockDatabaseReference.push()).thenReturn(mockDatabaseReference);
     when(mockDatabaseReference.set(any)).thenAnswer((_) => Future.value());
     when(mockDatabaseReference.path).thenReturn('testPath');
 
@@ -41,7 +42,8 @@ void main() {
     // Assert
     verify(mockDatabaseReference.child('groupConditions')).called(1);
     verify(mockDatabaseReference.child('testConditionedGroupId')).called(1);
-    verify(mockDatabaseReference.child('testConditionalGroupId')).called(1);
+    verifyNever(mockDatabaseReference.child('testConditionalGroupId'));
+    verify(mockDatabaseReference.push()).called(1);
     verify(mockDatabaseReference.set(groupCondition.toJson())).called(1);
   });
 
@@ -52,6 +54,7 @@ void main() {
       conditionalGroupId: 'testConditionalGroupId',
       usedTime: Duration(hours: 1),
       duringLastDays: 7,
+      id: 'testId',
     );
     when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
     when(mockDatabaseReference.update(any)).thenAnswer((_) => Future.value());
@@ -62,7 +65,9 @@ void main() {
     // Assert
     verify(mockDatabaseReference.child('groupConditions')).called(1);
     verify(mockDatabaseReference.child('testConditionedGroupId')).called(1);
-    verify(mockDatabaseReference.child('testConditionalGroupId')).called(1);
+    verify(mockDatabaseReference.child('testId')).called(1);
+    verifyNever(mockDatabaseReference.child('testConditionalGroupId'));
+    verifyNever(mockDatabaseReference.push());
     verify(mockDatabaseReference.update(groupCondition.toJson())).called(1);
   });
 
@@ -73,6 +78,7 @@ void main() {
       conditionalGroupId: 'testConditionalGroupId',
       usedTime: Duration(hours: 1),
       duringLastDays: 7,
+      id: 'testId',
     );
     when(mockDatabaseReference.child(any)).thenReturn(mockDatabaseReference);
     when(mockDatabaseReference.remove()).thenAnswer((_) => Future.value());
@@ -83,7 +89,8 @@ void main() {
     // Assert
     verify(mockDatabaseReference.child('groupConditions')).called(1);
     verify(mockDatabaseReference.child('testConditionedGroupId')).called(1);
-    verify(mockDatabaseReference.child('testConditionalGroupId')).called(1);
+    verifyNever(mockDatabaseReference.child('testConditionalGroupId'));
+    verify(mockDatabaseReference.child('testId')).called(1);
     verify(mockDatabaseReference.remove()).called(1);
   });
 
@@ -103,12 +110,12 @@ void main() {
     when(mockDatabaseReference.once())
         .thenAnswer((_) async => Future.value(mockDatabaseEvent));
     when(mockDataSnapshot.value).thenReturn(groupCondition.toJson());
+    when(mockDataSnapshot.key).thenReturn('testId');
     when(mockDatabaseReference.path).thenReturn('testPath');
 
     // Act
     final result = await groupConditionRepository.getGroupConditionByIds(
-        conditionedGroupId: 'testConditionedGroupId',
-        conditionId: 'someConditionId');
+        conditionedGroupId: 'testConditionedGroupId', conditionId: 'testId');
 
     // Assert
     expect(result, isNotNull);
@@ -119,7 +126,8 @@ void main() {
 
     verify(mockDatabaseReference.child('groupConditions')).called(1);
     verify(mockDatabaseReference.child('testConditionedGroupId')).called(1);
-    verify(mockDatabaseReference.child('testConditionalGroupId')).called(1);
+    verify(mockDatabaseReference.child('testId')).called(1);
+    verifyNever(mockDatabaseReference.child('testConditionalGroupId'));
   });
 
   test(
