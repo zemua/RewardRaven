@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 import 'package:reward_raven/db/entity/app_group.dart';
 import 'package:reward_raven/db/entity/group_condition.dart';
 import 'package:reward_raven/db/service/app_group_service.dart';
@@ -16,19 +18,26 @@ void main() {
   late MockAppGroupService mockAppGroupService;
   late AppGroup appGroup;
   late GroupCondition groupCondition;
+  late AppGroup positiveGroup;
+  late GetIt locator;
 
   setUp(() {
     mockGroupConditionService = MockGroupConditionService();
     mockAppGroupService = MockAppGroupService();
     appGroup = const AppGroup(
         id: 'testgroupid', name: 'group name', type: GroupType.positive);
+    positiveGroup = const AppGroup(
+        id: 'listedGroupId', name: 'listed group', type: GroupType.positive);
     groupCondition = GroupCondition(
       id: 'testconditionid',
       conditionedGroupId: 'conditionedGroupId',
-      conditionalGroupId: 'conditionalGroupId',
+      conditionalGroupId: 'listedGroupId',
       usedTime: const Duration(hours: 1),
       duringLastDays: 7,
     );
+
+    when(mockAppGroupService.getGroups(GroupType.positive))
+        .thenAnswer((_) async => [positiveGroup]);
 
     GetIt.instance
         .registerSingleton<GroupConditionService>(mockGroupConditionService);
@@ -49,9 +58,10 @@ void main() {
       ),
     );
 
+    await tester.pumpAndSettle();
+
     expect(find.text('Edit Condition'), findsOneWidget);
-    expect(find.text('Condition'), findsOneWidget);
-    expect(find.text('Group'), findsOneWidget);
+    expect(find.byType(TextFormField), findsNWidgets(2));
   });
 
   testWidgets('Time picker is displayed when button is pressed',

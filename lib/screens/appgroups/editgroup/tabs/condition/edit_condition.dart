@@ -144,6 +144,7 @@ class EditConditionState extends State<EditCondition> {
     }
     return ListTile(
       title: DropdownButtonFormField<String>(
+        key: const Key("conditionalGroupDropdown"),
         decoration: InputDecoration(
           labelText: AppLocalizations.of(context)!.conditionalGroup,
         ),
@@ -186,6 +187,7 @@ class EditConditionState extends State<EditCondition> {
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(minWidth: 60),
                   child: TextFormField(
+                    key: const Key("usedTime"),
                     controller: _timeController,
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.hhmm,
