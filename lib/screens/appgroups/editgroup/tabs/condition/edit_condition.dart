@@ -187,7 +187,7 @@ class EditConditionState extends State<EditCondition> {
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(minWidth: 60),
                   child: TextFormField(
-                    key: const Key("usedTime"),
+                    key: const Key("timeField"),
                     controller: _timeController,
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.hhmm,
@@ -229,6 +229,7 @@ class EditConditionState extends State<EditCondition> {
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(minWidth: 60),
                   child: TextFormField(
+                    key: const Key("daysField"),
                     controller: _daysController,
                     decoration: const InputDecoration(
                       isDense: true,
@@ -267,6 +268,7 @@ class EditConditionState extends State<EditCondition> {
       GlobalKey<FormState> formKey, BuildContext context) {
     return ListTile(
       title: ElevatedButton(
+        key: const Key("saveButton"),
         onPressed: () {
           if (formKey.currentState!.validate()) {
             _persistCondition();

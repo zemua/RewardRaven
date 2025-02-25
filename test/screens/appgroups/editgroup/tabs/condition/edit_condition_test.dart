@@ -75,27 +75,12 @@ void main() {
       ),
     );
 
-    await tester.tap(find.byKey(const Key('timeButton')));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const Key('timeField')));
     await tester.pump();
 
     expect(find.byType(TimePickerDialog), findsOneWidget);
-  });
-
-  testWidgets('Days picker is displayed when button is pressed',
-      (tester) async {
-    await tester.pumpWidget(
-      createLocalizationTestableWidget(
-        EditCondition(
-          conditionedGroup: appGroup,
-          condition: groupCondition,
-        ),
-      ),
-    );
-
-    await tester.tap(find.byKey(const Key('daysButton')));
-    await tester.pump();
-
-    expect(find.byType(Dialog), findsOneWidget);
   });
 
   testWidgets('Save button is enabled when all fields are filled',
@@ -109,11 +94,22 @@ void main() {
       ),
     );
 
-    await tester.enterText(find.byKey(const Key('timeController')), '10:00');
-    await tester.enterText(find.byKey(const Key('daysController')), '5');
-    await tester.tap(find.byKey(const Key('saveButton')));
+    await tester.pumpAndSettle();
+
+    await tester.enterText(find.byKey(const Key('daysField')), '5');
 
     expect(find.byKey(const Key('saveButton')), findsOneWidget);
+    await tester.tap(find.byKey(const Key('saveButton')));
+
+    final updatedCondition = GroupCondition(
+      id: "testconditionid",
+      conditionedGroupId: "testgroupid",
+      conditionalGroupId: "listedGroupId",
+      usedTime: const Duration(hours: 1),
+      duringLastDays: 5,
+    );
+    verify(mockGroupConditionService.updateGroupCondition(updatedCondition))
+        .called(1);
   });
 
   testWidgets('Save button is disabled when any field is empty',
@@ -127,11 +123,13 @@ void main() {
       ),
     );
 
-    await tester.enterText(find.byKey(const Key('timeController')), '');
-    await tester.enterText(find.byKey(const Key('daysController')), '5');
-    await tester.tap(find.byKey(const Key('saveButton')));
+    await tester.pumpAndSettle();
 
-    expect(find.byKey(const Key('saveButton')), findsNothing);
+    await tester.enterText(find.byKey(const Key('daysField')), '');
+    await tester.tap(find.byKey(const Key('saveButton')));
+    await tester.pumpAndSettle();
+
+    verifyNever(mockGroupConditionService.updateGroupCondition(any));
   });
 
   testWidgets('tests to be implemented', (tester) async {
