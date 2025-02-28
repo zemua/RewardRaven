@@ -15,6 +15,7 @@ import 'package:reward_raven/service/app/impl/android_apps_fetcher.dart';
 import 'package:reward_raven/service/app/impl/empty_apps_fetcher.dart';
 import 'package:reward_raven/service/impl/platform_wrapper_impl.dart';
 import 'package:reward_raven/service/platform_wrapper.dart';
+import 'package:reward_raven/tools/injectable_time_picker.dart';
 
 import 'db/repository/listed_app_repository.dart';
 import 'db/service/app_group_service.dart';
@@ -64,6 +65,7 @@ class RewardRavenApp extends StatelessWidget {
 
 void _setupLocator() {
   locator.registerSingleton<PlatformWrapper>(PlatformWrapperImpl());
+  locator.registerSingleton(InjectableTimePicker());
 
   if (!kIsWeb) {
     locator.registerSingleton<AndroidAppsFetcher>(AndroidAppsFetcher());

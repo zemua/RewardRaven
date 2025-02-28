@@ -8,6 +8,7 @@ import '../../../../../db/entity/app_group.dart';
 import '../../../../../db/entity/group_condition.dart';
 import '../../../../../db/service/app_group_service.dart';
 import '../../../../../db/service/group_condition_service.dart';
+import '../../../../../tools/injectable_time_picker.dart';
 
 final GetIt locator = GetIt.instance;
 
@@ -31,6 +32,7 @@ class EditCondition extends StatefulWidget {
 class EditConditionState extends State<EditCondition> {
   final _timeController = TextEditingController();
   final _daysController = TextEditingController();
+  final timePicker = locator<InjectableTimePicker>();
 
   late Map<String, AppGroup> groupsMap;
 
@@ -47,7 +49,7 @@ class EditConditionState extends State<EditCondition> {
       initialTime = const TimeOfDay(hour: 0, minute: 15); // Default time
     }
 
-    final TimeOfDay? newTime = await showTimePicker(
+    final TimeOfDay? newTime = await timePicker.showPicker(
       context: context,
       initialTime: initialTime,
       builder: (context, child) {
