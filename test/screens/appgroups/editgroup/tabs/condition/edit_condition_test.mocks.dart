@@ -4,12 +4,15 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
+import 'dart:ui' as _i9;
 
+import 'package:flutter/material.dart' as _i8;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:reward_raven/db/entity/app_group.dart' as _i6;
 import 'package:reward_raven/db/entity/group_condition.dart' as _i4;
 import 'package:reward_raven/db/service/app_group_service.dart' as _i5;
 import 'package:reward_raven/db/service/group_condition_service.dart' as _i2;
+import 'package:reward_raven/tools/injectable_time_picker.dart' as _i7;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -177,4 +180,63 @@ class MockAppGroupService extends _i1.Mock implements _i5.AppGroupService {
         ),
         returnValue: _i3.Stream<List<_i6.AppGroup>>.empty(),
       ) as _i3.Stream<List<_i6.AppGroup>>);
+}
+
+/// A class which mocks [InjectableTimePicker].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockInjectableTimePicker extends _i1.Mock
+    implements _i7.InjectableTimePicker {
+  MockInjectableTimePicker() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i3.Future<_i8.TimeOfDay?> showPicker({
+    required _i8.BuildContext? context,
+    required _i8.TimeOfDay? initialTime,
+    _i8.TransitionBuilder? builder,
+    bool? barrierDismissible = true,
+    _i9.Color? barrierColor,
+    String? barrierLabel,
+    bool? useRootNavigator = true,
+    _i8.TimePickerEntryMode? initialEntryMode = _i8.TimePickerEntryMode.dial,
+    String? cancelText,
+    String? confirmText,
+    String? helpText,
+    String? errorInvalidText,
+    String? hourLabelText,
+    String? minuteLabelText,
+    _i8.RouteSettings? routeSettings,
+    _i8.EntryModeChangeCallback? onEntryModeChanged,
+    _i9.Offset? anchorPoint,
+    _i8.Orientation? orientation,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #showPicker,
+          [],
+          {
+            #context: context,
+            #initialTime: initialTime,
+            #builder: builder,
+            #barrierDismissible: barrierDismissible,
+            #barrierColor: barrierColor,
+            #barrierLabel: barrierLabel,
+            #useRootNavigator: useRootNavigator,
+            #initialEntryMode: initialEntryMode,
+            #cancelText: cancelText,
+            #confirmText: confirmText,
+            #helpText: helpText,
+            #errorInvalidText: errorInvalidText,
+            #hourLabelText: hourLabelText,
+            #minuteLabelText: minuteLabelText,
+            #routeSettings: routeSettings,
+            #onEntryModeChanged: onEntryModeChanged,
+            #anchorPoint: anchorPoint,
+            #orientation: orientation,
+          },
+        ),
+        returnValue: _i3.Future<_i8.TimeOfDay?>.value(),
+      ) as _i3.Future<_i8.TimeOfDay?>);
 }

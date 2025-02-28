@@ -8,22 +8,25 @@ import 'package:reward_raven/db/entity/group_condition.dart';
 import 'package:reward_raven/db/service/app_group_service.dart';
 import 'package:reward_raven/db/service/group_condition_service.dart';
 import 'package:reward_raven/screens/appgroups/editgroup/tabs/condition/edit_condition.dart';
+import 'package:reward_raven/tools/injectable_time_picker.dart';
 
 import '../../../../../test_utils/localization_testable.dart';
 import 'edit_condition_test.mocks.dart';
 
-@GenerateMocks([GroupConditionService, AppGroupService])
+@GenerateMocks([GroupConditionService, AppGroupService, InjectableTimePicker])
 void main() {
   late MockGroupConditionService mockGroupConditionService;
   late MockAppGroupService mockAppGroupService;
+  late MockInjectableTimePicker mockTimePicker;
   late AppGroup appGroup;
   late GroupCondition groupCondition;
   late AppGroup positiveGroup;
-  late GetIt locator;
+  final locator = GetIt.instance;
 
   setUp(() {
     mockGroupConditionService = MockGroupConditionService();
     mockAppGroupService = MockAppGroupService();
+    mockTimePicker = MockInjectableTimePicker();
     appGroup = const AppGroup(
         id: 'testgroupid', name: 'group name', type: GroupType.positive);
     positiveGroup = const AppGroup(
@@ -42,6 +45,7 @@ void main() {
     GetIt.instance
         .registerSingleton<GroupConditionService>(mockGroupConditionService);
     GetIt.instance.registerSingleton<AppGroupService>(mockAppGroupService);
+    GetIt.instance.registerSingleton<InjectableTimePicker>(mockTimePicker);
   });
 
   tearDown(() {
@@ -66,6 +70,15 @@ void main() {
 
   testWidgets('Time picker is displayed when button is pressed',
       (tester) async {
+    when(mockTimePicker.showPicker(
+            context: anyNamed("context"),
+            initialTime: anyNamed("initialTime"),
+            builder: anyNamed("builder")))
+        .thenAnswer((invocation) async => showTimePicker(
+            context: invocation.namedArguments[#context],
+            initialTime: invocation.namedArguments[#initialTime],
+            builder: invocation.namedArguments[#builder]));
+
     await tester.pumpWidget(
       createLocalizationTestableWidget(
         EditCondition(
@@ -112,7 +125,7 @@ void main() {
         .called(1);
   });
 
-  testWidgets('Save button is disabled when any field is empty',
+  testWidgets('Save button is disabled when days field is empty',
       (tester) async {
     await tester.pumpWidget(
       createLocalizationTestableWidget(
@@ -132,7 +145,104 @@ void main() {
     verifyNever(mockGroupConditionService.updateGroupCondition(any));
   });
 
-  testWidgets('tests to be implemented', (tester) async {
-    fail("TODO");
+  testWidgets('Save button is disabled when time field is 00:00',
+      (tester) async {
+    when(mockTimePicker.showPicker(
+            context: anyNamed("context"),
+            initialTime: anyNamed("initialTime"),
+            builder: anyNamed("builder")))
+        .thenAnswer((_) async => const TimeOfDay(hour: 00, minute: 00));
+
+    await tester.pumpWidget(
+      createLocalizationTestableWidget(
+        EditCondition(
+          conditionedGroup: appGroup,
+          condition: groupCondition,
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const Key('timeField')));
+    await tester.tap(find.byKey(const Key('saveButton')));
+    await tester.pumpAndSettle();
+
+    verifyNever(mockGroupConditionService.updateGroupCondition(any));
+  });
+
+  testWidgets('Save button is enabled when values entered on fields',
+      (tester) async {
+    when(mockTimePicker.showPicker(
+            context: anyNamed("context"),
+            initialTime: anyNamed("initialTime"),
+            builder: anyNamed("builder")))
+        .thenAnswer((_) async => const TimeOfDay(hour: 01, minute: 36));
+
+    await tester.pumpWidget(
+      createLocalizationTestableWidget(
+        EditCondition(
+          conditionedGroup: appGroup,
+          condition: null,
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    await tester.enterText(find.byKey(const Key('daysField')), '1');
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('timeField')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('conditionalGroupDropdown')));
+    await tester.pumpAndSettle();
+    expect(find.text('listed group'), findsOneWidget);
+    await tester.tap(find.text('listed group'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('saveButton')));
+    await tester.pumpAndSettle();
+
+    verifyNever(mockGroupConditionService.updateGroupCondition(any));
+    verify(mockGroupConditionService.saveGroupCondition(any)).called(1);
+  });
+
+  testWidgets('Save button is disabled when no dropdown selection',
+      (tester) async {
+    when(mockTimePicker.showPicker(
+            context: anyNamed("context"),
+            initialTime: anyNamed("initialTime"),
+            builder: anyNamed("builder")))
+        .thenAnswer((_) async => const TimeOfDay(hour: 01, minute: 36));
+
+    await tester.pumpWidget(
+      createLocalizationTestableWidget(
+        EditCondition(
+          conditionedGroup: appGroup,
+          condition: null,
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    await tester.enterText(find.byKey(const Key('daysField')), '1');
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('timeField')));
+    await tester.pumpAndSettle();
+    // Not selecting an entry for the dropdown
+    // Commented out code below is used to select an entry for the dropdown,
+    // but it is not executed in this test, so the save button should be
+    // disabled.
+    //
+    // await tester.tap(find.byKey(const Key('conditionalGroupDropdown')));
+    // await tester.pumpAndSettle();
+    // expect(find.text('listed group'), findsOneWidget);
+    // await tester.tap(find.text('listed group'));
+    // await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('saveButton')));
+    await tester.pumpAndSettle();
+
+    verifyNever(mockGroupConditionService.updateGroupCondition(any));
+    verifyNever(mockGroupConditionService.saveGroupCondition(any));
   });
 }

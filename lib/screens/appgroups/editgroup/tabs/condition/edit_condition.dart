@@ -202,7 +202,7 @@ class EditConditionState extends State<EditCondition> {
                     textAlign: TextAlign.center,
                     onTap: _pickTime,
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      if (value == null || value.isEmpty || value == '00:00') {
                         return '';
                       }
                       return null;
