@@ -8,6 +8,7 @@ import '../../../../db/entity/group_condition.dart';
 import '../../../../db/service/app_group_service.dart';
 import '../../../../db/service/group_condition_service.dart';
 import '../../../../error/group_not_found_exception.dart';
+import '../../../../tools/injectable_time_picker.dart';
 import '../../../apps/app_list_type.dart';
 import 'condition/edit_condition.dart';
 
@@ -206,7 +207,7 @@ class GroupAppItemState extends State<GroupConditionItem> {
               ),
               child: Text(
                 // TODO de-duplicate code transforming Duration to String
-                '${widget.conditionalGroupName} ${AppLocalizations.of(context)!.forString} ${widget.usedTime.inHours}:${widget.usedTime.inMinutes % 60} ${AppLocalizations.of(context)!.inTheLast} ${widget.duringLastDays} ${AppLocalizations.of(context)!.days}',
+                '${widget.conditionalGroupName} ${AppLocalizations.of(context)!.forString} ${durationToDigitalClock(widget.usedTime)} ${AppLocalizations.of(context)!.inTheLast} ${widget.duringLastDays} ${AppLocalizations.of(context)!.days}',
                 style: TextStyle(
                   color: conditionsMet
                       ? Theme.of(context).colorScheme.primary

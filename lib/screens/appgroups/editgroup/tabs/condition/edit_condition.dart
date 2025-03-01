@@ -43,8 +43,7 @@ class EditConditionState extends State<EditCondition> {
   Future<void> _pickTime() async {
     TimeOfDay? initialTime;
     if (_selectedTime != null) {
-      initialTime = TimeOfDay(
-          hour: _selectedTime!.inHours, minute: _selectedTime!.inMinutes % 60);
+      initialTime = toTimeOfDay(_selectedTime!);
     } else {
       initialTime = const TimeOfDay(hour: 0, minute: 15); // Default time
     }
@@ -62,8 +61,7 @@ class EditConditionState extends State<EditCondition> {
     if (newTime != null) {
       _selectedTime = Duration(hours: newTime.hour, minutes: newTime.minute);
       setState(() {
-        _timeController.text =
-            '${newTime.hour.toString().padLeft(2, '0')}:${newTime.minute.toString().padLeft(2, '0')}';
+        _timeController.text = timeToDigitalClock(newTime);
       });
     }
   }
@@ -82,8 +80,7 @@ class EditConditionState extends State<EditCondition> {
 
     if (_selectedTime == null && widget.condition?.usedTime != null) {
       _selectedTime = widget.condition!.usedTime;
-      _timeController.text =
-          '${usedTime.inHours.toString().padLeft(2, '0')}:${(usedTime.inMinutes % 60).toString().padLeft(2, '0')}';
+      _timeController.text = durationToDigitalClock(usedTime);
     }
 
     if (_selectedDays == null && widget.condition?.duringLastDays != null) {

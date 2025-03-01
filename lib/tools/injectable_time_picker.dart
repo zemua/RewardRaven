@@ -42,3 +42,15 @@ class InjectableTimePicker {
         orientation: orientation);
   }
 }
+
+TimeOfDay toTimeOfDay(Duration duration) {
+  return TimeOfDay(hour: duration.inHours, minute: duration.inMinutes % 60);
+}
+
+String timeToDigitalClock(TimeOfDay time) {
+  return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
+}
+
+String durationToDigitalClock(Duration duration) {
+  return '${duration.inHours.toString().padLeft(2, '0')}:${(duration.inMinutes % 60).toString().padLeft(2, '0')}';
+}
