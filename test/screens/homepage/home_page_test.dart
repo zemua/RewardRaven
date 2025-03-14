@@ -2,15 +2,19 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:installed_apps/app_info.dart';
 import 'package:mockito/mockito.dart';
+import 'package:reward_raven/db/entity/app_group.dart';
+import 'package:reward_raven/db/service/app_group_service.dart';
 import 'package:reward_raven/main.dart';
+import 'package:reward_raven/screens/appgroups/app_group_list.dart';
 import 'package:reward_raven/screens/apps/app_list.dart';
-import 'package:reward_raven/screens/apps/fetcher/apps_fetcher.dart';
+import 'package:reward_raven/service/app/apps_fetcher.dart';
 
 void main() {
   final getIt = GetIt.instance;
 
   setUp(() {
     getIt.registerSingleton<AppsFetcher>(MockAppsFetcher());
+    getIt.registerSingleton<AppGroupService>(MockAppGroupService());
   });
 
   tearDown(() {
@@ -26,28 +30,29 @@ void main() {
       expect(find.byType(AppList), findsOneWidget);
     });
 
-    testWidgets('prints message on positive groups button press',
+    testWidgets('navigates to app group list on positive groups button press',
         (WidgetTester tester) async {
       await tester.pumpWidget(const RewardRavenApp());
       await tester.tap(find.text('Positive Groups'));
-      await tester.pump();
-      // Check console output for the message
+      await tester.pumpAndSettle();
+      expect(find.byType(AppGroupList), findsOneWidget);
     });
 
-    testWidgets('prints message on negative apps button press',
+    testWidgets('navigates to negative apps list on negative apps button press',
         (WidgetTester tester) async {
       await tester.pumpWidget(const RewardRavenApp());
       await tester.tap(find.text('Negative Apps'));
-      await tester.pump();
-      // Check console output for the message
+      await tester.pumpAndSettle();
+      expect(find.byType(AppList), findsOneWidget);
     });
 
-    testWidgets('prints message on negative groups button press',
+    testWidgets(
+        'navigates to negative groups list on negative groups button press',
         (WidgetTester tester) async {
       await tester.pumpWidget(const RewardRavenApp());
       await tester.tap(find.text('Negative Groups'));
-      await tester.pump();
-      // Check console output for the message
+      await tester.pumpAndSettle();
+      expect(find.byType(AppGroupList), findsOneWidget);
     });
 
     testWidgets('prints message on random checks button press',
@@ -80,5 +85,33 @@ class MockAppsFetcher extends Mock implements AppsFetcher {
   @override
   Future<List<AppInfo>> fetchInstalledApps() async {
     return [];
+  }
+
+  @override
+  Future<List<AppInfo>> fetchAllApps() async {
+    return [];
+  }
+
+  @override
+  bool hasHiddenApps() {
+    return true;
+  }
+}
+
+class MockAppGroupService extends Mock implements AppGroupService {
+  @override
+  Future<List<AppGroup>> getGroups(GroupType type) async {
+    return [
+      AppGroup(name: 'Group 1', type: type),
+      AppGroup(name: 'Group 2', type: type),
+    ];
+  }
+
+  @override
+  Stream<List<AppGroup>> streamGroups(GroupType type) {
+    return Stream.value([
+      AppGroup(name: 'Group 1', type: type),
+      AppGroup(name: 'Group 2', type: type),
+    ]);
   }
 }

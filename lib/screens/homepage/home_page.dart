@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../appgroups/app_group_list.dart';
+import '../appgroups/app_group_list_type.dart';
 import '../apps/app_list.dart';
+import '../apps/app_list_type.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -26,7 +29,11 @@ class HomePage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const AppList()),
+                                builder: (context) => AppList(
+                                    listType: AppListType.positive,
+                                    titleBarMessage:
+                                        AppLocalizations.of(context)!
+                                            .positiveApps)),
                           );
                         },
                         child: Row(
@@ -43,7 +50,16 @@ class HomePage extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          print('Positive groups button pressed');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AppGroupList(
+                                listType: AppGroupListType.positive,
+                                titleBarMessage: AppLocalizations.of(context)!
+                                    .positiveGroups,
+                              ),
+                            ),
+                          );
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -64,7 +80,15 @@ class HomePage extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          print('Negative apps button pressed');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AppList(
+                                    listType: AppListType.negative,
+                                    titleBarMessage:
+                                        AppLocalizations.of(context)!
+                                            .negativeApps)),
+                          );
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -80,7 +104,16 @@ class HomePage extends StatelessWidget {
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
-                          print('Negative groups button pressed');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AppGroupList(
+                                listType: AppGroupListType.negative,
+                                titleBarMessage: AppLocalizations.of(context)!
+                                    .negativeGroups,
+                              ),
+                            ),
+                          );
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
