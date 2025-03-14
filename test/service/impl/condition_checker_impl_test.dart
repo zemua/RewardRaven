@@ -18,7 +18,7 @@ void main() {
   });
 
   group('AppsFetcherProvider', () {
-    test('fetchInstalledApps returns list of apps on Android', () async {
+    test('Checks that a condition is met', () async {
       MockGroupConditionService mockGroupConditionService =
           MockGroupConditionService();
       MockAppGroupService mockAppGroupService = MockAppGroupService();
