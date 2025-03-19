@@ -8,6 +8,7 @@
         tools:ignore="QueryAllPackagesPermission" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
@@ -16,6 +17,12 @@
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:enableOnBackInvokedCallback="true">
+
+        <!-- Foreground service -->
+        <service android:name="devs.mrp.service.foreground.Watchdog"
+            android:foregroundServiceType="specialUse"
+            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
