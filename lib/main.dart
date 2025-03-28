@@ -2,8 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 import 'package:reward_raven/db/helper/firebase_helper.dart';
 import 'package:reward_raven/db/repository/app_group_repository.dart';
 import 'package:reward_raven/db/repository/group_condition_repository.dart';
@@ -27,6 +29,7 @@ import 'firebase_options.dart'; // $ flutterfire configure
 final GetIt locator = GetIt.instance;
 
 void main() async {
+  final logger = Logger();
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
@@ -39,11 +42,14 @@ void main() async {
       FirebaseDatabase.instance.useDatabaseEmulator('10.0.2.2', 9000);
       FirebaseDatabase.instance.setPersistenceEnabled(false);
     } catch (e) {
-      print('Error connecting to Firebase emulator: $e');
+      logger.e('Error connecting to Firebase emulator: $e');
     }
   }
 
   _setupLocator();
+
+  FlutterForegroundTask.initCommunicationPort();
+
   runApp(const RewardRavenApp());
 }
 

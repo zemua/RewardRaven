@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:logger/logger.dart';
 
 import '../appgroups/app_group_list.dart';
 import '../appgroups/app_group_list_type.dart';
 import '../apps/app_list.dart';
 import '../apps/app_list_type.dart';
 
-class HomePage extends StatelessWidget {
+final logger = Logger();
+
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  HomePageState createState() => HomePageState();
+}
+
+class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,7 +142,7 @@ class HomePage extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        print('Random checks button pressed');
+                        logger.d('Random checks button pressed');
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -150,7 +160,7 @@ class HomePage extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        print('My Times button pressed');
+                        logger.d('My Times button pressed');
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -168,7 +178,7 @@ class HomePage extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        print('Settings button pressed');
+                        logger.d('Settings button pressed');
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -187,5 +197,67 @@ class HomePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _onReceiveTaskData(Object data) {
+    if (data is Map<String, dynamic>) {
+      final dynamic timestampMillis = data["timestampMillis"];
+      if (timestampMillis != null) {
+        final DateTime timestamp =
+            DateTime.fromMillisecondsSinceEpoch(timestampMillis, isUtc: true);
+        logger.i('timestamp: ${timestamp.toString()}');
+      }
+    }
+  }
+
+  Future<void> _requestPermissions() async {
+    final NotificationPermission notificationPermission =
+        await FlutterForegroundTask.checkNotificationPermission();
+    if (notificationPermission != NotificationPermission.granted) {
+      await FlutterForegroundTask.requestNotificationPermission();
+    }
+  }
+
+  void _initService() {
+    FlutterForegroundTask.init(
+      androidNotificationOptions: AndroidNotificationOptions(
+        channelId: 'foreground_service',
+        channelName: 'Foreground Service Notification',
+        channelDescription:
+            'This notification appears when the foreground service is running.',
+        channelImportance: NotificationChannelImportance.LOW,
+        priority: NotificationPriority.LOW,
+      ),
+      iosNotificationOptions: const IOSNotificationOptions(
+        showNotification: true,
+        playSound: false,
+      ),
+      foregroundTaskOptions: ForegroundTaskOptions(
+          allowWakeLock: false,
+          allowWifiLock: false,
+          autoRunOnBoot: true,
+          autoRunOnMyPackageReplaced: true,
+          eventAction: ForegroundTaskEventAction.repeat(5000)),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Add a callback to receive data sent from the TaskHandler.
+    FlutterForegroundTask.addTaskDataCallback(_onReceiveTaskData);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Request permissions and initialize the service.
+      _requestPermissions();
+      _initService();
+    });
+  }
+
+  @override
+  void dispose() {
+    // Remove a callback to receive data sent from the TaskHandler.
+    FlutterForegroundTask.removeTaskDataCallback(_onReceiveTaskData);
+    super.dispose();
   }
 }
