@@ -218,27 +218,33 @@ class HomePageState extends State<HomePage> {
     }
   }
 
-  void _initService() {
-    FlutterForegroundTask.init(
-      androidNotificationOptions: AndroidNotificationOptions(
-        channelId: 'foreground_service',
-        channelName: 'Foreground Service Notification',
-        channelDescription:
-            'This notification appears when the foreground service is running.',
-        channelImportance: NotificationChannelImportance.LOW,
-        priority: NotificationPriority.LOW,
-      ),
-      iosNotificationOptions: const IOSNotificationOptions(
-        showNotification: true,
-        playSound: false,
-      ),
-      foregroundTaskOptions: ForegroundTaskOptions(
-          allowWakeLock: false,
-          allowWifiLock: false,
-          autoRunOnBoot: true,
-          autoRunOnMyPackageReplaced: true,
-          eventAction: ForegroundTaskEventAction.repeat(5000)),
-    );
+  void _initService() async {
+    if (await FlutterForegroundTask.isRunningService) {
+      logger.d("Service is already running, doing nothing");
+      return;
+    } else {
+      logger.d("Starting FlutterForegroundTask service");
+      FlutterForegroundTask.init(
+        androidNotificationOptions: AndroidNotificationOptions(
+          channelId: 'foreground_service',
+          channelName: 'Foreground Service Notification',
+          channelDescription:
+              'This notification appears when the foreground service is running.',
+          channelImportance: NotificationChannelImportance.LOW,
+          priority: NotificationPriority.LOW,
+        ),
+        iosNotificationOptions: const IOSNotificationOptions(
+          showNotification: true,
+          playSound: false,
+        ),
+        foregroundTaskOptions: ForegroundTaskOptions(
+            allowWakeLock: false,
+            allowWifiLock: false,
+            autoRunOnBoot: true,
+            autoRunOnMyPackageReplaced: true,
+            eventAction: ForegroundTaskEventAction.repeat(5000)),
+      );
+    }
   }
 
   @override
