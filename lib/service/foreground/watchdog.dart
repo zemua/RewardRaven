@@ -5,7 +5,7 @@ final logger = Logger();
 
 @pragma('vm:entry-point')
 void startCallback() {
-  logger.d('startCallback');
+  logger.d('startCallback, setting task handler');
   FlutterForegroundTask.setTaskHandler(WatchdogTaskHandler());
 }
 

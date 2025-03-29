@@ -3,6 +3,7 @@ import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logger/logger.dart';
 
+import '../../service/foreground/watchdog.dart';
 import '../appgroups/app_group_list.dart';
 import '../appgroups/app_group_list_type.dart';
 import '../apps/app_list.dart';
@@ -14,13 +15,14 @@ class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  HomePageState createState() => HomePageState();
+  State<StatefulWidget> createState() => _HomePageState();
 }
 
-class HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WithForegroundTask(
+        child: Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.homePage),
       ),
@@ -196,18 +198,11 @@ class HomePageState extends State<HomePage> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   void _onReceiveTaskData(Object data) {
-    if (data is Map<String, dynamic>) {
-      final dynamic timestampMillis = data["timestampMillis"];
-      if (timestampMillis != null) {
-        final DateTime timestamp =
-            DateTime.fromMillisecondsSinceEpoch(timestampMillis, isUtc: true);
-        logger.i('timestamp: ${timestamp.toString()}');
-      }
-    }
+    logger.d('onReceiveTaskData: $data');
   }
 
   Future<void> _requestPermissions() async {
@@ -223,15 +218,13 @@ class HomePageState extends State<HomePage> {
       logger.d("Service is already running, doing nothing");
       return;
     } else {
-      logger.d("Starting FlutterForegroundTask service");
+      logger.d("Initializing FlutterForegroundTask service");
       FlutterForegroundTask.init(
         androidNotificationOptions: AndroidNotificationOptions(
           channelId: 'foreground_service',
           channelName: 'Foreground Service Notification',
           channelDescription:
               'This notification appears when the foreground service is running.',
-          channelImportance: NotificationChannelImportance.LOW,
-          priority: NotificationPriority.LOW,
         ),
         iosNotificationOptions: const IOSNotificationOptions(
           showNotification: true,
@@ -247,6 +240,31 @@ class HomePageState extends State<HomePage> {
     }
   }
 
+  Future<ServiceRequestResult> _startService() async {
+    if (await FlutterForegroundTask.isRunningService) {
+      logger.d("Service is already running");
+      return FlutterForegroundTask.restartService();
+    } else {
+      logger.d("Starting service");
+      var startServiceResult = await FlutterForegroundTask.startService(
+        serviceId: 256,
+        notificationTitle: 'Foreground Service is running',
+        notificationText: 'Tap to return to the app',
+        notificationIcon: null,
+        notificationButtons: [
+          const NotificationButton(id: 'btn_hello', text: 'hello'),
+        ],
+        notificationInitialRoute: '/',
+        callback: startCallback,
+      );
+      if (startServiceResult is ServiceRequestFailure) {
+        logger.e(
+            "Failed to start foreground service: ${startServiceResult.error}");
+      }
+      return startServiceResult;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -257,6 +275,7 @@ class HomePageState extends State<HomePage> {
       // Request permissions and initialize the service.
       _requestPermissions();
       _initService();
+      _startService();
     });
   }
 
@@ -265,5 +284,10 @@ class HomePageState extends State<HomePage> {
     // Remove a callback to receive data sent from the TaskHandler.
     FlutterForegroundTask.removeTaskDataCallback(_onReceiveTaskData);
     super.dispose();
+  }
+
+  Future<ServiceRequestResult> _stopService() {
+    logger.d('Stopping service');
+    return FlutterForegroundTask.stopService();
   }
 }
