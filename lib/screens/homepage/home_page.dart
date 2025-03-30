@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logger/logger.dart';
 
@@ -21,8 +20,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return WithForegroundTask(
-        child: Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.homePage),
       ),
@@ -193,101 +191,12 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ]),
+                const WatchdogWidget(),
               ],
             ),
           ),
         ),
       ),
-    ));
-  }
-
-  void _onReceiveTaskData(Object data) {
-    logger.d('onReceiveTaskData: $data');
-  }
-
-  Future<void> _requestPermissions() async {
-    final NotificationPermission notificationPermission =
-        await FlutterForegroundTask.checkNotificationPermission();
-    if (notificationPermission != NotificationPermission.granted) {
-      await FlutterForegroundTask.requestNotificationPermission();
-    }
-  }
-
-  void _initService() async {
-    if (await FlutterForegroundTask.isRunningService) {
-      logger.d("Service is already running, doing nothing");
-      return;
-    } else {
-      logger.d("Initializing FlutterForegroundTask service");
-      FlutterForegroundTask.init(
-        androidNotificationOptions: AndroidNotificationOptions(
-          channelId: 'foreground_service',
-          channelName: 'Foreground Service Notification',
-          channelDescription:
-              'This notification appears when the foreground service is running.',
-        ),
-        iosNotificationOptions: const IOSNotificationOptions(
-          showNotification: true,
-          playSound: false,
-        ),
-        foregroundTaskOptions: ForegroundTaskOptions(
-            allowWakeLock: false,
-            allowWifiLock: false,
-            autoRunOnBoot: true,
-            autoRunOnMyPackageReplaced: true,
-            eventAction: ForegroundTaskEventAction.repeat(5000)),
-      );
-    }
-  }
-
-  Future<ServiceRequestResult> _startService() async {
-    if (await FlutterForegroundTask.isRunningService) {
-      logger.d("Service is already running");
-      return FlutterForegroundTask.restartService();
-    } else {
-      logger.d("Starting service");
-      var startServiceResult = await FlutterForegroundTask.startService(
-        serviceId: 256,
-        notificationTitle: 'Foreground Service is running',
-        notificationText: 'Tap to return to the app',
-        notificationIcon: null,
-        notificationButtons: [
-          const NotificationButton(id: 'btn_hello', text: 'hello'),
-        ],
-        notificationInitialRoute: '/',
-        callback: startCallback,
-      );
-      if (startServiceResult is ServiceRequestFailure) {
-        logger.e(
-            "Failed to start foreground service: ${startServiceResult.error}");
-      }
-      return startServiceResult;
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    // Add a callback to receive data sent from the TaskHandler.
-    FlutterForegroundTask.addTaskDataCallback(_onReceiveTaskData);
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Request permissions and initialize the service.
-      _requestPermissions();
-      _initService();
-      _startService();
-    });
-  }
-
-  @override
-  void dispose() {
-    // Remove a callback to receive data sent from the TaskHandler.
-    FlutterForegroundTask.removeTaskDataCallback(_onReceiveTaskData);
-    super.dispose();
-  }
-
-  Future<ServiceRequestResult> _stopService() {
-    logger.d('Stopping service');
-    return FlutterForegroundTask.stopService();
+    );
   }
 }
