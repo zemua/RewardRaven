@@ -36,8 +36,9 @@
   "save": "Save",
   "search" : "Search",
   "settings": "Settings",
-  "welcome": "Welcome to Reward Raven",
-    "@welcome": {
-        "description": "The welcome message"
-    }
+  "watchdogServiceAndroidChannelDescription": "This notification appears when the watchdog service is running and the app usage is being monitored.",
+  "watchdogServiceAndroidChannelName": "Watchdog Service Notification",
+  "watchdogServiceDefaultText": "App usage will be monitored",
+  "watchdogServiceDefaultTitle": "Watchdog service running",
+  "welcome": "Welcome to Reward Raven"
 }

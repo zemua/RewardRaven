@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logger/logger.dart';
 
 final logger = Logger();
@@ -18,8 +19,21 @@ class WatchdogWidget extends StatefulWidget {
 }
 
 class _WatchdogWidgetState extends State<WatchdogWidget> {
+  late String _notificationTitle;
+  late String _notificationText;
+  late String _channelName;
+  late String _channelDescription;
+
   @override
   Widget build(BuildContext context) {
+    _notificationTitle =
+        AppLocalizations.of(context)!.watchdogServiceDefaultTitle;
+    _notificationText =
+        AppLocalizations.of(context)!.watchdogServiceDefaultText;
+    _channelName =
+        AppLocalizations.of(context)!.watchdogServiceAndroidChannelName;
+    _channelDescription =
+        AppLocalizations.of(context)!.watchdogServiceAndroidChannelDescription;
     return const SizedBox.shrink();
   }
 
@@ -40,9 +54,8 @@ class _WatchdogWidgetState extends State<WatchdogWidget> {
     FlutterForegroundTask.init(
       androidNotificationOptions: AndroidNotificationOptions(
         channelId: 'foreground_service',
-        channelName: 'Foreground Service Notification',
-        channelDescription:
-            'This notification appears when the foreground service is running.',
+        channelName: _channelName,
+        channelDescription: _channelDescription,
       ),
       iosNotificationOptions: const IOSNotificationOptions(
         showNotification: true,
@@ -61,20 +74,22 @@ class _WatchdogWidgetState extends State<WatchdogWidget> {
     if (await FlutterForegroundTask.isRunningService) {
       logger.d("Service is already running");
       FlutterForegroundTask.updateService(
-        notificationTitle: 'Hello MyTaskHandler :)',
-        notificationText: 'blablabla',
+        notificationTitle: _notificationTitle,
+        notificationText: _notificationText,
+        notificationButtons: [],
+        notificationIcon: null,
+        notificationInitialRoute: '/',
+        callback: startCallback,
       );
       return FlutterForegroundTask.restartService();
     } else {
       logger.d("Starting service");
       var startServiceResult = await FlutterForegroundTask.startService(
         serviceId: 256,
-        notificationTitle: 'Watchdog Service is running',
-        notificationText: 'tap here',
+        notificationTitle: _notificationTitle,
+        notificationText: _notificationText,
+        notificationButtons: [],
         notificationIcon: null,
-        notificationButtons: [
-          const NotificationButton(id: 'btn_hello', text: 'hello raven'),
-        ],
         notificationInitialRoute: '/',
         callback: startCallback,
       );
