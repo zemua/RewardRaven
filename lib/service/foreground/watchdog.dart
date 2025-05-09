@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logger/logger.dart';
@@ -129,6 +130,8 @@ class _WatchdogWidgetState extends State<WatchdogWidget> {
 }
 
 class WatchdogTaskHandler extends TaskHandler {
+  static const MethodChannel _appinfoChannel = MethodChannel('appinfo');
+
   // Called when the task is started.
   @override
   Future<void> onStart(DateTime timestamp, TaskStarter starter) async {
@@ -137,13 +140,15 @@ class WatchdogTaskHandler extends TaskHandler {
 
   // Called based on the eventAction set in ForegroundTaskOptions.
   @override
-  void onRepeatEvent(DateTime timestamp) {
+  void onRepeatEvent(DateTime timestamp) async {
     logger.d('onRepeatEvent');
-    // Send data to main isolate.
-    final Map<String, dynamic> data = {
-      "timestampMillis": timestamp.millisecondsSinceEpoch,
-    };
-    FlutterForegroundTask.sendDataToMain(data);
+    try {
+      final result =
+          await _appinfoChannel.invokeMethod<int>('getForegroundAppInfo');
+      logger.d('App info: $result');
+    } catch (e) {
+      logger.e('Failed to get app info: $e');
+    }
   }
 
   // Called when the task is destroyed.
