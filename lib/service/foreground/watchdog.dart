@@ -130,7 +130,7 @@ class _WatchdogWidgetState extends State<WatchdogWidget> {
 }
 
 class WatchdogTaskHandler extends TaskHandler {
-  static const MethodChannel _appinfoChannel = MethodChannel('appinfo');
+  static const _appinfoChannel = MethodChannel('mrp.dev/appinfo');
 
   // Called when the task is started.
   @override
@@ -144,7 +144,7 @@ class WatchdogTaskHandler extends TaskHandler {
     logger.d('onRepeatEvent');
     try {
       final result =
-          await _appinfoChannel.invokeMethod<int>('getForegroundAppInfo');
+          await _appinfoChannel.invokeMethod<String>('getForegroundAppInfo');
       logger.d('App info: $result');
     } catch (e) {
       logger.e('Failed to get app info: $e');
