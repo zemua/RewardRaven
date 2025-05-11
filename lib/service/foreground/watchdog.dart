@@ -43,9 +43,13 @@ class _WatchdogWidgetState extends State<WatchdogWidget> {
   Future<void> _onReceiveTaskData(Object data) async {
     if (data is String) {
       logger.d("onReceiveTaskData: $data");
-      final result =
-          await _appinfoChannel.invokeMethod<String>('getForegroundAppInfo');
-      logger.d('App info: $result');
+      try {
+        final result =
+            await _appinfoChannel.invokeMethod<Map>('getForegroundAppInfo');
+        logger.d('App info: $result');
+      } catch (e) {
+        logger.e('Failed to get app info: $e');
+      }
     }
   }
 
@@ -145,11 +149,7 @@ class WatchdogTaskHandler extends TaskHandler {
   @override
   void onRepeatEvent(DateTime timestamp) async {
     logger.d('onRepeatEvent');
-    try {
-      FlutterForegroundTask.sendDataToMain("getForegroundAppInfo");
-    } catch (e) {
-      logger.e('Failed to get app info: $e');
-    }
+    FlutterForegroundTask.sendDataToMain("getForegroundAppInfo");
   }
 
   // Called when the task is destroyed.
