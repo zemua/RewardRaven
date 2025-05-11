@@ -20,6 +20,8 @@ class WatchdogWidget extends StatefulWidget {
 }
 
 class _WatchdogWidgetState extends State<WatchdogWidget> {
+  static const _appinfoChannel = MethodChannel('mrp.dev/appinfo');
+
   late String _notificationTitle;
   late String _notificationText;
   late String _channelName;
@@ -38,8 +40,13 @@ class _WatchdogWidgetState extends State<WatchdogWidget> {
     return const SizedBox.shrink();
   }
 
-  void _onReceiveTaskData(Object data) {
-    logger.d('onReceiveTaskData: $data');
+  Future<void> _onReceiveTaskData(Object data) async {
+    if (data is String) {
+      logger.d("onReceiveTaskData: $data");
+      final result =
+          await _appinfoChannel.invokeMethod<String>('getForegroundAppInfo');
+      logger.d('App info: $result');
+    }
   }
 
   Future<void> _requestPermissions() async {
@@ -105,7 +112,6 @@ class _WatchdogWidgetState extends State<WatchdogWidget> {
   @override
   void initState() {
     super.initState();
-    // Add a callback to receive data sent from the TaskHandler.
     FlutterForegroundTask.addTaskDataCallback(_onReceiveTaskData);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -118,7 +124,6 @@ class _WatchdogWidgetState extends State<WatchdogWidget> {
 
   @override
   void dispose() {
-    // Remove a callback to receive data sent from the TaskHandler.
     FlutterForegroundTask.removeTaskDataCallback(_onReceiveTaskData);
     super.dispose();
   }
@@ -130,8 +135,6 @@ class _WatchdogWidgetState extends State<WatchdogWidget> {
 }
 
 class WatchdogTaskHandler extends TaskHandler {
-  static const _appinfoChannel = MethodChannel('mrp.dev/appinfo');
-
   // Called when the task is started.
   @override
   Future<void> onStart(DateTime timestamp, TaskStarter starter) async {
@@ -143,9 +146,7 @@ class WatchdogTaskHandler extends TaskHandler {
   void onRepeatEvent(DateTime timestamp) async {
     logger.d('onRepeatEvent');
     try {
-      final result =
-          await _appinfoChannel.invokeMethod<String>('getForegroundAppInfo');
-      logger.d('App info: $result');
+      FlutterForegroundTask.sendDataToMain("getForegroundAppInfo");
     } catch (e) {
       logger.e('Failed to get app info: $e');
     }
