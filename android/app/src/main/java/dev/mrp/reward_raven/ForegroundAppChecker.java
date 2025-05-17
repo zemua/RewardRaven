@@ -42,8 +42,8 @@ public class ForegroundAppChecker {
         Long now = System.currentTimeMillis();
         Long queryStartTime;
         if(Objects.isNull(lastQuery) || lastQuery == 0L){
-            // datos de los últimos 7 dias
             queryStartTime = now - 1000*60*60*24*7;
+            Log.d(TAG, "queryStartTime set to the last 7 days: " + new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date(queryStartTime)));
         } else {
             // datos del query desde el último query
             // nota: cuando la duración es muy pequeña, Android no devuelve datos
@@ -52,6 +52,7 @@ public class ForegroundAppChecker {
             // actualización: con 1 segundo algunos eventos se pierden
             //         parece que siempre funciona con 1.5 segundos
             queryStartTime = lastQuery - 5000L;
+            Log.d(TAG, "queryStartTime set before the last query: " + new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date(queryStartTime)));
         }
 
         UsageEvents levents = mUsageStatsManager.queryEvents(queryStartTime, now);

@@ -63,6 +63,7 @@ class _WatchdogWidgetState extends State<WatchdogWidget> {
 
     final hasStatsPermission = await UsageTracker.hasPermission();
     if (!hasStatsPermission) {
+      // TODO make this more user friendly
       await UsageTracker.requestPermission();
     }
   }
