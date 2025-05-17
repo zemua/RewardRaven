@@ -12,14 +12,14 @@ void startCallback() {
   FlutterForegroundTask.setTaskHandler(WatchdogTaskHandler());
 }
 
-class WatchdogWidget extends StatefulWidget {
-  const WatchdogWidget({super.key});
+class AndroidWatchdogWidget extends StatefulWidget {
+  const AndroidWatchdogWidget({super.key});
 
   @override
-  State<StatefulWidget> createState() => _WatchdogWidgetState();
+  State<StatefulWidget> createState() => _AndroidWatchdogWidgetState();
 }
 
-class _WatchdogWidgetState extends State<WatchdogWidget> {
+class _AndroidWatchdogWidgetState extends State<AndroidWatchdogWidget> {
   static const _appinfoChannel = MethodChannel('mrp.dev/appinfo');
 
   late String _notificationTitle;

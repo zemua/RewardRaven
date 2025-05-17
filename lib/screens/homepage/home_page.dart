@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:usage_tracker/usage_tracker.dart';
 
-import '../../service/foreground/watchdog.dart';
+import '../../service/foreground/androidwatchdog.dart';
+import '../../service/platform_wrapper.dart';
 import '../appgroups/app_group_list.dart';
 import '../appgroups/app_group_list_type.dart';
 import '../apps/app_list.dart';
 import '../apps/app_list_type.dart';
 
 final logger = Logger();
+final GetIt locator = GetIt.instance;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,6 +22,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final PlatformWrapper _platformWrapper = locator<PlatformWrapper>();
+
   @override
   void initState() {
     super.initState();
@@ -198,7 +203,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ]),
-                const WatchdogWidget(),
+                if (_platformWrapper.isAndroid()) const AndroidWatchdogWidget(),
               ],
             ),
           ),
