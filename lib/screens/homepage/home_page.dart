@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logger/logger.dart';
+import 'package:usage_tracker/usage_tracker.dart';
 
 import '../../service/foreground/watchdog.dart';
 import '../appgroups/app_group_list.dart';
@@ -18,6 +19,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    _requestPermissions();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -198,5 +205,38 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  Future<void> _requestPermissions() async {
+    logger.d('Requesting permissions');
+    final hasStatsPermission = await UsageTracker.hasPermission();
+    logger.d('Has stats permission: $hasStatsPermission');
+    if (!hasStatsPermission) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Permissions Required'),
+            content: Text(
+                'This app needs usage statistics permissions to function properly. Please grant the permissions in the next screen.'),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Go to Settings'),
+                onPressed: () async {
+                  await UsageTracker.requestPermission();
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }
