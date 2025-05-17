@@ -2,7 +2,6 @@ package dev.mrp.reward_raven;
 
 import androidx.annotation.NonNull;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import io.flutter.embedding.android.FlutterActivity;
@@ -27,21 +26,14 @@ public class MainActivity extends FlutterActivity {
         channel.setMethodCallHandler(
                 (call, result) -> {
                     if (call.method.equals("getForegroundAppInfo")) {
-                        Map<String, Object> foregroundAppInfo = getForegroundAppInfo();
-                        result.success(foregroundAppInfo);
+                        ForegroundAppChecker foregroundAppChecker = new ForegroundAppChecker(getApplicationContext());
+                        Map<String,Object> data = foregroundAppChecker.getForegroundApp(null);
+                        result.success(data);
                     } else {
                         result.notImplemented();
                     }
                 }
         );
-    }
-
-    private Map<String, Object> getForegroundAppInfo() {
-        Map<String, Object> customObject = new HashMap<>();
-        customObject.put("name", "John Doe");
-        customObject.put("age", 30);
-        customObject.put("isActive", true);
-        return customObject;
     }
 
 }

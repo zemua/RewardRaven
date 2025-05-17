@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logger/logger.dart';
+import 'package:usage_tracker/usage_tracker.dart';
 
 final logger = Logger();
 
@@ -58,6 +59,11 @@ class _WatchdogWidgetState extends State<WatchdogWidget> {
         await FlutterForegroundTask.checkNotificationPermission();
     if (notificationPermission != NotificationPermission.granted) {
       await FlutterForegroundTask.requestNotificationPermission();
+    }
+
+    final hasStatsPermission = await UsageTracker.hasPermission();
+    if (!hasStatsPermission) {
+      await UsageTracker.requestPermission();
     }
   }
 

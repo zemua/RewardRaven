@@ -54,6 +54,7 @@ dependencies:
   awesome_notifications_core: ^0.10.0 # use the latest core version available
   awesome_notifications: ^0.10.0 # This version is managed by core plugin
   permission_handler: ^11.4.0
+  usage_tracker: ^0.1.0
 
 dev_dependencies:
   flutter_test:
