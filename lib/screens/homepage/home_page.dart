@@ -221,19 +221,19 @@ class _HomePageState extends State<HomePage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Permissions Required'),
-            content: Text(
-                'This app needs usage statistics permissions to function properly. Please grant the permissions in the next screen.'),
+            title: Text(AppLocalizations.of(context)!.permissionsRequired),
+            content: Text(AppLocalizations.of(context)!
+                .usageStatisticsPermissionExplanation),
             actions: <Widget>[
               TextButton(
-                child: Text('Go to Settings'),
+                child: Text(AppLocalizations.of(context)!.goToSettings),
                 onPressed: () async {
                   await UsageTracker.requestPermission();
                   Navigator.of(context).pop();
                 },
               ),
               TextButton(
-                child: Text('Cancel'),
+                child: Text(AppLocalizations.of(context)!.cancel),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
