@@ -17,9 +17,6 @@ class FirebaseHelper {
 
   Future<void> _loadDatabase() async {
     try {
-      _database.setPersistenceEnabled(true);
-      _database.setPersistenceCacheSizeBytes(90000000); // cache size 90MB
-
       _databaseReference = _database.ref(_databasePath);
       await _initializeLocalDb(_databaseReference);
       _logger.i("Database ${_databaseReference.path} loaded successfully");

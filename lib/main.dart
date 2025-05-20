@@ -44,6 +44,10 @@ void main() async {
     } catch (e) {
       logger.e('Error connecting to Firebase emulator: $e');
     }
+  } else {
+    FirebaseDatabase.instance.setPersistenceEnabled(true);
+    FirebaseDatabase.instance
+        .setPersistenceCacheSizeBytes(90000000); // cache size ~90MB
   }
 
   _setupLocator();
