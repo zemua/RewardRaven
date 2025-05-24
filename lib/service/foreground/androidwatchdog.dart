@@ -44,8 +44,7 @@ class _AndroidWatchdogWidgetState extends State<AndroidWatchdogWidget> {
     if (data is String) {
       logger.d("onReceiveTaskData: $data");
       try {
-        final result =
-            await _appinfoChannel.invokeMethod<Map>('getForegroundAppInfo');
+        final result = await _appinfoChannel.invokeMethod<Map>(data);
         logger.d('App info: $result');
       } catch (e) {
         logger.e('Failed to get app info: $e');
