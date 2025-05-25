@@ -1,23 +1,22 @@
 class AppData {
-  final String appId;
-  final String appName;
-  final DateTime timestamp;
+  final String _processId;
+  final String _appName;
+  DateTime? _timestamp;
 
-  AppData({
-    required this.appId,
-    required this.appName,
-    required this.timestamp,
-  });
+  String get appId => _processId;
+  String get appName => _appName;
 
-  factory AppData.fromMap(Map<String, dynamic> map) => AppData(
-        appId: map['appId'],
-        appName: map['appName'],
-        timestamp: DateTime.parse(map['timestamp']),
-      );
+  DateTime? get timestamp => _timestamp;
+  set timestamp(DateTime? value) {
+    _timestamp = value;
+  }
 
-  Map<String, dynamic> toMap() => {
-        'appId': appId,
-        'appName': appName,
-        'timestamp': timestamp.toIso8601String(),
-      };
+  AppData({required String processId, required String appName})
+      : _processId = processId,
+        _appName = appName;
+
+  @override
+  String toString() {
+    return 'AppData{processId: $_processId, appName: $_appName, timestamp: $_timestamp}';
+  }
 }

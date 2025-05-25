@@ -18,6 +18,8 @@ import 'package:reward_raven/service/app/impl/empty_apps_fetcher.dart';
 import 'package:reward_raven/service/condition_checker.dart';
 import 'package:reward_raven/service/impl/condition_checker_impl.dart';
 import 'package:reward_raven/service/impl/platform_wrapper_impl.dart';
+import 'package:reward_raven/service/loopchain/app_data_chain_master.dart';
+import 'package:reward_raven/service/loopchain/app_data_handler.dart';
 import 'package:reward_raven/service/platform_wrapper.dart';
 import 'package:reward_raven/tools/injectable_time_picker.dart';
 
@@ -94,4 +96,5 @@ void _setupLocator() {
       .registerSingleton<GroupConditionRepository>(GroupConditionRepository());
   locator.registerSingleton<GroupConditionService>(GroupConditionService());
   locator.registerSingleton<ConditionChecker>(ConditionCheckerImpl());
+  locator.registerSingleton<AppDataHandler>(AppDataChainMaster());
 }

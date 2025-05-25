@@ -1,15 +1,23 @@
-class AppDataHandler {
+import 'package:logger/logger.dart';
+
+import 'app_data_dto.dart';
+import 'app_data_handler.dart';
+
+final logger = Logger();
+
+class AppDataChainMaster implements AppDataHandler {
   AppDataHandler? entryHandler;
 
-  AppDataHandler() {}
+  AppDataChainMaster() {}
 
   void setNextHandler(AppDataHandler handler) {
     throw UnsupportedError("Next handler in chain master is not supported.");
   }
 
-  void handleAppData() {
+  void handleAppData(AppData data) {
+    logger.d('handleAppData: $data');
     if (entryHandler != null) {
-      entryHandler!.handleAppData();
+      entryHandler!.handleAppData(data);
     }
   }
 }

@@ -2,9 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 
+import '../loopchain/app_data_dto.dart';
+import '../loopchain/app_data_handler.dart';
+
 final logger = Logger();
+final GetIt locator = GetIt.instance;
 
 @pragma('vm:entry-point')
 void startCallback() {
@@ -46,6 +51,10 @@ class _AndroidWatchdogWidgetState extends State<AndroidWatchdogWidget> {
       try {
         final result = await _appinfoChannel.invokeMethod<Map>(data);
         logger.d('App info: $result');
+        String processId = result?['packageName'];
+        String appName = result?['appName'];
+        locator<AppDataHandler>()
+            .handleAppData(new AppData(processId: processId, appName: appName));
       } catch (e) {
         logger.e('Failed to get app info: $e');
       }
