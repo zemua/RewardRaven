@@ -14,7 +14,7 @@ class AppDataChainMaster implements AppDataHandler {
     throw UnsupportedError("Next handler in chain master is not supported.");
   }
 
-  void handleAppData(AppData data) {
+  Future<void> handleAppData(AppData data) async {
     logger.d('handleAppData: $data');
     if (entryHandler != null) {
       entryHandler!.handleAppData(data);
