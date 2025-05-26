@@ -4,7 +4,6 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
-import 'dart:ui' as _i9;
 
 import 'package:flutter/material.dart' as _i8;
 import 'package:mockito/mockito.dart' as _i1;
@@ -197,7 +196,7 @@ class MockInjectableTimePicker extends _i1.Mock
     required _i8.TimeOfDay? initialTime,
     _i8.TransitionBuilder? builder,
     bool? barrierDismissible = true,
-    _i9.Color? barrierColor,
+    dynamic barrierColor,
     String? barrierLabel,
     bool? useRootNavigator = true,
     _i8.TimePickerEntryMode? initialEntryMode = _i8.TimePickerEntryMode.dial,
@@ -209,7 +208,7 @@ class MockInjectableTimePicker extends _i1.Mock
     String? minuteLabelText,
     _i8.RouteSettings? routeSettings,
     _i8.EntryModeChangeCallback? onEntryModeChanged,
-    _i9.Offset? anchorPoint,
+    dynamic anchorPoint,
     _i8.Orientation? orientation,
   }) =>
       (super.noSuchMethod(
