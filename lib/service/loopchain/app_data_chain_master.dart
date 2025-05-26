@@ -2,13 +2,16 @@ import 'package:logger/logger.dart';
 
 import 'app_data_dto.dart';
 import 'app_data_handler.dart';
+import 'chainelements/timestamp.dart';
 
 final logger = Logger();
 
 class AppDataChainMaster implements AppDataHandler {
-  AppDataHandler? entryHandler;
+  AppDataHandler? _entryHandler;
 
-  AppDataChainMaster() {}
+  AppDataChainMaster() {
+    _entryHandler = TimestampChain();
+  }
 
   void setNextHandler(AppDataHandler handler) {
     throw UnsupportedError("Next handler in chain master is not supported.");
@@ -16,8 +19,8 @@ class AppDataChainMaster implements AppDataHandler {
 
   Future<void> handleAppData(AppData data) async {
     logger.d('handleAppData: $data');
-    if (entryHandler != null) {
-      entryHandler!.handleAppData(data);
+    if (_entryHandler != null) {
+      _entryHandler!.handleAppData(data);
     }
   }
 }
