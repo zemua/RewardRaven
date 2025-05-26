@@ -2,8 +2,9 @@ import 'package:logger/logger.dart';
 
 import 'app_data_dto.dart';
 import 'app_data_handler.dart';
-import 'chainelements/platform.dart';
-import 'chainelements/timestamp.dart';
+import 'chainelements/listed_app_chain.dart';
+import 'chainelements/platform_chain.dart';
+import 'chainelements/timestamp_chain.dart';
 
 final logger = Logger();
 
@@ -11,7 +12,10 @@ class AppDataChainMaster implements AppDataHandler {
   AppDataHandler? _entryHandler;
 
   AppDataChainMaster() {
+    AppDataHandler listedAppHandler = ListedAppChain();
+
     AppDataHandler platformHandler = PlatformChain();
+    platformHandler.setNextHandler(listedAppHandler);
 
     _entryHandler = TimestampChain();
     _entryHandler!.setNextHandler(platformHandler);

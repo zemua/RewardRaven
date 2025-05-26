@@ -1,33 +1,32 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get_it/get_it.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:reward_raven/db/entity/listed_app.dart';
+import 'package:reward_raven/db/service/listed_app_service.dart';
+import 'package:reward_raven/main.dart';
 import 'package:reward_raven/service/loopchain/app_data_chain_master.dart';
 import 'package:reward_raven/service/loopchain/app_data_dto.dart';
 import 'package:reward_raven/service/platform_wrapper.dart';
 
 import 'app_data_handler_chain_test.mocks.dart';
 
-@GenerateNiceMocks([MockSpec<PlatformWrapper>()])
+@GenerateNiceMocks([MockSpec<PlatformWrapper>(), MockSpec<ListedAppService>()])
 void main() {
-  void setupLocator(PlatformWrapper platformWrapper) {
-    if (GetIt.I.isRegistered<PlatformWrapper>()) {
-      GetIt.I.unregister<PlatformWrapper>();
-    }
-    GetIt.I.registerSingleton<PlatformWrapper>(platformWrapper);
-  }
+  late MockPlatformWrapper mockPlatformWrapper;
+  late MockListedAppService mockListedAppService;
 
   group('AppDataChainMaster', () {
     late AppDataChainMaster chainMaster;
     late AppData testAppData;
 
-    late MockPlatformWrapper mockPlatformWrapper;
-
     setUp(() {
       // Create and setup mock
       mockPlatformWrapper = MockPlatformWrapper();
       when(mockPlatformWrapper.platformName).thenReturn('test_platform');
-      setupLocator(mockPlatformWrapper);
+      locator.registerSingleton<PlatformWrapper>(mockPlatformWrapper);
+
+      mockListedAppService = MockListedAppService();
+      locator.registerSingleton<ListedAppService>(mockListedAppService);
 
       chainMaster = AppDataChainMaster();
       testAppData = AppData(
@@ -36,12 +35,16 @@ void main() {
       );
     });
 
+    tearDown(() {
+      locator.reset();
+    });
+
     test('should maintain initial AppData properties', () async {
       // Act
       await chainMaster.handleAppData(testAppData);
 
       // Assert
-      expect(testAppData.appId, equals('test_process_id'));
+      expect(testAppData.processId, equals('test_process_id'));
       expect(testAppData.appName, equals('test_app'));
     });
 
@@ -71,6 +74,28 @@ void main() {
       // Assert
       expect(testAppData.platform, isNotNull);
       expect(testAppData.platform, equals('test_platform'));
+    });
+
+    test('should add ListedApp to AppData', () async {
+      // Setup a dummy ListedApp
+      final listedApp = ListedApp(
+          identifier: 'test_id',
+          platform: 'android',
+          status: AppStatus.positive,
+          listId: '1');
+
+      when(mockListedAppService.getListedAppById("test_process_id"))
+          .thenAnswer((_) => Future.value(listedApp));
+      when(mockPlatformWrapper.isAndroid()).thenAnswer((_) => true);
+
+      // Verify initial state
+      expect(testAppData.listedApp, isNull);
+
+      // Act
+      await chainMaster.handleAppData(testAppData);
+
+      // Assert
+      expect(testAppData.listedApp, equals(listedApp));
     });
   });
 }

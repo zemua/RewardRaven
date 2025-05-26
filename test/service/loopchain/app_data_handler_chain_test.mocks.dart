@@ -3,8 +3,13 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'dart:async' as _i5;
+
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i3;
+import 'package:reward_raven/db/entity/listed_app.dart' as _i6;
+import 'package:reward_raven/db/service/listed_app_service.dart' as _i4;
+import 'package:reward_raven/screens/apps/app_list_type.dart' as _i7;
 import 'package:reward_raven/service/platform_wrapper.dart' as _i2;
 
 // ignore_for_file: type=lint
@@ -46,4 +51,75 @@ class MockPlatformWrapper extends _i1.Mock implements _i2.PlatformWrapper {
         returnValue: false,
         returnValueForMissingStub: false,
       ) as bool);
+}
+
+/// A class which mocks [ListedAppService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockListedAppService extends _i1.Mock implements _i4.ListedAppService {
+  @override
+  _i5.Future<void> saveListedApp(_i6.ListedApp? app) => (super.noSuchMethod(
+        Invocation.method(
+          #saveListedApp,
+          [app],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+
+  @override
+  _i5.Future<void> updateListedApp(_i6.ListedApp? app) => (super.noSuchMethod(
+        Invocation.method(
+          #updateListedApp,
+          [app],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+
+  @override
+  _i5.Future<void> deleteListedApp(_i6.ListedApp? app) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteListedApp,
+          [app],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+
+  @override
+  _i5.Future<_i6.ListedApp?> getListedAppById(String? identifier) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getListedAppById,
+          [identifier],
+        ),
+        returnValue: _i5.Future<_i6.ListedApp?>.value(),
+        returnValueForMissingStub: _i5.Future<_i6.ListedApp?>.value(),
+      ) as _i5.Future<_i6.ListedApp?>);
+
+  @override
+  _i5.Future<List<_i6.ListedApp>> fetchListedAppsByType(
+          _i7.AppListType? listType) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchListedAppsByType,
+          [listType],
+        ),
+        returnValue: _i5.Future<List<_i6.ListedApp>>.value(<_i6.ListedApp>[]),
+        returnValueForMissingStub:
+            _i5.Future<List<_i6.ListedApp>>.value(<_i6.ListedApp>[]),
+      ) as _i5.Future<List<_i6.ListedApp>>);
+
+  @override
+  _i5.Future<_i6.AppStatus> fetchStatus(String? identifier) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #fetchStatus,
+          [identifier],
+        ),
+        returnValue: _i5.Future<_i6.AppStatus>.value(_i6.AppStatus.positive),
+        returnValueForMissingStub:
+            _i5.Future<_i6.AppStatus>.value(_i6.AppStatus.positive),
+      ) as _i5.Future<_i6.AppStatus>);
 }
