@@ -31,7 +31,7 @@ class ListedAppChain implements AppDataHandler {
     data.listedApp = await locator<ListedAppService>().getListedAppById(id);
 
     if (_nextHandler != null) {
-      _nextHandler!.handleAppData(data);
+      await _nextHandler!.handleAppData(data);
     }
   }
 }

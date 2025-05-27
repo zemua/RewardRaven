@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import 'app_group.dart';
+
 class ListedApp extends Equatable {
   final String identifier;
   final String platform;
@@ -66,5 +68,18 @@ enum AppStatus {
   negative,
   neutral,
   depends,
-  unknown,
+  unknown;
+
+  GroupType? toGroupType() {
+    switch (this) {
+      case AppStatus.positive:
+        return GroupType.positive;
+      case AppStatus.negative:
+        return GroupType.negative;
+      case AppStatus.neutral:
+      case AppStatus.depends:
+      case AppStatus.unknown:
+        return null;
+    }
+  }
 }

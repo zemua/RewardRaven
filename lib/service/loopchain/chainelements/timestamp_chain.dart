@@ -18,7 +18,7 @@ class TimestampChain implements AppDataHandler {
     logger.d('handleAppData: $data');
     data.timestamp = DateTime.now();
     if (_nextHandler != null) {
-      _nextHandler!.handleAppData(data);
+      await _nextHandler!.handleAppData(data);
     }
   }
 }

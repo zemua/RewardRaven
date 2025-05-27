@@ -2,6 +2,7 @@ import 'package:logger/logger.dart';
 
 import 'app_data_dto.dart';
 import 'app_data_handler.dart';
+import 'chainelements/app_group_chain.dart';
 import 'chainelements/listed_app_chain.dart';
 import 'chainelements/platform_chain.dart';
 import 'chainelements/timestamp_chain.dart';
@@ -12,7 +13,10 @@ class AppDataChainMaster implements AppDataHandler {
   AppDataHandler? _entryHandler;
 
   AppDataChainMaster() {
+    AppDataHandler appGroupHandler = AppGroupChain();
+
     AppDataHandler listedAppHandler = ListedAppChain();
+    listedAppHandler.setNextHandler(appGroupHandler);
 
     AppDataHandler platformHandler = PlatformChain();
     platformHandler.setNextHandler(listedAppHandler);
@@ -28,7 +32,7 @@ class AppDataChainMaster implements AppDataHandler {
   Future<void> handleAppData(AppData data) async {
     logger.d('handleAppData: $data');
     if (_entryHandler != null) {
-      _entryHandler!.handleAppData(data);
+      await _entryHandler!.handleAppData(data);
     }
   }
 }

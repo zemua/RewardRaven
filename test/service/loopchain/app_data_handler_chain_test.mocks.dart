@@ -7,7 +7,9 @@ import 'dart:async' as _i5;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i3;
+import 'package:reward_raven/db/entity/app_group.dart' as _i9;
 import 'package:reward_raven/db/entity/listed_app.dart' as _i6;
+import 'package:reward_raven/db/service/app_group_service.dart' as _i8;
 import 'package:reward_raven/db/service/listed_app_service.dart' as _i4;
 import 'package:reward_raven/screens/apps/app_list_type.dart' as _i7;
 import 'package:reward_raven/service/platform_wrapper.dart' as _i2;
@@ -122,4 +124,76 @@ class MockListedAppService extends _i1.Mock implements _i4.ListedAppService {
         returnValueForMissingStub:
             _i5.Future<_i6.AppStatus>.value(_i6.AppStatus.positive),
       ) as _i5.Future<_i6.AppStatus>);
+}
+
+/// A class which mocks [AppGroupService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockAppGroupService extends _i1.Mock implements _i8.AppGroupService {
+  @override
+  _i5.Future<void> saveGroup(_i9.AppGroup? group) => (super.noSuchMethod(
+        Invocation.method(
+          #saveGroup,
+          [group],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+
+  @override
+  _i5.Future<void> updateGroup(
+    String? key,
+    _i9.AppGroup? group,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateGroup,
+          [
+            key,
+            group,
+          ],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+
+  @override
+  _i5.Future<_i9.AppGroup?> getGroup(
+    _i9.GroupType? type,
+    String? key,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getGroup,
+          [
+            type,
+            key,
+          ],
+        ),
+        returnValue: _i5.Future<_i9.AppGroup?>.value(),
+        returnValueForMissingStub: _i5.Future<_i9.AppGroup?>.value(),
+      ) as _i5.Future<_i9.AppGroup?>);
+
+  @override
+  _i5.Future<List<_i9.AppGroup>> getGroups(_i9.GroupType? type) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getGroups,
+          [type],
+        ),
+        returnValue: _i5.Future<List<_i9.AppGroup>>.value(<_i9.AppGroup>[]),
+        returnValueForMissingStub:
+            _i5.Future<List<_i9.AppGroup>>.value(<_i9.AppGroup>[]),
+      ) as _i5.Future<List<_i9.AppGroup>>);
+
+  @override
+  _i5.Stream<List<_i9.AppGroup>> streamGroups(_i9.GroupType? type) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #streamGroups,
+          [type],
+        ),
+        returnValue: _i5.Stream<List<_i9.AppGroup>>.empty(),
+        returnValueForMissingStub: _i5.Stream<List<_i9.AppGroup>>.empty(),
+      ) as _i5.Stream<List<_i9.AppGroup>>);
 }

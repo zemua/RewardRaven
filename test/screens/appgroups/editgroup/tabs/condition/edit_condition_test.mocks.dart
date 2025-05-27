@@ -197,7 +197,7 @@ class MockInjectableTimePicker extends _i1.Mock
     required _i8.TimeOfDay? initialTime,
     _i8.TransitionBuilder? builder,
     bool? barrierDismissible = true,
-    dynamic barrierColor,
+    _i9.Color? barrierColor,
     String? barrierLabel,
     bool? useRootNavigator = true,
     _i8.TimePickerEntryMode? initialEntryMode = _i8.TimePickerEntryMode.dial,
