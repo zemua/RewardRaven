@@ -8,8 +8,10 @@ import 'dart:async' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i3;
 import 'package:reward_raven/db/entity/app_group.dart' as _i9;
+import 'package:reward_raven/db/entity/group_condition.dart' as _i11;
 import 'package:reward_raven/db/entity/listed_app.dart' as _i6;
 import 'package:reward_raven/db/service/app_group_service.dart' as _i8;
+import 'package:reward_raven/db/service/group_condition_service.dart' as _i10;
 import 'package:reward_raven/db/service/listed_app_service.dart' as _i4;
 import 'package:reward_raven/screens/apps/app_list_type.dart' as _i7;
 import 'package:reward_raven/service/platform_wrapper.dart' as _i2;
@@ -196,4 +198,88 @@ class MockAppGroupService extends _i1.Mock implements _i8.AppGroupService {
         returnValue: _i5.Stream<List<_i9.AppGroup>>.empty(),
         returnValueForMissingStub: _i5.Stream<List<_i9.AppGroup>>.empty(),
       ) as _i5.Stream<List<_i9.AppGroup>>);
+}
+
+/// A class which mocks [GroupConditionService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGroupConditionService extends _i1.Mock
+    implements _i10.GroupConditionService {
+  @override
+  _i5.Future<_i11.GroupCondition?> getGroupCondition({
+    required String? conditionedGroupId,
+    required String? conditionId,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getGroupCondition,
+          [],
+          {
+            #conditionedGroupId: conditionedGroupId,
+            #conditionId: conditionId,
+          },
+        ),
+        returnValue: _i5.Future<_i11.GroupCondition?>.value(),
+        returnValueForMissingStub: _i5.Future<_i11.GroupCondition?>.value(),
+      ) as _i5.Future<_i11.GroupCondition?>);
+
+  @override
+  _i5.Future<List<_i11.GroupCondition>> getGroupConditions(
+          String? conditionedGroupId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getGroupConditions,
+          [conditionedGroupId],
+        ),
+        returnValue: _i5.Future<List<_i11.GroupCondition>>.value(
+            <_i11.GroupCondition>[]),
+        returnValueForMissingStub: _i5.Future<List<_i11.GroupCondition>>.value(
+            <_i11.GroupCondition>[]),
+      ) as _i5.Future<List<_i11.GroupCondition>>);
+
+  @override
+  _i5.Stream<List<_i11.GroupCondition>> streamGroupConditions(
+          String? conditionedGroupId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #streamGroupConditions,
+          [conditionedGroupId],
+        ),
+        returnValue: _i5.Stream<List<_i11.GroupCondition>>.empty(),
+        returnValueForMissingStub:
+            _i5.Stream<List<_i11.GroupCondition>>.empty(),
+      ) as _i5.Stream<List<_i11.GroupCondition>>);
+
+  @override
+  _i5.Future<void> saveGroupCondition(_i11.GroupCondition? groupCondition) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #saveGroupCondition,
+          [groupCondition],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+
+  @override
+  _i5.Future<void> updateGroupCondition(_i11.GroupCondition? groupCondition) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateGroupCondition,
+          [groupCondition],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+
+  @override
+  _i5.Future<void> deleteGroupCondition(_i11.GroupCondition? groupCondition) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #deleteGroupCondition,
+          [groupCondition],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
 }

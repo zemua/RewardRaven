@@ -1,6 +1,7 @@
 import 'package:reward_raven/db/entity/listed_app.dart';
 
 import '../../db/entity/app_group.dart';
+import '../../db/entity/group_condition.dart';
 
 class AppData {
   final String _processId;
@@ -9,6 +10,7 @@ class AppData {
   String? _platform;
   ListedApp? _listedApp;
   AppGroup? _appGroup;
+  List<GroupCondition>? _groupConditions;
 
   String get processId => _processId;
   String get appName => _appName;
@@ -31,6 +33,11 @@ class AppData {
   AppGroup? get appGroup => _appGroup;
   set appGroup(AppGroup? value) {
     _appGroup = value;
+  }
+
+  List<GroupCondition>? get groupConditions => _groupConditions;
+  set groupConditions(List<GroupCondition>? value) {
+    _groupConditions = value;
   }
 
   AppData({required String processId, required String appName})

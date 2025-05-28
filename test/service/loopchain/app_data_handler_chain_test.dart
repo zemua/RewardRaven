@@ -3,8 +3,10 @@ import 'package:get_it/get_it.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:reward_raven/db/entity/app_group.dart';
+import 'package:reward_raven/db/entity/group_condition.dart';
 import 'package:reward_raven/db/entity/listed_app.dart';
 import 'package:reward_raven/db/service/app_group_service.dart';
+import 'package:reward_raven/db/service/group_condition_service.dart';
 import 'package:reward_raven/db/service/listed_app_service.dart';
 import 'package:reward_raven/service/loopchain/app_data_chain_master.dart';
 import 'package:reward_raven/service/loopchain/app_data_dto.dart';
@@ -15,12 +17,14 @@ import 'app_data_handler_chain_test.mocks.dart';
 @GenerateNiceMocks([
   MockSpec<PlatformWrapper>(),
   MockSpec<ListedAppService>(),
-  MockSpec<AppGroupService>()
+  MockSpec<AppGroupService>(),
+  MockSpec<GroupConditionService>()
 ])
 void main() {
   late MockPlatformWrapper mockPlatformWrapper;
   late MockListedAppService mockListedAppService;
   late MockAppGroupService mockAppGroupService;
+  late MockGroupConditionService mockGroupConditionService;
 
   final locator = GetIt.instance;
 
@@ -39,6 +43,10 @@ void main() {
 
       mockAppGroupService = MockAppGroupService();
       locator.registerSingleton<AppGroupService>(mockAppGroupService);
+
+      mockGroupConditionService = MockGroupConditionService();
+      locator
+          .registerSingleton<GroupConditionService>(mockGroupConditionService);
 
       chainMaster = AppDataChainMaster();
       testAppData = AppData(
@@ -199,6 +207,47 @@ void main() {
       expect(testAppData.listedApp, isNull);
       expect(testAppData.appGroup, isNull);
       verifyNever(mockAppGroupService.getGroup(any, any));
+    });
+
+    test('should assign conditions when exists', () async {
+      // Arrange
+      final testListedApp = ListedApp(
+        identifier: 'test_id',
+        platform: 'android',
+        status: AppStatus.positive,
+        listId: 'test_list_id',
+      );
+
+      final testGroup = AppGroup(
+          id: 'test_group_id', name: 'Test Group', type: GroupType.positive);
+
+      final conditions = [
+        GroupCondition(
+          id: 'test_id',
+          conditionalGroupId: 'conditional_group_id',
+          conditionedGroupId: 'test_group_id',
+          usedTime: Duration(hours: 1),
+          duringLastDays: 1,
+        ),
+      ];
+
+      when(mockListedAppService.getListedAppById(any))
+          .thenAnswer((_) => Future.value(testListedApp));
+      when(mockAppGroupService.getGroup(any, any))
+          .thenAnswer((_) => Future.value(testGroup));
+      when(mockGroupConditionService.getGroupConditions(any))
+          .thenAnswer((_) => Future.value(conditions));
+
+      // Act
+      await chainMaster.handleAppData(testAppData);
+
+      // Assert
+      expect(testAppData.listedApp, equals(testListedApp));
+      expect(testAppData.appGroup, equals(testGroup));
+      expect(testAppData.groupConditions, equals(conditions));
+      verify(mockGroupConditionService.getGroupConditions(
+        'test_group_id',
+      )).called(1);
     });
   });
 }
