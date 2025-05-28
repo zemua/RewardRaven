@@ -14,6 +14,7 @@ import 'package:reward_raven/db/service/app_group_service.dart' as _i8;
 import 'package:reward_raven/db/service/group_condition_service.dart' as _i10;
 import 'package:reward_raven/db/service/listed_app_service.dart' as _i4;
 import 'package:reward_raven/screens/apps/app_list_type.dart' as _i7;
+import 'package:reward_raven/service/condition_checker.dart' as _i12;
 import 'package:reward_raven/service/platform_wrapper.dart' as _i2;
 
 // ignore_for_file: type=lint
@@ -282,4 +283,20 @@ class MockGroupConditionService extends _i1.Mock
         returnValue: _i5.Future<void>.value(),
         returnValueForMissingStub: _i5.Future<void>.value(),
       ) as _i5.Future<void>);
+}
+
+/// A class which mocks [ConditionChecker].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockConditionChecker extends _i1.Mock implements _i12.ConditionChecker {
+  @override
+  _i5.Future<bool> isConditionMet(_i11.GroupCondition? condition) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #isConditionMet,
+          [condition],
+        ),
+        returnValue: _i5.Future<bool>.value(false),
+        returnValueForMissingStub: _i5.Future<bool>.value(false),
+      ) as _i5.Future<bool>);
 }

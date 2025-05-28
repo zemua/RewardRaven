@@ -8,6 +8,7 @@ import 'package:reward_raven/db/entity/listed_app.dart';
 import 'package:reward_raven/db/service/app_group_service.dart';
 import 'package:reward_raven/db/service/group_condition_service.dart';
 import 'package:reward_raven/db/service/listed_app_service.dart';
+import 'package:reward_raven/service/condition_checker.dart';
 import 'package:reward_raven/service/loopchain/app_data_chain_master.dart';
 import 'package:reward_raven/service/loopchain/app_data_dto.dart';
 import 'package:reward_raven/service/platform_wrapper.dart';
@@ -18,13 +19,15 @@ import 'app_data_handler_chain_test.mocks.dart';
   MockSpec<PlatformWrapper>(),
   MockSpec<ListedAppService>(),
   MockSpec<AppGroupService>(),
-  MockSpec<GroupConditionService>()
+  MockSpec<GroupConditionService>(),
+  MockSpec<ConditionChecker>(),
 ])
 void main() {
   late MockPlatformWrapper mockPlatformWrapper;
   late MockListedAppService mockListedAppService;
   late MockAppGroupService mockAppGroupService;
   late MockGroupConditionService mockGroupConditionService;
+  late MockConditionChecker mockConditionChecker;
 
   final locator = GetIt.instance;
 
@@ -47,6 +50,9 @@ void main() {
       mockGroupConditionService = MockGroupConditionService();
       locator
           .registerSingleton<GroupConditionService>(mockGroupConditionService);
+
+      mockConditionChecker = MockConditionChecker();
+      locator.registerSingleton<ConditionChecker>(mockConditionChecker);
 
       chainMaster = AppDataChainMaster();
       testAppData = AppData(
@@ -248,6 +254,84 @@ void main() {
       verify(mockGroupConditionService.getGroupConditions(
         'test_group_id',
       )).called(1);
+    });
+
+    test('should verify conditions met', () async {
+      // Arrange
+      final testListedApp = ListedApp(
+        identifier: 'test_id',
+        platform: 'android',
+        status: AppStatus.positive,
+        listId: 'test_list_id',
+      );
+
+      final testGroup = AppGroup(
+          id: 'test_group_id', name: 'Test Group', type: GroupType.positive);
+
+      final conditions = [
+        GroupCondition(
+          id: 'test_id',
+          conditionalGroupId: 'conditional_group_id',
+          conditionedGroupId: 'test_group_id',
+          usedTime: Duration(hours: 1),
+          duringLastDays: 1,
+        ),
+      ];
+
+      when(mockListedAppService.getListedAppById(any))
+          .thenAnswer((_) => Future.value(testListedApp));
+      when(mockAppGroupService.getGroup(any, any))
+          .thenAnswer((_) => Future.value(testGroup));
+      when(mockGroupConditionService.getGroupConditions(any))
+          .thenAnswer((_) => Future.value(conditions));
+      when(mockConditionChecker.isConditionMet(any))
+          .thenAnswer((_) => Future.value(true));
+
+      // Act
+      await chainMaster.handleAppData(testAppData);
+
+      // Assert
+      expect(testAppData.conditionsMet, equals(true));
+      verify(mockConditionChecker.isConditionMet(any)).called(1);
+    });
+
+    test('should verify conditions NOT met', () async {
+      // Arrange
+      final testListedApp = ListedApp(
+        identifier: 'test_id',
+        platform: 'android',
+        status: AppStatus.positive,
+        listId: 'test_list_id',
+      );
+
+      final testGroup = AppGroup(
+          id: 'test_group_id', name: 'Test Group', type: GroupType.positive);
+
+      final conditions = [
+        GroupCondition(
+          id: 'test_id',
+          conditionalGroupId: 'conditional_group_id',
+          conditionedGroupId: 'test_group_id',
+          usedTime: Duration(hours: 1),
+          duringLastDays: 1,
+        ),
+      ];
+
+      when(mockListedAppService.getListedAppById(any))
+          .thenAnswer((_) => Future.value(testListedApp));
+      when(mockAppGroupService.getGroup(any, any))
+          .thenAnswer((_) => Future.value(testGroup));
+      when(mockGroupConditionService.getGroupConditions(any))
+          .thenAnswer((_) => Future.value(conditions));
+      when(mockConditionChecker.isConditionMet(any))
+          .thenAnswer((_) => Future.value(false));
+
+      // Act
+      await chainMaster.handleAppData(testAppData);
+
+      // Assert
+      expect(testAppData.conditionsMet, equals(false));
+      verify(mockConditionChecker.isConditionMet(any)).called(1);
     });
   });
 }

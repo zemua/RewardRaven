@@ -11,6 +11,8 @@ import '../loopchain/app_data_handler.dart';
 final logger = Logger();
 final GetIt locator = GetIt.instance;
 
+const int WATCHDOG_PERIOD = 5000;
+
 @pragma('vm:entry-point')
 void startCallback() {
   logger.d('startCallback, setting task handler');
@@ -86,7 +88,7 @@ class _AndroidWatchdogWidgetState extends State<AndroidWatchdogWidget> {
           allowWifiLock: false,
           autoRunOnBoot: true,
           autoRunOnMyPackageReplaced: true,
-          eventAction: ForegroundTaskEventAction.repeat(5000)),
+          eventAction: ForegroundTaskEventAction.repeat(WATCHDOG_PERIOD)),
     );
   }
 

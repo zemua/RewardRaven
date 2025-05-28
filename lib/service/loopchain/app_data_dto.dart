@@ -11,6 +11,10 @@ class AppData {
   ListedApp? _listedApp;
   AppGroup? _appGroup;
   List<GroupCondition>? _groupConditions;
+  int _timeElapsed = 0;
+  int _timeCounted = 0;
+  bool _conditionsMet = true;
+  bool _shallBlock = false;
 
   String get processId => _processId;
   String get appName => _appName;
@@ -38,6 +42,26 @@ class AppData {
   List<GroupCondition>? get groupConditions => _groupConditions;
   set groupConditions(List<GroupCondition>? value) {
     _groupConditions = value;
+  }
+
+  int get timeElapsed => _timeElapsed;
+  set timeElapsed(int value) {
+    _timeElapsed = value;
+  }
+
+  int get timeCounted => _timeCounted;
+  set timeCounted(int value) {
+    _timeCounted = value;
+  }
+
+  bool get conditionsMet => _conditionsMet;
+  set conditionsMet(bool value) {
+    _conditionsMet = value;
+  }
+
+  bool get shallBlock => _shallBlock;
+  set shallBlock(bool value) {
+    _shallBlock = value;
   }
 
   AppData({required String processId, required String appName})
