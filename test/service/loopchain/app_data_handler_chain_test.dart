@@ -333,5 +333,109 @@ void main() {
       expect(testAppData.conditionsMet, equals(false));
       verify(mockConditionChecker.isConditionMet(any)).called(1);
     });
+
+    test('no positive and no negative, should not count time', () async {
+      // Act
+      await chainMaster.handleAppData(testAppData);
+
+      // Assert
+      expect(testAppData.timeElapsed, equals(5000));
+      expect(testAppData.timeCounted, equals(0));
+    });
+
+    test('negative should discount time', () async {
+      var testListedApp = ListedApp(
+        identifier: 'test_id',
+        platform: 'android',
+        status: AppStatus.negative,
+        listId: 'test_list_id',
+      );
+
+      when(mockListedAppService.getListedAppById(any))
+          .thenAnswer((_) => Future.value(testListedApp));
+
+      // Act
+      await chainMaster.handleAppData(testAppData);
+
+      // Assert
+      expect(testAppData.timeElapsed, equals(5000));
+      expect(testAppData.timeCounted, equals(-20000));
+    });
+
+    test('positve and conditions not met should not count time', () async {
+      var testListedApp = ListedApp(
+        identifier: 'test_id',
+        platform: 'android',
+        status: AppStatus.positive,
+        listId: 'test_list_id',
+      );
+
+      final testGroup = AppGroup(
+          id: 'test_group_id', name: 'Test Group', type: GroupType.positive);
+
+      final conditions = [
+        GroupCondition(
+          id: 'test_id',
+          conditionalGroupId: 'conditional_group_id',
+          conditionedGroupId: 'test_group_id',
+          usedTime: Duration(hours: 1),
+          duringLastDays: 1,
+        ),
+      ];
+
+      when(mockListedAppService.getListedAppById(any))
+          .thenAnswer((_) => Future.value(testListedApp));
+      when(mockAppGroupService.getGroup(any, any))
+          .thenAnswer((_) => Future.value(testGroup));
+      when(mockGroupConditionService.getGroupConditions(any))
+          .thenAnswer((_) => Future.value(conditions));
+      when(mockConditionChecker.isConditionMet(any))
+          .thenAnswer((_) => Future.value(false));
+
+      // Act
+      await chainMaster.handleAppData(testAppData);
+
+      // Assert
+      expect(testAppData.timeElapsed, equals(5000));
+      expect(testAppData.timeCounted, equals(0));
+    });
+
+    test('positve and conditions met should count time', () async {
+      var testListedApp = ListedApp(
+        identifier: 'test_id',
+        platform: 'android',
+        status: AppStatus.positive,
+        listId: 'test_list_id',
+      );
+
+      final testGroup = AppGroup(
+          id: 'test_group_id', name: 'Test Group', type: GroupType.positive);
+
+      final conditions = [
+        GroupCondition(
+          id: 'test_id',
+          conditionalGroupId: 'conditional_group_id',
+          conditionedGroupId: 'test_group_id',
+          usedTime: Duration(hours: 1),
+          duringLastDays: 1,
+        ),
+      ];
+
+      when(mockListedAppService.getListedAppById(any))
+          .thenAnswer((_) => Future.value(testListedApp));
+      when(mockAppGroupService.getGroup(any, any))
+          .thenAnswer((_) => Future.value(testGroup));
+      when(mockGroupConditionService.getGroupConditions(any))
+          .thenAnswer((_) => Future.value(conditions));
+      when(mockConditionChecker.isConditionMet(any))
+          .thenAnswer((_) => Future.value(true));
+
+      // Act
+      await chainMaster.handleAppData(testAppData);
+
+      // Assert
+      expect(testAppData.timeElapsed, equals(5000));
+      expect(testAppData.timeCounted, equals(5000));
+    });
   });
 }

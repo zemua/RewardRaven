@@ -3,6 +3,7 @@ import 'package:logger/logger.dart';
 import 'app_data_dto.dart';
 import 'app_data_handler.dart';
 import 'chainelements/app_group_chain.dart';
+import 'chainelements/app_time_chain.dart';
 import 'chainelements/conditions_check_chain.dart';
 import 'chainelements/group_conditions_chain.dart';
 import 'chainelements/listed_app_chain.dart';
@@ -15,7 +16,10 @@ class AppDataChainMaster implements AppDataHandler {
   AppDataHandler? _entryHandler;
 
   AppDataChainMaster() {
+    AppDataHandler appTimeHandler = AppTimeChain();
+
     AppDataHandler conditionsCheckHandler = ConditionsCheckChain();
+    conditionsCheckHandler.setNextHandler(appTimeHandler);
 
     AppDataHandler groupConditionsHandler = GroupConditionsChain();
     groupConditionsHandler.setNextHandler(conditionsCheckHandler);
