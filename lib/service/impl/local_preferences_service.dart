@@ -21,13 +21,13 @@ class LocalPreferencesService implements PreferencesService {
 
   @override
   Future<String> getUserUUID() async {
-    String userUuidProperty = "user_uuid";
+    String deviceUuidProperty = "device_uuid";
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? uuid = prefs.getString(userUuidProperty);
+    String? uuid = prefs.getString(deviceUuidProperty);
     if (uuid == null) {
       uuid = Uuid().v1();
-      logger.i("Generated user uuid: $uuid");
-      await prefs.setString(userUuidProperty, uuid);
+      logger.i("Generated device uuid: $uuid");
+      await prefs.setString(deviceUuidProperty, uuid);
     }
     return uuid;
   }
