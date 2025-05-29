@@ -1,3 +1,4 @@
+import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
@@ -6,23 +7,24 @@ import '../preferences_service.dart';
 
 class LocalPreferencesService implements PreferencesService {
   final logger = Logger();
+  final GetIt locator = GetIt.instance;
 
   @override
   void saveSharedString(String key, String value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = locator<SharedPreferences>();
     await prefs.setString(key, value);
   }
 
   @override
   Future<String?> getSharedString(String key) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = locator<SharedPreferences>();
     return prefs.getString(key);
   }
 
   @override
   Future<String> getUserUUID() async {
     String deviceUuidProperty = "device_uuid";
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = locator<SharedPreferences>();
     String? uuid = prefs.getString(deviceUuidProperty);
     if (uuid == null) {
       uuid = Uuid().v1();

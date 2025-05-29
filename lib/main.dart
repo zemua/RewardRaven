@@ -22,6 +22,7 @@ import 'package:reward_raven/service/loopchain/app_data_chain_master.dart';
 import 'package:reward_raven/service/loopchain/app_data_handler.dart';
 import 'package:reward_raven/service/platform_wrapper.dart';
 import 'package:reward_raven/tools/injectable_time_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'db/repository/listed_app_repository.dart';
 import 'db/service/app_group_service.dart';
@@ -52,7 +53,7 @@ void main() async {
         .setPersistenceCacheSizeBytes(90000000); // cache size ~90MB
   }
 
-  _setupLocator();
+  await _setupLocator();
 
   FlutterForegroundTask.initCommunicationPort();
 
@@ -77,7 +78,9 @@ class RewardRavenApp extends StatelessWidget {
   }
 }
 
-void _setupLocator() {
+Future<void> _setupLocator() async {
+  locator.registerSingleton<SharedPreferences>(
+      await SharedPreferences.getInstance());
   locator.registerSingleton<PlatformWrapper>(PlatformWrapperImpl());
   locator.registerSingleton(InjectableTimePicker());
 
