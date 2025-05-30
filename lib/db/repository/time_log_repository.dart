@@ -4,12 +4,12 @@ import 'package:logger/logger.dart';
 
 import '../../service/preferences_service.dart';
 import '../entity/collections.dart';
+import '../entity/time_log.dart';
 import '../helper/firebase_helper.dart';
 
 final GetIt _locator = GetIt.instance;
 
 class TimeLogRepository {
-  // TODO implement tests
   final FirebaseHelper _firebaseHelper = _locator.get<FirebaseHelper>();
   final PreferencesService _sharedPreferences =
       _locator.get<PreferencesService>();
@@ -17,29 +17,61 @@ class TimeLogRepository {
 
   TimeLogRepository();
 
-  Future<void> addToTotal(TimeLog) async {
-    final now = DateTime.now();
-    final reference = _firebaseHelper.getReference(
-        'timelogs/$appPackageName/${now.year}/${now.month}/${now.day}');
-    await reference.runTransaction((MutableData transaction) async {
-      final data = transaction.value as Map<dynamic, dynamic>?;
-      if (data == null) {
-        transaction.value = {'total': time};
+  Future<void> addToTotal(TimeLog timeLog) async {
+    try {
+      String uuid = await _sharedPreferences.getUserUUID();
+      final reference = await _resolveTotalReference();
+      final uuidRef = reference.child(sanitizeDbPath(uuid));
+      final dbEvent = await uuidRef.once().timeout(const Duration(seconds: 10));
+      final DataSnapshot snapshot = dbEvent.snapshot;
+      if (snapshot.value != null) {
+        final Map<String, dynamic> logMap =
+            Map<String, dynamic>.from(snapshot.value as Map);
+        final TimeLog retrievedLog = TimeLog.fromJson(logMap);
+        logger.i("Retrieved log with uuid $uuid as $retrievedLog");
+        TimeLog updatedLog = TimeLog(
+            duration: timeLog.duration + retrievedLog.duration,
+            dateTime: timeLog.dateTime);
+        await uuidRef
+            .update(updatedLog.toJson())
+            .timeout(const Duration(seconds: 10));
+        logger
+            .i('Updated log with uuid $uuid as $updatedLog in ${uuidRef.path}');
       } else {
-        final newTotal = (data['total'] as int) + time;
-        transaction.value = {'total': newTotal};
+        logger.i(
+            'No log found for uuid $uuid proceeding to create a new entry in ${uuidRef.path}');
+        await uuidRef
+            .set(timeLog.toJson())
+            .timeout(const Duration(seconds: 10));
+        logger.i('Created log with uuid $uuid as $timeLog');
       }
-      return transaction;
-    });
+    } catch (e) {
+      logger.e('Failed to resolve log: $e');
+    }
   }
 
-  Future<int> getTotal(String appPackageName) async {
-    final now = DateTime.now();
-    final reference = _firebaseHelper.getReference(
-        'timelogs/$appPackageName/${now.year}/${now.month}/${now.day}');
-    final snapshot = await reference.get();
-    final data = snapshot.value as Map<dynamic, dynamic>?;
-    return data?['total'] as int? ?? 0;
+  Future<int> getTotalSeconds() async {
+    final reference = await _resolveTotalReference();
+    final snapshot = await reference.get().timeout(const Duration(seconds: 10));
+    if (snapshot.value != null) {
+      final Map<dynamic, dynamic> logMap =
+          Map<dynamic, dynamic>.from(snapshot.value as Map);
+      int totalDuration = 0;
+      logMap.forEach((key, value) {
+        if (value is Map) {
+          try {
+            final timeLog = TimeLog.fromJson(Map<String, dynamic>.from(value));
+            totalDuration += timeLog.duration.inSeconds;
+          } catch (e) {
+            logger.e('Error parsing TimeLog: $e');
+          }
+        }
+      });
+
+      return totalDuration;
+    } else {
+      return 0;
+    }
   }
 
   Future<DatabaseReference> _resolveTotalReference() async {
@@ -47,8 +79,7 @@ class TimeLogRepository {
       final dbRef = await _firebaseHelper.databaseReference;
       return dbRef
           .child(sanitizeDbPath(DbCollection.logs.name))
-          .child(sanitizeDbPath("total"))
-          .child(sanitizeDbPath(await _sharedPreferences.getUserUUID()));
+          .child(sanitizeDbPath("total"));
     } catch (e) {
       logger.e('Failed to resolve db reference: $e');
       rethrow;
