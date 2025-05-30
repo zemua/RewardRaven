@@ -17,10 +17,12 @@ import 'package:reward_raven/service/app/impl/android_apps_fetcher.dart';
 import 'package:reward_raven/service/app/impl/empty_apps_fetcher.dart';
 import 'package:reward_raven/service/condition_checker.dart';
 import 'package:reward_raven/service/impl/condition_checker_impl.dart';
+import 'package:reward_raven/service/impl/local_preferences_service.dart';
 import 'package:reward_raven/service/impl/platform_wrapper_impl.dart';
 import 'package:reward_raven/service/loopchain/app_data_chain_master.dart';
 import 'package:reward_raven/service/loopchain/app_data_handler.dart';
 import 'package:reward_raven/service/platform_wrapper.dart';
+import 'package:reward_raven/service/preferences_service.dart';
 import 'package:reward_raven/tools/injectable_time_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,7 +31,7 @@ import 'db/service/app_group_service.dart';
 import 'db/service/listed_app_service.dart';
 import 'firebase_options.dart'; // $ flutterfire configure
 
-final GetIt locator = GetIt.instance;
+final GetIt _locator = GetIt.instance;
 
 void main() async {
   final logger = Logger();
@@ -79,25 +81,26 @@ class RewardRavenApp extends StatelessWidget {
 }
 
 Future<void> _setupLocator() async {
-  locator.registerSingleton<SharedPreferences>(
+  _locator.registerSingleton<SharedPreferences>(
       await SharedPreferences.getInstance());
-  locator.registerSingleton<PlatformWrapper>(PlatformWrapperImpl());
-  locator.registerSingleton(InjectableTimePicker());
+  _locator.registerSingleton<PreferencesService>(LocalPreferencesService());
+  _locator.registerSingleton<PlatformWrapper>(PlatformWrapperImpl());
+  _locator.registerSingleton(InjectableTimePicker());
 
   if (!kIsWeb) {
-    locator.registerSingleton<AndroidAppsFetcher>(AndroidAppsFetcher());
+    _locator.registerSingleton<AndroidAppsFetcher>(AndroidAppsFetcher());
   }
-  locator.registerSingleton<EmptyAppsFetcher>(EmptyAppsFetcher());
+  _locator.registerSingleton<EmptyAppsFetcher>(EmptyAppsFetcher());
 
-  locator.registerSingleton<FirebaseHelper>(FirebaseHelper());
-  locator.registerSingleton<AppsFetcher>(AppsFetcherProvider());
-  locator.registerSingleton<ListedAppRepository>(ListedAppRepository());
-  locator.registerSingleton<ListedAppService>(ListedAppService());
-  locator.registerSingleton<AppGroupRepository>(AppGroupRepository());
-  locator.registerSingleton<AppGroupService>(AppGroupService());
-  locator
+  _locator.registerSingleton<FirebaseHelper>(FirebaseHelper());
+  _locator.registerSingleton<AppsFetcher>(AppsFetcherProvider());
+  _locator.registerSingleton<ListedAppRepository>(ListedAppRepository());
+  _locator.registerSingleton<ListedAppService>(ListedAppService());
+  _locator.registerSingleton<AppGroupRepository>(AppGroupRepository());
+  _locator.registerSingleton<AppGroupService>(AppGroupService());
+  _locator
       .registerSingleton<GroupConditionRepository>(GroupConditionRepository());
-  locator.registerSingleton<GroupConditionService>(GroupConditionService());
-  locator.registerSingleton<ConditionChecker>(ConditionCheckerImpl());
-  locator.registerSingleton<AppDataHandler>(AppDataChainMaster());
+  _locator.registerSingleton<GroupConditionService>(GroupConditionService());
+  _locator.registerSingleton<ConditionChecker>(ConditionCheckerImpl());
+  _locator.registerSingleton<AppDataHandler>(AppDataChainMaster());
 }
