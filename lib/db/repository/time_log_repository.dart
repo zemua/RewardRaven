@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'package:reward_raven/tools/dates.dart';
 
 import '../../service/preferences_service.dart';
 import '../entity/collections.dart';
@@ -19,32 +20,8 @@ class TimeLogRepository {
 
   Future<void> addToTotal(TimeLog timeLog) async {
     try {
-      String uuid = await _sharedPreferences.getUserUUID();
       final reference = await _resolveTotalReference();
-      final uuidRef = reference.child(sanitizeDbPath(uuid));
-      final dbEvent = await uuidRef.once().timeout(const Duration(seconds: 10));
-      final DataSnapshot snapshot = dbEvent.snapshot;
-      if (snapshot.value != null) {
-        final Map<String, dynamic> logMap =
-            Map<String, dynamic>.from(snapshot.value as Map);
-        final TimeLog retrievedLog = TimeLog.fromJson(logMap);
-        logger.i("Retrieved log with uuid $uuid as $retrievedLog");
-        TimeLog updatedLog = TimeLog(
-            duration: timeLog.duration + retrievedLog.duration,
-            dateTime: timeLog.dateTime);
-        await uuidRef
-            .update(updatedLog.toJson())
-            .timeout(const Duration(seconds: 10));
-        logger
-            .i('Updated log with uuid $uuid as $updatedLog in ${uuidRef.path}');
-      } else {
-        logger.i(
-            'No log found for uuid $uuid proceeding to create a new entry in ${uuidRef.path}');
-        await uuidRef
-            .set(timeLog.toJson())
-            .timeout(const Duration(seconds: 10));
-        logger.i('Created log with uuid $uuid as $timeLog');
-      }
+      await add(timeLog, reference);
     } catch (e) {
       logger.e('Failed to resolve log: $e');
     }
@@ -83,6 +60,54 @@ class TimeLogRepository {
     } catch (e) {
       logger.e('Failed to resolve db reference: $e');
       rethrow;
+    }
+  }
+
+  Future<void> addToGroup(TimeLog timeLog, String groupId) async {
+    try {
+      final reference = await _resolveGroupReference(groupId, timeLog.dateTime);
+      await add(timeLog, reference);
+    } catch (e) {
+      logger.e('Failed to resolve log: $e');
+    }
+  }
+
+  Future<DatabaseReference> _resolveGroupReference(
+      String groupId, DateTime dateTime) async {
+    try {
+      final dbRef = await _firebaseHelper.databaseReference;
+      return dbRef
+          .child(sanitizeDbPath(DbCollection.logs.name))
+          .child(sanitizeDbPath("group"))
+          .child(sanitizeDbPath(groupId))
+          .child(sanitizeDbPath(toDateOnly(dateTime)));
+    } catch (e) {
+      logger.e('Failed to resolve db reference: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> add(TimeLog timeLog, DatabaseReference reference) async {
+    String uuid = await _sharedPreferences.getUserUUID();
+    final uuidRef = reference.child(sanitizeDbPath(uuid));
+    final snapshot = await uuidRef.get().timeout(const Duration(seconds: 10));
+    if (snapshot.value != null) {
+      final Map<String, dynamic> logMap =
+          Map<String, dynamic>.from(snapshot.value as Map);
+      final TimeLog retrievedLog = TimeLog.fromJson(logMap);
+      logger.i("Retrieved log with uuid $uuid as $retrievedLog");
+      TimeLog updatedLog = TimeLog(
+          duration: timeLog.duration + retrievedLog.duration,
+          dateTime: timeLog.dateTime);
+      await uuidRef
+          .update(updatedLog.toJson())
+          .timeout(const Duration(seconds: 10));
+      logger.i('Updated log with uuid $uuid as $updatedLog in ${uuidRef.path}');
+    } else {
+      logger.i(
+          'No log found for uuid $uuid proceeding to create a new entry in ${uuidRef.path}');
+      await uuidRef.set(timeLog.toJson()).timeout(const Duration(seconds: 10));
+      logger.i('Created log with uuid $uuid as $timeLog');
     }
   }
 }
