@@ -9,6 +9,7 @@ import 'package:logger/logger.dart';
 import 'package:reward_raven/db/helper/firebase_helper.dart';
 import 'package:reward_raven/db/repository/app_group_repository.dart';
 import 'package:reward_raven/db/repository/group_condition_repository.dart';
+import 'package:reward_raven/db/repository/time_log_repository.dart';
 import 'package:reward_raven/db/service/group_condition_service.dart';
 import 'package:reward_raven/screens/homepage/home_page.dart';
 import 'package:reward_raven/service/app/apps_fetcher.dart';
@@ -101,6 +102,8 @@ Future<void> _setupLocator() async {
   _locator
       .registerSingleton<GroupConditionRepository>(GroupConditionRepository());
   _locator.registerSingleton<GroupConditionService>(GroupConditionService());
+  _locator.registerSingleton<TimeLogRepository>(TimeLogRepository());
+  _locator.registerSingleton<TimeLogService>(TimeLogService());
   _locator.registerSingleton<ConditionChecker>(ConditionCheckerImpl());
   _locator.registerSingleton<AppDataHandler>(AppDataChainMaster());
 }
