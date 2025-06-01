@@ -29,26 +29,7 @@ class TimeLogRepository {
 
   Future<int> getTotalSeconds() async {
     final reference = await _resolveTotalReference();
-    final snapshot = await reference.get().timeout(const Duration(seconds: 10));
-    if (snapshot.value != null) {
-      final Map<dynamic, dynamic> logMap =
-          Map<dynamic, dynamic>.from(snapshot.value as Map);
-      int totalDuration = 0;
-      logMap.forEach((key, value) {
-        if (value is Map) {
-          try {
-            final timeLog = TimeLog.fromJson(Map<String, dynamic>.from(value));
-            totalDuration += timeLog.duration.inSeconds;
-          } catch (e) {
-            logger.e('Error parsing TimeLog: $e');
-          }
-        }
-      });
-
-      return totalDuration;
-    } else {
-      return 0;
-    }
+    return await _totalSeconds(reference);
   }
 
   Future<DatabaseReference> _resolveTotalReference() async {
@@ -70,6 +51,11 @@ class TimeLogRepository {
     } catch (e) {
       logger.e('Failed to resolve log: $e');
     }
+  }
+
+  Future<int> getGroupTotalSeconds(String groupId, DateTime dateTime) async {
+    final reference = await _resolveGroupReference(groupId, dateTime);
+    return await _totalSeconds(reference);
   }
 
   Future<DatabaseReference> _resolveGroupReference(
@@ -108,6 +94,29 @@ class TimeLogRepository {
           'No log found for uuid $uuid proceeding to create a new entry in ${uuidRef.path}');
       await uuidRef.set(timeLog.toJson()).timeout(const Duration(seconds: 10));
       logger.i('Created log with uuid $uuid as $timeLog');
+    }
+  }
+
+  Future<int> _totalSeconds(DatabaseReference reference) async {
+    final snapshot = await reference.get().timeout(const Duration(seconds: 10));
+    if (snapshot.value != null) {
+      final Map<dynamic, dynamic> logMap =
+          Map<dynamic, dynamic>.from(snapshot.value as Map);
+      int totalDuration = 0;
+      logMap.forEach((key, value) {
+        if (value is Map) {
+          try {
+            final timeLog = TimeLog.fromJson(Map<String, dynamic>.from(value));
+            totalDuration += timeLog.duration.inSeconds;
+          } catch (e) {
+            logger.e('Error parsing TimeLog: $e');
+          }
+        }
+      });
+
+      return totalDuration;
+    } else {
+      return 0;
     }
   }
 }

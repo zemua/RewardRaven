@@ -8,6 +8,7 @@ import 'package:reward_raven/db/entity/time_log.dart';
 import 'package:reward_raven/db/helper/firebase_helper.dart';
 import 'package:reward_raven/db/repository/time_log_repository.dart';
 import 'package:reward_raven/service/preferences_service.dart';
+import 'package:reward_raven/tools/dates.dart';
 
 import 'time_log_repository_test.mocks.dart';
 
@@ -219,7 +220,7 @@ void main() {
       });
 
       // Act
-      await timeLogRepository.addToTotal(testTimeLog);
+      await timeLogRepository.addToGroup(testTimeLog, 'groupId');
 
       // Assert
       verify(mockDatabaseReference.update(argThat(isA<Map<String, dynamic>>())))
@@ -229,6 +230,32 @@ void main() {
       expect(capturedUpdate, isNotNull);
       expect(capturedUpdate!['date_time'], '2023-01-01T12:00:00.000');
       expect(capturedUpdate!['duration'], 3600);
+    });
+  });
+
+  group('countFromGroup', () {
+    test('should return sum of all time logs from group', () async {
+      // Arrange
+      when(mockDatabaseReference.child(toDateOnly(DateTime.now())))
+          .thenReturn(mockDatabaseReference);
+      when(mockDataSnapshot.value).thenReturn({
+        'device1': {
+          'date_time': '2023-01-01T12:00:00.000',
+          'duration': 1800, // 30 minutes
+        },
+        'device2': {
+          'date_time': '2023-01-01T13:00:00.000',
+          'duration': 1800, // 30 minutes
+        },
+      });
+
+      // Act
+      final result = await timeLogRepository.getGroupTotalSeconds(
+          'groupId', DateTime.now());
+
+      // Assert
+      expect(result, equals(3600)); // 60 minutes in seconds
+      verify(mockDatabaseReference.get()).called(1);
     });
   });
 }
