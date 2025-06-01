@@ -30,6 +30,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'db/repository/listed_app_repository.dart';
 import 'db/service/app_group_service.dart';
 import 'db/service/listed_app_service.dart';
+import 'db/service/time_log_service.dart';
 import 'firebase_options.dart'; // $ flutterfire configure
 
 final GetIt _locator = GetIt.instance;
