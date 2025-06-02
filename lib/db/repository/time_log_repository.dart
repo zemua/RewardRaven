@@ -11,6 +11,7 @@ import '../helper/firebase_helper.dart';
 final GetIt _locator = GetIt.instance;
 
 class TimeLogRepository {
+  // TODO delete old entries periodically to free db space
   final FirebaseHelper _firebaseHelper = _locator.get<FirebaseHelper>();
   final PreferencesService _sharedPreferences =
       _locator.get<PreferencesService>();

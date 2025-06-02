@@ -14,8 +14,8 @@ import 'package:reward_raven/service/app/apps_fetcher.dart';
 import '../../../../test_utils/localization_testable.dart';
 import 'group_conditions_test.mocks.dart';
 
-@GenerateMocks([GroupConditionService])
 @GenerateNiceMocks([
+  MockSpec<GroupConditionService>(),
   MockSpec<AppsFetcher>(),
   MockSpec<ListedAppService>(),
   MockSpec<AppGroupService>(),

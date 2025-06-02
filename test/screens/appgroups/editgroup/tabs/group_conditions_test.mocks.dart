@@ -34,10 +34,6 @@ import 'package:reward_raven/service/app/apps_fetcher.dart' as _i5;
 /// See the documentation for Mockito's code generation for more information.
 class MockGroupConditionService extends _i1.Mock
     implements _i2.GroupConditionService {
-  MockGroupConditionService() {
-    _i1.throwOnMissingStub(this);
-  }
-
   @override
   _i3.Future<_i4.GroupCondition?> getGroupCondition({
     required String? conditionedGroupId,
@@ -53,6 +49,7 @@ class MockGroupConditionService extends _i1.Mock
           },
         ),
         returnValue: _i3.Future<_i4.GroupCondition?>.value(),
+        returnValueForMissingStub: _i3.Future<_i4.GroupCondition?>.value(),
       ) as _i3.Future<_i4.GroupCondition?>);
 
   @override
@@ -65,6 +62,8 @@ class MockGroupConditionService extends _i1.Mock
         ),
         returnValue:
             _i3.Future<List<_i4.GroupCondition>>.value(<_i4.GroupCondition>[]),
+        returnValueForMissingStub:
+            _i3.Future<List<_i4.GroupCondition>>.value(<_i4.GroupCondition>[]),
       ) as _i3.Future<List<_i4.GroupCondition>>);
 
   @override
@@ -76,6 +75,7 @@ class MockGroupConditionService extends _i1.Mock
           [conditionedGroupId],
         ),
         returnValue: _i3.Stream<List<_i4.GroupCondition>>.empty(),
+        returnValueForMissingStub: _i3.Stream<List<_i4.GroupCondition>>.empty(),
       ) as _i3.Stream<List<_i4.GroupCondition>>);
 
   @override

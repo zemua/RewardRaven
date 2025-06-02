@@ -1,18 +1,56 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
+import 'package:intl/intl.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
+import 'package:reward_raven/db/repository/time_log_repository.dart';
+import 'package:reward_raven/db/service/time_log_service.dart';
+import 'package:reward_raven/tools/dates.dart';
 
+import 'time_log_service_test.mocks.dart';
+
+@GenerateNiceMocks([
+  MockSpec<TimeLogRepository>(),
+])
 void main() {
   final locator = GetIt.instance;
+  late MockTimeLogRepository timeLogRepository;
+  late TimeLogService timeLogService;
 
-  setUp(() {});
+  setUp(() {
+    timeLogRepository = MockTimeLogRepository();
+    locator.registerSingleton<TimeLogRepository>(timeLogRepository);
+
+    timeLogService = TimeLogService();
+  });
 
   tearDown(() {
     locator.reset();
   });
 
   group('TimeLogService', () {
-    test('add log to repository', () async {
-      fail("to be implemented");
+    test('get ground seconds for last 1 days', () async {
+      List<DateTime> captured = [];
+      when(timeLogRepository.getGroupTotalSeconds("someGroupId", any))
+          .thenAnswer((invocation) {
+        captured.add(invocation.positionalArguments.last);
+        return Future.value(30);
+      });
+
+      final result =
+          await timeLogService.getGroupSecondsForLastDays("someGroupId", 1);
+
+      expect(result, equals(60));
+      verify(timeLogRepository.getGroupTotalSeconds("someGroupId", any))
+          .called(2);
+
+      List<String> formattedDates = captured.map((dateTime) {
+        return DateFormat('yyyy-MM-dd').format(dateTime);
+      }).toList();
+
+      assert(formattedDates.contains(toDateOnly(DateTime.now())));
+      assert(formattedDates.contains(
+          toDateOnly(DateTime.now().subtract(const Duration(days: 1)))));
     });
   });
 }
