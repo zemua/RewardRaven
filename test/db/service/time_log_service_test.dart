@@ -52,5 +52,9 @@ void main() {
       assert(formattedDates.contains(
           toDateOnly(DateTime.now().subtract(const Duration(days: 1)))));
     });
+
+    test('add to total', () async {
+      fail("not yet implemented");
+    });
   });
 }
