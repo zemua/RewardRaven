@@ -1,19 +1,18 @@
 import 'package:get_it/get_it.dart';
 
 import '../../db/entity/group_condition.dart';
-import '../../db/service/app_group_service.dart';
-import '../../db/service/group_condition_service.dart';
+import '../../db/service/time_log_service.dart';
 import '../condition_checker.dart';
 
 final GetIt locator = GetIt.instance;
 
 class ConditionCheckerImpl implements ConditionChecker {
-  final GroupConditionService _groupConditionService =
-      locator.get<GroupConditionService>();
-  final AppGroupService _appGroupService = locator.get<AppGroupService>();
+  final TimeLogService _timeLogService = locator.get<TimeLogService>();
 
   @override
-  Future<bool> isConditionMet(GroupCondition condition) {
-    return Future.value(false);
+  Future<bool> isConditionMet(GroupCondition condition) async {
+    final usedSeconds = await _timeLogService.getGroupSecondsForLastDays(
+        condition.conditionalGroupId, condition.duringLastDays);
+    return usedSeconds >= condition.usedTime.inSeconds;
   }
 }
