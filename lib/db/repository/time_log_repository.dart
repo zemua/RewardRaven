@@ -28,9 +28,9 @@ class TimeLogRepository {
     }
   }
 
-  Future<int> getTotalSeconds() async {
+  Future<Duration> getTotalDuration() async {
     final reference = await _resolveTotalReference();
-    return await _totalSeconds(reference);
+    return Duration(seconds: await _totalSeconds(reference));
   }
 
   Future<DatabaseReference> _resolveTotalReference() async {
@@ -54,9 +54,10 @@ class TimeLogRepository {
     }
   }
 
-  Future<int> getGroupTotalSeconds(String groupId, DateTime dateTime) async {
+  Future<Duration> getGroupTotalDuration(
+      String groupId, DateTime dateTime) async {
     final reference = await _resolveGroupReference(groupId, dateTime);
-    return await _totalSeconds(reference);
+    return Duration(seconds: await _totalSeconds(reference));
   }
 
   Future<DatabaseReference> _resolveGroupReference(

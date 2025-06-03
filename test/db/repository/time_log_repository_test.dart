@@ -131,10 +131,10 @@ void main() {
       when(mockDataSnapshot.value).thenReturn(null);
 
       // Act
-      final result = await timeLogRepository.getTotalSeconds();
+      final result = await timeLogRepository.getTotalDuration();
 
       // Assert
-      expect(result, equals(0));
+      expect(result, equals(const Duration()));
       verify(mockTotalReference.get()).called(1);
     });
 
@@ -153,10 +153,10 @@ void main() {
       });
 
       // Act
-      final result = await timeLogRepository.getTotalSeconds();
+      final result = await timeLogRepository.getTotalDuration();
 
       // Assert
-      expect(result, equals(3600)); // 60 minutes in seconds
+      expect(result, equals(const Duration(seconds: 3600)));
       verify(mockTotalReference.get()).called(1);
     });
 
@@ -176,11 +176,10 @@ void main() {
       });
 
       // Act
-      final result = await timeLogRepository.getTotalSeconds();
+      final result = await timeLogRepository.getTotalDuration();
 
       // Assert
-      expect(result,
-          equals(3600)); // Should still sum the valid entries (30 + 30 minutes)
+      expect(result, equals(const Duration(seconds: 3600)));
       verify(mockTotalReference.get()).called(1);
     });
   });
@@ -250,11 +249,12 @@ void main() {
       });
 
       // Act
-      final result = await timeLogRepository.getGroupTotalSeconds(
+      final result = await timeLogRepository.getGroupTotalDuration(
           'groupId', DateTime.now());
 
       // Assert
-      expect(result, equals(3600)); // 60 minutes in seconds
+      expect(result,
+          equals(const Duration(seconds: 3600))); // 60 minutes in seconds
       verify(mockDatabaseReference.get()).called(1);
     });
   });

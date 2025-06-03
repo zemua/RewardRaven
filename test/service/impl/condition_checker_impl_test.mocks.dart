@@ -22,6 +22,16 @@ import 'package:reward_raven/db/service/time_log_service.dart' as _i2;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
+class _FakeDuration_0 extends _i1.SmartFake implements Duration {
+  _FakeDuration_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [TimeLogService].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -37,14 +47,26 @@ class MockTimeLogService extends _i1.Mock implements _i2.TimeLogService {
       ) as _i3.Future<void>);
 
   @override
-  _i3.Future<int> getTotalSeconds() => (super.noSuchMethod(
+  _i3.Future<Duration> getTotalDuration() => (super.noSuchMethod(
         Invocation.method(
-          #getTotalSeconds,
+          #getTotalDuration,
           [],
         ),
-        returnValue: _i3.Future<int>.value(0),
-        returnValueForMissingStub: _i3.Future<int>.value(0),
-      ) as _i3.Future<int>);
+        returnValue: _i3.Future<Duration>.value(_FakeDuration_0(
+          this,
+          Invocation.method(
+            #getTotalDuration,
+            [],
+          ),
+        )),
+        returnValueForMissingStub: _i3.Future<Duration>.value(_FakeDuration_0(
+          this,
+          Invocation.method(
+            #getTotalDuration,
+            [],
+          ),
+        )),
+      ) as _i3.Future<Duration>);
 
   @override
   _i3.Future<void> addToGroup(
@@ -64,19 +86,37 @@ class MockTimeLogService extends _i1.Mock implements _i2.TimeLogService {
       ) as _i3.Future<void>);
 
   @override
-  _i3.Future<int> getGroupSecondsForLastDays(
+  _i3.Future<Duration> getGroupDurationForLastDays(
     String? groupId,
     int? lastDays,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #getGroupSecondsForLastDays,
+          #getGroupDurationForLastDays,
           [
             groupId,
             lastDays,
           ],
         ),
-        returnValue: _i3.Future<int>.value(0),
-        returnValueForMissingStub: _i3.Future<int>.value(0),
-      ) as _i3.Future<int>);
+        returnValue: _i3.Future<Duration>.value(_FakeDuration_0(
+          this,
+          Invocation.method(
+            #getGroupDurationForLastDays,
+            [
+              groupId,
+              lastDays,
+            ],
+          ),
+        )),
+        returnValueForMissingStub: _i3.Future<Duration>.value(_FakeDuration_0(
+          this,
+          Invocation.method(
+            #getGroupDurationForLastDays,
+            [
+              groupId,
+              lastDays,
+            ],
+          ),
+        )),
+      ) as _i3.Future<Duration>);
 }

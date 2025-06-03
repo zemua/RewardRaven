@@ -31,17 +31,17 @@ void main() {
   group('TimeLogService', () {
     test('get ground seconds for last 1 days', () async {
       List<DateTime> captured = [];
-      when(timeLogRepository.getGroupTotalSeconds("someGroupId", any))
+      when(timeLogRepository.getGroupTotalDuration("someGroupId", any))
           .thenAnswer((invocation) {
         captured.add(invocation.positionalArguments.last);
-        return Future.value(30);
+        return Future.value(const Duration(seconds: 30));
       });
 
       final result =
-          await timeLogService.getGroupSecondsForLastDays("someGroupId", 1);
+          await timeLogService.getGroupDurationForLastDays("someGroupId", 1);
 
-      expect(result, equals(60));
-      verify(timeLogRepository.getGroupTotalSeconds("someGroupId", any))
+      expect(result, equals(const Duration(seconds: 60)));
+      verify(timeLogRepository.getGroupTotalDuration("someGroupId", any))
           .called(2);
 
       List<String> formattedDates = captured.map((dateTime) {

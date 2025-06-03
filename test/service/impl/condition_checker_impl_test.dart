@@ -31,8 +31,8 @@ void main() {
 
   group('AppsFetcherProvider', () {
     test('Checks that a condition is met', () async {
-      when(mockTimeLogService.getGroupSecondsForLastDays("zxcvb", 2))
-          .thenAnswer((_) => Future.value(7200));
+      when(mockTimeLogService.getGroupDurationForLastDays("zxcvb", 2))
+          .thenAnswer((_) => Future.value(const Duration(hours: 2)));
 
       final isMet = await conditionChecker.isConditionMet(GroupCondition(
           conditionedGroupId: "asdfg",

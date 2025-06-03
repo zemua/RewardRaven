@@ -34,6 +34,16 @@ class _FakeLogger_0 extends _i1.SmartFake implements _i2.Logger {
         );
 }
 
+class _FakeDuration_1 extends _i1.SmartFake implements Duration {
+  _FakeDuration_1(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [TimeLogRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -62,14 +72,26 @@ class MockTimeLogRepository extends _i1.Mock implements _i3.TimeLogRepository {
       ) as _i4.Future<void>);
 
   @override
-  _i4.Future<int> getTotalSeconds() => (super.noSuchMethod(
+  _i4.Future<Duration> getTotalDuration() => (super.noSuchMethod(
         Invocation.method(
-          #getTotalSeconds,
+          #getTotalDuration,
           [],
         ),
-        returnValue: _i4.Future<int>.value(0),
-        returnValueForMissingStub: _i4.Future<int>.value(0),
-      ) as _i4.Future<int>);
+        returnValue: _i4.Future<Duration>.value(_FakeDuration_1(
+          this,
+          Invocation.method(
+            #getTotalDuration,
+            [],
+          ),
+        )),
+        returnValueForMissingStub: _i4.Future<Duration>.value(_FakeDuration_1(
+          this,
+          Invocation.method(
+            #getTotalDuration,
+            [],
+          ),
+        )),
+      ) as _i4.Future<Duration>);
 
   @override
   _i4.Future<void> addToGroup(
@@ -89,21 +111,39 @@ class MockTimeLogRepository extends _i1.Mock implements _i3.TimeLogRepository {
       ) as _i4.Future<void>);
 
   @override
-  _i4.Future<int> getGroupTotalSeconds(
+  _i4.Future<Duration> getGroupTotalDuration(
     String? groupId,
     DateTime? dateTime,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
-          #getGroupTotalSeconds,
+          #getGroupTotalDuration,
           [
             groupId,
             dateTime,
           ],
         ),
-        returnValue: _i4.Future<int>.value(0),
-        returnValueForMissingStub: _i4.Future<int>.value(0),
-      ) as _i4.Future<int>);
+        returnValue: _i4.Future<Duration>.value(_FakeDuration_1(
+          this,
+          Invocation.method(
+            #getGroupTotalDuration,
+            [
+              groupId,
+              dateTime,
+            ],
+          ),
+        )),
+        returnValueForMissingStub: _i4.Future<Duration>.value(_FakeDuration_1(
+          this,
+          Invocation.method(
+            #getGroupTotalDuration,
+            [
+              groupId,
+              dateTime,
+            ],
+          ),
+        )),
+      ) as _i4.Future<Duration>);
 
   @override
   _i4.Future<void> add(

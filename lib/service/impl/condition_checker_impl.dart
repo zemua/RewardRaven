@@ -11,8 +11,8 @@ class ConditionCheckerImpl implements ConditionChecker {
 
   @override
   Future<bool> isConditionMet(GroupCondition condition) async {
-    final usedSeconds = await _timeLogService.getGroupSecondsForLastDays(
+    final usedDuration = await _timeLogService.getGroupDurationForLastDays(
         condition.conditionalGroupId, condition.duringLastDays);
-    return usedSeconds >= condition.usedTime.inSeconds;
+    return usedDuration >= condition.usedTime;
   }
 }
