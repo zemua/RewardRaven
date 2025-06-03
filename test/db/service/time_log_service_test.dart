@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:reward_raven/db/entity/time_log.dart';
 import 'package:reward_raven/db/repository/time_log_repository.dart';
 import 'package:reward_raven/db/service/time_log_service.dart';
 import 'package:reward_raven/tools/dates.dart';
@@ -16,6 +17,11 @@ void main() {
   final locator = GetIt.instance;
   late MockTimeLogRepository timeLogRepository;
   late TimeLogService timeLogService;
+
+  final testTimeLog = TimeLog(
+    duration: const Duration(minutes: 30),
+    dateTime: DateTime(2023, 1, 1, 12, 0),
+  );
 
   setUp(() {
     timeLogRepository = MockTimeLogRepository();
@@ -54,7 +60,21 @@ void main() {
     });
 
     test('add to total', () async {
-      fail("not yet implemented");
+      await timeLogService.addToTotal(testTimeLog);
+      verify(timeLogRepository.addToTotal(testTimeLog)).called(1);
+    });
+
+    test('get total duration', () async {
+      when(timeLogRepository.getTotalDuration())
+          .thenAnswer((_) => Future.value(const Duration(hours: 2)));
+      Duration result = await timeLogService.getTotalDuration();
+      expect(result, equals(const Duration(hours: 2)));
+    });
+
+    test('add to group', () async {
+      await timeLogService.addToGroup(testTimeLog, "someGroupId");
+      verify(timeLogRepository.addToGroup(testTimeLog, "someGroupId"))
+          .called(1);
     });
   });
 }
