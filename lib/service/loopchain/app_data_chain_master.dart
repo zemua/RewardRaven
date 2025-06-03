@@ -37,6 +37,7 @@ class AppDataChainMaster implements AppDataHandler {
     _entryHandler!.setNextHandler(platformHandler);
   }
 
+  @override
   void setNextHandler(AppDataHandler handler) {
     throw UnsupportedError("Next handler in chain master is not supported.");
   }
