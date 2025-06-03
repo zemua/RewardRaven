@@ -14,6 +14,6 @@ class ConditionCheckerImpl implements ConditionChecker {
 
   @override
   Future<bool> isConditionMet(GroupCondition condition) {
-    return Future.value(true); // TODO implement
+    return Future.value(false);
   }
 }
