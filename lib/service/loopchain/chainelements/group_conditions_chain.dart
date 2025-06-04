@@ -6,7 +6,7 @@ import '../app_data_dto.dart';
 import '../app_data_handler.dart';
 
 final logger = Logger();
-final GetIt locator = GetIt.instance;
+final GetIt _locator = GetIt.instance;
 
 class GroupConditionsChain implements AppDataHandler {
   AppDataHandler? _nextHandler;
@@ -21,7 +21,7 @@ class GroupConditionsChain implements AppDataHandler {
     logger.d('handleAppData: $data');
 
     if (data.appGroup?.id != null) {
-      data.groupConditions = await locator<GroupConditionService>()
+      data.groupConditions = await _locator<GroupConditionService>()
           .getGroupConditions(data.appGroup!.id!);
     }
 

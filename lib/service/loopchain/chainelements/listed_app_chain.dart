@@ -7,7 +7,7 @@ import '../app_data_dto.dart';
 import '../app_data_handler.dart';
 
 final logger = Logger();
-final GetIt locator = GetIt.instance;
+final GetIt _locator = GetIt.instance;
 
 class ListedAppChain implements AppDataHandler {
   AppDataHandler? _nextHandler;
@@ -22,13 +22,13 @@ class ListedAppChain implements AppDataHandler {
     logger.d('handleAppData: $data');
 
     String id;
-    if (locator<PlatformWrapper>().isAndroid()) {
+    if (_locator<PlatformWrapper>().isAndroid()) {
       id = data.processId;
     } else {
       id = data.appName;
     }
 
-    data.listedApp = await locator<ListedAppService>().getListedAppById(id);
+    data.listedApp = await _locator<ListedAppService>().getListedAppById(id);
 
     if (_nextHandler != null) {
       await _nextHandler!.handleAppData(data);

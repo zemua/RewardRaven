@@ -14,6 +14,7 @@ class AppData {
   bool _conditionsMet = true;
   int _timeElapsed = 0;
   int _timeCounted = 0;
+  int _remainingTime = 0;
 
   String get processId => _processId;
   String get appName => _appName;
@@ -56,6 +57,11 @@ class AppData {
   int get timeCounted => _timeCounted;
   set timeCounted(int value) {
     _timeCounted = value;
+  }
+
+  int get remainingTime => _remainingTime;
+  set remainingTime(int value) {
+    _remainingTime = value;
   }
 
   AppData({required String processId, required String appName})

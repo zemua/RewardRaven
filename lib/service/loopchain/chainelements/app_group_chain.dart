@@ -6,7 +6,7 @@ import '../app_data_dto.dart';
 import '../app_data_handler.dart';
 
 final logger = Logger();
-final GetIt locator = GetIt.instance;
+final GetIt _locator = GetIt.instance;
 
 class AppGroupChain implements AppDataHandler {
   AppDataHandler? _nextHandler;
@@ -22,7 +22,7 @@ class AppGroupChain implements AppDataHandler {
 
     if (data.listedApp?.listId != null &&
         data.listedApp?.status?.toGroupType() != null) {
-      data.appGroup = await locator<AppGroupService>().getGroup(
+      data.appGroup = await _locator<AppGroupService>().getGroup(
           data.listedApp!.status!.toGroupType()!, data.listedApp!.listId!);
     }
 

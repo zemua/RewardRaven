@@ -1,4 +1,3 @@
-import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:reward_raven/service/foreground/androidwatchdog.dart';
 
@@ -7,7 +6,6 @@ import '../app_data_dto.dart';
 import '../app_data_handler.dart';
 
 final logger = Logger();
-final GetIt locator = GetIt.instance;
 
 class AppTimeChain implements AppDataHandler {
   AppDataHandler? _nextHandler;

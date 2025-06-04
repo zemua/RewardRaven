@@ -6,7 +6,7 @@ import '../app_data_dto.dart';
 import '../app_data_handler.dart';
 
 final logger = Logger();
-final GetIt locator = GetIt.instance;
+final GetIt _locator = GetIt.instance;
 
 class ConditionsCheckChain implements AppDataHandler {
   AppDataHandler? _nextHandler;
@@ -20,7 +20,7 @@ class ConditionsCheckChain implements AppDataHandler {
   Future<void> handleAppData(AppData data) async {
     logger.d('handleAppData: $data');
 
-    ConditionChecker checker = locator<ConditionChecker>();
+    ConditionChecker checker = _locator<ConditionChecker>();
     bool allMet = true;
     if (data.groupConditions != null && data.groupConditions!.isNotEmpty) {
       for (var condition in data.groupConditions!) {
