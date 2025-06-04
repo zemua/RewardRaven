@@ -1,6 +1,10 @@
 import 'package:equatable/equatable.dart';
 
 class TimeLog extends Equatable {
+  static final String _date_time_name = 'date_time';
+  static final String _used_name = 'used';
+  static final String _counted_name = 'counted';
+
   final DateTime dateTime;
   final Duration used;
   final Duration counted;
@@ -12,17 +16,17 @@ class TimeLog extends Equatable {
 
   factory TimeLog.fromJson(Map<String, dynamic> json) {
     return TimeLog(
-      dateTime: DateTime.parse(json['date_time']),
-      used: Duration(seconds: json['used']),
-      counted: Duration(seconds: json['counted']),
+      dateTime: DateTime.parse(json[_date_time_name]),
+      used: Duration(seconds: json[_used_name]),
+      counted: Duration(seconds: json[_counted_name]),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'date_time': dateTime.toIso8601String(),
-      'used': used.inSeconds,
-      'counted': counted.inSeconds
+      _date_time_name: dateTime.toIso8601String(),
+      _used_name: used.inSeconds,
+      _counted_name: counted.inSeconds
     };
   }
 }
