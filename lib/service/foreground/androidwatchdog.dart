@@ -11,7 +11,7 @@ import '../loopchain/app_data_handler.dart';
 final logger = Logger();
 final GetIt locator = GetIt.instance;
 
-const int WATCHDOG_PERIOD = 5000;
+const Duration watchdogPeriod = Duration(seconds: 5);
 
 @pragma('vm:entry-point')
 void startCallback() {
@@ -56,7 +56,7 @@ class _AndroidWatchdogWidgetState extends State<AndroidWatchdogWidget> {
         String processId = result?['packageName'];
         String appName = result?['appName'];
         locator<AppDataHandler>()
-            .handleAppData(new AppData(processId: processId, appName: appName));
+            .handleAppData(AppData(processId: processId, appName: appName));
       } catch (e) {
         logger.e('Failed to get app info: $e');
       }
@@ -88,7 +88,8 @@ class _AndroidWatchdogWidgetState extends State<AndroidWatchdogWidget> {
           allowWifiLock: false,
           autoRunOnBoot: true,
           autoRunOnMyPackageReplaced: true,
-          eventAction: ForegroundTaskEventAction.repeat(WATCHDOG_PERIOD)),
+          eventAction:
+              ForegroundTaskEventAction.repeat(watchdogPeriod.inMilliseconds)),
     );
   }
 

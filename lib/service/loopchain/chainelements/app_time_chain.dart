@@ -21,14 +21,14 @@ class AppTimeChain implements AppDataHandler {
   Future<void> handleAppData(AppData data) async {
     logger.d('handleAppData: $data');
 
-    data.timeElapsed = WATCHDOG_PERIOD;
+    data.timeElapsed = watchdogPeriod;
     if (data.listedApp?.status == AppStatus.positive && data.conditionsMet) {
       data.timeCounted = data.timeElapsed;
     } else if (data.listedApp?.status == AppStatus.negative) {
       data.timeCounted =
-          -4 * data.timeElapsed; // TODO make proportion configurable
+          Duration(seconds: -1 * (4 * data.timeElapsed.inSeconds).abs());
     } else {
-      data.timeCounted = 0;
+      data.timeCounted = Duration.zero;
     }
 
     if (_nextHandler != null) {

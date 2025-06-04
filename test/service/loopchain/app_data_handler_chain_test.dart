@@ -10,6 +10,7 @@ import 'package:reward_raven/db/service/app_group_service.dart';
 import 'package:reward_raven/db/service/group_condition_service.dart';
 import 'package:reward_raven/db/service/listed_app_service.dart';
 import 'package:reward_raven/db/service/time_log_service.dart';
+import 'package:reward_raven/service/app_blocker.dart';
 import 'package:reward_raven/service/condition_checker.dart';
 import 'package:reward_raven/service/loopchain/app_data_chain_master.dart';
 import 'package:reward_raven/service/loopchain/app_data_dto.dart';
@@ -24,6 +25,7 @@ import 'app_data_handler_chain_test.mocks.dart';
   MockSpec<GroupConditionService>(),
   MockSpec<ConditionChecker>(),
   MockSpec<TimeLogService>(),
+  MockSpec<AppBlocker>(),
 ])
 void main() {
   late MockPlatformWrapper mockPlatformWrapper;
@@ -32,6 +34,7 @@ void main() {
   late MockGroupConditionService mockGroupConditionService;
   late MockConditionChecker mockConditionChecker;
   late MockTimeLogService mockTimeLogService;
+  late MockAppBlocker mockAppBlocker;
 
   final locator = GetIt.instance;
 
@@ -60,6 +63,9 @@ void main() {
 
       mockTimeLogService = MockTimeLogService();
       locator.registerSingleton<TimeLogService>(mockTimeLogService);
+
+      mockAppBlocker = MockAppBlocker();
+      locator.registerSingleton<AppBlocker>(mockAppBlocker);
 
       chainMaster = AppDataChainMaster();
       testAppData = AppData(
@@ -352,8 +358,8 @@ void main() {
       await chainMaster.handleAppData(testAppData);
 
       // Assert
-      expect(testAppData.timeElapsed, equals(5000));
-      expect(testAppData.timeCounted, equals(0));
+      expect(testAppData.timeElapsed, equals(const Duration(seconds: 5)));
+      expect(testAppData.timeCounted, equals(Duration.zero));
     });
 
     test('negative should discount time', () async {
@@ -371,8 +377,8 @@ void main() {
       await chainMaster.handleAppData(testAppData);
 
       // Assert
-      expect(testAppData.timeElapsed, equals(5000));
-      expect(testAppData.timeCounted, equals(-20000));
+      expect(testAppData.timeElapsed, equals(const Duration(seconds: 5)));
+      expect(testAppData.timeCounted, equals(const Duration(seconds: -20)));
     });
 
     test('positve and conditions not met should not count time', () async {
@@ -409,8 +415,8 @@ void main() {
       await chainMaster.handleAppData(testAppData);
 
       // Assert
-      expect(testAppData.timeElapsed, equals(5000));
-      expect(testAppData.timeCounted, equals(0));
+      expect(testAppData.timeElapsed, equals(const Duration(seconds: 5)));
+      expect(testAppData.timeCounted, equals(Duration.zero));
     });
 
     test('positve and conditions met should count time', () async {
@@ -447,8 +453,8 @@ void main() {
       await chainMaster.handleAppData(testAppData);
 
       // Assert
-      expect(testAppData.timeElapsed, equals(5000));
-      expect(testAppData.timeCounted, equals(5000));
+      expect(testAppData.timeElapsed, equals(const Duration(seconds: 5)));
+      expect(testAppData.timeCounted, equals(const Duration(seconds: 5)));
     });
 
     test('shall fetch remaining time', () async {
@@ -457,6 +463,176 @@ void main() {
 
       // Assert
       expect(testAppData.remainingTime, equals(const Duration(minutes: 30)));
+    });
+
+    test('shall not block uncategorized app even when time is out', () async {
+      when(mockTimeLogService.getTotalDuration())
+          .thenAnswer((_) => Future.value(TimeLog(
+              counted: const Duration(seconds: -100), // time is out
+              used: const Duration(hours: 1),
+              dateTime: DateTime.now())));
+
+      await chainMaster.handleAppData(testAppData);
+
+      verifyNever(mockAppBlocker.blockApp(any));
+    });
+
+    test(
+        'shall not block positive app even when conditions are not met and time is out',
+        () async {
+      var testListedApp = ListedApp(
+        identifier: 'test_id',
+        platform: 'android',
+        status: AppStatus.positive,
+        listId: 'test_list_id',
+      );
+
+      final testGroup = AppGroup(
+          id: 'test_group_id', name: 'Test Group', type: GroupType.positive);
+
+      final conditions = [
+        GroupCondition(
+          id: 'test_id',
+          conditionalGroupId: 'conditional_group_id',
+          conditionedGroupId: 'test_group_id',
+          usedTime: Duration(hours: 1),
+          duringLastDays: 1,
+        ),
+      ];
+
+      when(mockListedAppService.getListedAppById(any))
+          .thenAnswer((_) => Future.value(testListedApp));
+      when(mockAppGroupService.getGroup(any, any))
+          .thenAnswer((_) => Future.value(testGroup));
+      when(mockGroupConditionService.getGroupConditions(any))
+          .thenAnswer((_) => Future.value(conditions));
+      when(mockConditionChecker.isConditionMet(any))
+          .thenAnswer((_) => Future.value(false));
+
+      when(mockTimeLogService.getTotalDuration())
+          .thenAnswer((_) => Future.value(TimeLog(
+              counted: const Duration(seconds: -100), // time is out
+              used: const Duration(hours: 1),
+              dateTime: DateTime.now())));
+
+      await chainMaster.handleAppData(testAppData);
+
+      verifyNever(mockAppBlocker.blockApp(any));
+    });
+
+    test('shall not block negative app when enough time and conditions met',
+        () async {
+      var testListedApp = ListedApp(
+        identifier: 'test_id',
+        platform: 'android',
+        status: AppStatus.negative,
+        listId: 'test_list_id',
+      );
+
+      final testGroup = AppGroup(
+          id: 'test_group_id', name: 'Test Group', type: GroupType.negative);
+
+      final conditions = [
+        GroupCondition(
+          id: 'test_id',
+          conditionalGroupId: 'conditional_group_id',
+          conditionedGroupId: 'test_group_id',
+          usedTime: Duration(hours: 1),
+          duringLastDays: 1,
+        ),
+      ];
+
+      when(mockListedAppService.getListedAppById(any))
+          .thenAnswer((_) => Future.value(testListedApp));
+      when(mockAppGroupService.getGroup(any, any))
+          .thenAnswer((_) => Future.value(testGroup));
+      when(mockGroupConditionService.getGroupConditions(any))
+          .thenAnswer((_) => Future.value(conditions));
+      when(mockConditionChecker.isConditionMet(any))
+          .thenAnswer((_) => Future.value(true));
+
+      await chainMaster.handleAppData(testAppData);
+
+      verifyNever(mockAppBlocker.blockApp(any));
+    });
+
+    test('shall call to block negative app when conditions are not met',
+        () async {
+      var testListedApp = ListedApp(
+        identifier: 'test_id',
+        platform: 'android',
+        status: AppStatus.negative,
+        listId: 'test_list_id',
+      );
+
+      final testGroup = AppGroup(
+          id: 'test_group_id', name: 'Test Group', type: GroupType.negative);
+
+      final conditions = [
+        GroupCondition(
+          id: 'test_id',
+          conditionalGroupId: 'conditional_group_id',
+          conditionedGroupId: 'test_group_id',
+          usedTime: Duration(hours: 1),
+          duringLastDays: 1,
+        ),
+      ];
+
+      when(mockListedAppService.getListedAppById(any))
+          .thenAnswer((_) => Future.value(testListedApp));
+      when(mockAppGroupService.getGroup(any, any))
+          .thenAnswer((_) => Future.value(testGroup));
+      when(mockGroupConditionService.getGroupConditions(any))
+          .thenAnswer((_) => Future.value(conditions));
+      when(mockConditionChecker.isConditionMet(any))
+          .thenAnswer((_) => Future.value(false));
+
+      await chainMaster.handleAppData(testAppData);
+
+      verify(mockAppBlocker.blockApp(any)).called(1);
+    });
+
+    test('shall call to block negative app when time is out', () async {
+      var testListedApp = const ListedApp(
+        identifier: 'test_id',
+        platform: 'android',
+        status: AppStatus.negative,
+        listId: 'test_list_id',
+      );
+
+      const testGroup = AppGroup(
+          id: 'test_group_id', name: 'Test Group', type: GroupType.negative);
+
+      final conditions = [
+        GroupCondition(
+          id: 'test_id',
+          conditionalGroupId: 'conditional_group_id',
+          conditionedGroupId: 'test_group_id',
+          usedTime: const Duration(hours: 1),
+          duringLastDays: 1,
+        ),
+      ];
+
+      when(mockListedAppService.getListedAppById(any))
+          .thenAnswer((_) => Future.value(testListedApp));
+      when(mockAppGroupService.getGroup(any, any))
+          .thenAnswer((_) => Future.value(testGroup));
+      when(mockGroupConditionService.getGroupConditions(any))
+          .thenAnswer((_) => Future.value(conditions));
+      when(mockConditionChecker.isConditionMet(any))
+          .thenAnswer((_) => Future.value(true));
+
+      when(mockTimeLogService.getTotalDuration()).thenAnswer((_) =>
+          Future.value(TimeLog(
+              counted: const Duration(
+                  seconds:
+                      10), // negative app usage would be decreasing 20 seconds with a proportion of 4
+              used: const Duration(hours: 1),
+              dateTime: DateTime.now())));
+
+      await chainMaster.handleAppData(testAppData);
+
+      verify(mockAppBlocker.blockApp(any)).called(1);
     });
   });
 }

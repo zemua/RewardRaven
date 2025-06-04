@@ -7,24 +7,24 @@ import '../preferences_service.dart';
 
 class LocalPreferencesService implements PreferencesService {
   final logger = Logger();
-  final GetIt locator = GetIt.instance;
+  final GetIt _locator = GetIt.instance;
 
   @override
   void saveSharedString(String key, String value) async {
-    SharedPreferences prefs = locator<SharedPreferences>();
+    SharedPreferences prefs = _locator<SharedPreferences>();
     await prefs.setString(key, value);
   }
 
   @override
   Future<String?> getSharedString(String key) async {
-    SharedPreferences prefs = locator<SharedPreferences>();
+    SharedPreferences prefs = _locator<SharedPreferences>();
     return prefs.getString(key);
   }
 
   @override
   Future<String> getUserUUID() async {
     String deviceUuidProperty = "device_uuid";
-    SharedPreferences prefs = locator<SharedPreferences>();
+    SharedPreferences prefs = _locator<SharedPreferences>();
     String? uuid = prefs.getString(deviceUuidProperty);
     if (uuid == null) {
       uuid = Uuid().v1();

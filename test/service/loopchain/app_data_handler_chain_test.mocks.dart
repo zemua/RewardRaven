@@ -16,6 +16,7 @@ import 'package:reward_raven/db/service/group_condition_service.dart' as _i11;
 import 'package:reward_raven/db/service/listed_app_service.dart' as _i5;
 import 'package:reward_raven/db/service/time_log_service.dart' as _i14;
 import 'package:reward_raven/screens/apps/app_list_type.dart' as _i8;
+import 'package:reward_raven/service/app_blocker.dart' as _i15;
 import 'package:reward_raven/service/condition_checker.dart' as _i13;
 import 'package:reward_raven/service/platform_wrapper.dart' as _i3;
 
@@ -400,4 +401,19 @@ class MockTimeLogService extends _i1.Mock implements _i14.TimeLogService {
           ),
         )),
       ) as _i6.Future<_i2.TimeLog>);
+}
+
+/// A class which mocks [AppBlocker].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockAppBlocker extends _i1.Mock implements _i15.AppBlocker {
+  @override
+  _i6.Future<void> blockApp(String? identifier) => (super.noSuchMethod(
+        Invocation.method(
+          #blockApp,
+          [identifier],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
 }

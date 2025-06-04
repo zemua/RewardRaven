@@ -12,8 +12,8 @@ class AppData {
   AppGroup? _appGroup;
   List<GroupCondition>? _groupConditions;
   bool _conditionsMet = true;
-  int _timeElapsed = 0;
-  int _timeCounted = 0;
+  Duration _timeElapsed = Duration.zero;
+  Duration _timeCounted = Duration.zero;
   Duration _remainingTime = Duration.zero;
 
   String get processId => _processId;
@@ -49,13 +49,13 @@ class AppData {
     _conditionsMet = value;
   }
 
-  int get timeElapsed => _timeElapsed;
-  set timeElapsed(int value) {
+  Duration get timeElapsed => _timeElapsed;
+  set timeElapsed(Duration value) {
     _timeElapsed = value;
   }
 
-  int get timeCounted => _timeCounted;
-  set timeCounted(int value) {
+  Duration get timeCounted => _timeCounted;
+  set timeCounted(Duration value) {
     _timeCounted = value;
   }
 
@@ -70,6 +70,6 @@ class AppData {
 
   @override
   String toString() {
-    return 'AppData{processId: $_processId, appName: $_appName, timestamp: $_timestamp, platform: $_platform, listedApp: $_listedApp, appGroup: $_appGroup}';
+    return 'AppData{processId: $_processId, appName: $_appName, timestamp: $_timestamp, platform: $_platform, listedApp: $_listedApp, appGroup: $_appGroup, groupConditions: $_groupConditions, conditionsMet: $_conditionsMet, timeElapsed: $_timeElapsed, timeCounted: $_timeCounted, remainingTime: $_remainingTime}';
   }
 }

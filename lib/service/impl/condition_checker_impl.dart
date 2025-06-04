@@ -4,10 +4,10 @@ import '../../db/entity/group_condition.dart';
 import '../../db/service/time_log_service.dart';
 import '../condition_checker.dart';
 
-final GetIt locator = GetIt.instance;
+final GetIt _locator = GetIt.instance;
 
 class ConditionCheckerImpl implements ConditionChecker {
-  final TimeLogService _timeLogService = locator.get<TimeLogService>();
+  final TimeLogService _timeLogService = _locator.get<TimeLogService>();
 
   @override
   Future<bool> isConditionMet(GroupCondition condition) async {

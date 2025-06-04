@@ -4,6 +4,7 @@ import 'app_data_dto.dart';
 import 'app_data_handler.dart';
 import 'chainelements/app_group_chain.dart';
 import 'chainelements/app_time_chain.dart';
+import 'chainelements/blocking_chain.dart';
 import 'chainelements/conditions_check_chain.dart';
 import 'chainelements/group_conditions_chain.dart';
 import 'chainelements/listed_app_chain.dart';
@@ -17,7 +18,10 @@ class AppDataChainMaster implements AppDataHandler {
   AppDataHandler? _entryHandler;
 
   AppDataChainMaster() {
+    AppDataHandler blockingHandler = BlockingChain();
+
     AppDataHandler remainingTimeHandler = RemainingTimeChain();
+    remainingTimeHandler.setNextHandler(blockingHandler);
 
     AppDataHandler appTimeHandler = AppTimeChain();
     appTimeHandler.setNextHandler(remainingTimeHandler);
