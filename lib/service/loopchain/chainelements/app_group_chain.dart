@@ -11,12 +11,14 @@ final GetIt _locator = GetIt.instance;
 class AppGroupChain implements AppDataHandler {
   AppDataHandler? _nextHandler;
 
-  AppGroupChain() {}
+  AppGroupChain();
 
+  @override
   void setNextHandler(AppDataHandler handler) {
     _nextHandler = handler;
   }
 
+  @override
   Future<void> handleAppData(AppData data) async {
     logger.d('handleAppData: $data');
 

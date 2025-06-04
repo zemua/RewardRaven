@@ -8,6 +8,7 @@ import 'chainelements/conditions_check_chain.dart';
 import 'chainelements/group_conditions_chain.dart';
 import 'chainelements/listed_app_chain.dart';
 import 'chainelements/platform_chain.dart';
+import 'chainelements/remaining_time_chain.dart';
 import 'chainelements/timestamp_chain.dart';
 
 final logger = Logger();
@@ -16,7 +17,10 @@ class AppDataChainMaster implements AppDataHandler {
   AppDataHandler? _entryHandler;
 
   AppDataChainMaster() {
+    AppDataHandler remainingTimeHandler = RemainingTimeChain();
+
     AppDataHandler appTimeHandler = AppTimeChain();
+    appTimeHandler.setNextHandler(remainingTimeHandler);
 
     AppDataHandler conditionsCheckHandler = ConditionsCheckChain();
     conditionsCheckHandler.setNextHandler(appTimeHandler);
@@ -42,6 +46,7 @@ class AppDataChainMaster implements AppDataHandler {
     throw UnsupportedError("Next handler in chain master is not supported.");
   }
 
+  @override
   Future<void> handleAppData(AppData data) async {
     logger.d('handleAppData: $data');
     if (_entryHandler != null) {

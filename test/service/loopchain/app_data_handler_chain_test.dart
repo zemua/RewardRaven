@@ -5,9 +5,11 @@ import 'package:mockito/mockito.dart';
 import 'package:reward_raven/db/entity/app_group.dart';
 import 'package:reward_raven/db/entity/group_condition.dart';
 import 'package:reward_raven/db/entity/listed_app.dart';
+import 'package:reward_raven/db/entity/time_log.dart';
 import 'package:reward_raven/db/service/app_group_service.dart';
 import 'package:reward_raven/db/service/group_condition_service.dart';
 import 'package:reward_raven/db/service/listed_app_service.dart';
+import 'package:reward_raven/db/service/time_log_service.dart';
 import 'package:reward_raven/service/condition_checker.dart';
 import 'package:reward_raven/service/loopchain/app_data_chain_master.dart';
 import 'package:reward_raven/service/loopchain/app_data_dto.dart';
@@ -21,6 +23,7 @@ import 'app_data_handler_chain_test.mocks.dart';
   MockSpec<AppGroupService>(),
   MockSpec<GroupConditionService>(),
   MockSpec<ConditionChecker>(),
+  MockSpec<TimeLogService>(),
 ])
 void main() {
   late MockPlatformWrapper mockPlatformWrapper;
@@ -28,6 +31,7 @@ void main() {
   late MockAppGroupService mockAppGroupService;
   late MockGroupConditionService mockGroupConditionService;
   late MockConditionChecker mockConditionChecker;
+  late MockTimeLogService mockTimeLogService;
 
   final locator = GetIt.instance;
 
@@ -54,11 +58,20 @@ void main() {
       mockConditionChecker = MockConditionChecker();
       locator.registerSingleton<ConditionChecker>(mockConditionChecker);
 
+      mockTimeLogService = MockTimeLogService();
+      locator.registerSingleton<TimeLogService>(mockTimeLogService);
+
       chainMaster = AppDataChainMaster();
       testAppData = AppData(
         processId: 'test_process_id',
         appName: 'test_app',
       );
+
+      when(mockTimeLogService.getTotalDuration()).thenAnswer((_) =>
+          Future.value(TimeLog(
+              used: const Duration(minutes: 50),
+              counted: const Duration(minutes: 30),
+              dateTime: DateTime.now())));
     });
 
     tearDown(() {
@@ -436,6 +449,14 @@ void main() {
       // Assert
       expect(testAppData.timeElapsed, equals(5000));
       expect(testAppData.timeCounted, equals(5000));
+    });
+
+    test('shall fetch remaining time', () async {
+      // Act
+      await chainMaster.handleAppData(testAppData);
+
+      // Assert
+      expect(testAppData.remainingTime, equals(const Duration(minutes: 30)));
     });
   });
 }

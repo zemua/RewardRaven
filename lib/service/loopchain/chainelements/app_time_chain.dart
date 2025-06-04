@@ -10,12 +10,14 @@ final logger = Logger();
 class AppTimeChain implements AppDataHandler {
   AppDataHandler? _nextHandler;
 
-  AppTimeChain() {}
+  AppTimeChain();
 
+  @override
   void setNextHandler(AppDataHandler handler) {
     _nextHandler = handler;
   }
 
+  @override
   Future<void> handleAppData(AppData data) async {
     logger.d('handleAppData: $data');
 

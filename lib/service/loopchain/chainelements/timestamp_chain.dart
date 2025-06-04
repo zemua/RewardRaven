@@ -8,12 +8,14 @@ final logger = Logger();
 class TimestampChain implements AppDataHandler {
   AppDataHandler? _nextHandler;
 
-  TimestampChain() {}
+  TimestampChain();
 
+  @override
   void setNextHandler(AppDataHandler handler) {
     _nextHandler = handler;
   }
 
+  @override
   Future<void> handleAppData(AppData data) async {
     logger.d('handleAppData: $data');
     data.timestamp = DateTime.now();

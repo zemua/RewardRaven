@@ -12,12 +12,14 @@ final GetIt _locator = GetIt.instance;
 class ListedAppChain implements AppDataHandler {
   AppDataHandler? _nextHandler;
 
-  ListedAppChain() {}
+  ListedAppChain();
 
+  @override
   void setNextHandler(AppDataHandler handler) {
     _nextHandler = handler;
   }
 
+  @override
   Future<void> handleAppData(AppData data) async {
     logger.d('handleAppData: $data');
 

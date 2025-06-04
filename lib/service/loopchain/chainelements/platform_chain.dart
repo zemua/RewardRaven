@@ -11,12 +11,14 @@ final GetIt _locator = GetIt.instance;
 class PlatformChain implements AppDataHandler {
   AppDataHandler? _nextHandler;
 
-  PlatformChain() {}
+  PlatformChain();
 
+  @override
   void setNextHandler(AppDataHandler handler) {
     _nextHandler = handler;
   }
 
+  @override
   Future<void> handleAppData(AppData data) async {
     logger.d('handleAppData: $data');
     data.platform = _locator<PlatformWrapper>().platformName;
