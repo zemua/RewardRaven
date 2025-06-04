@@ -6,6 +6,7 @@
     "description": "The title of the app"
   },
   "apps": "Apps",
+  "cancel": "Cancel",
   "conditionalGroup": "Conditional Group",
   "conditions": "Conditions",
   "days": "days",
@@ -14,6 +15,7 @@
   "error": "Error",
   "filter": "Filter",
   "forString": "for",
+  "goToSettings": "Go to Settings",
   "groupName": "Group Name",
   "groupNameEmpty": "Group name cannot be empty",
   "hasUsed": "Has used",
@@ -30,14 +32,17 @@
   "noGroupsFound": "No groups found",
   "noPositiveGroupsFound": "No positive groups found",
   "options": "Options",
+  "permissionsRequired": "Permissions Required",
   "positiveApps": "Positive Apps",
   "positiveGroups": "Positive Groups",
   "randomChecks": "Random Checks",
   "save": "Save",
   "search" : "Search",
   "settings": "Settings",
-  "welcome": "Welcome to Reward Raven",
-    "@welcome": {
-        "description": "The welcome message"
-    }
+  "usageStatisticsPermissionExplanation": "This app needs usage statistics permissions to function properly. Please grant the permissions in the next screen.",
+  "watchdogServiceAndroidChannelDescription": "This notification appears when the watchdog service is running and the app usage is being monitored.",
+  "watchdogServiceAndroidChannelName": "Watchdog Service Notification",
+  "watchdogServiceDefaultText": "App usage will be monitored",
+  "watchdogServiceDefaultTitle": "Watchdog service running",
+  "welcome": "Welcome to Reward Raven"
 }

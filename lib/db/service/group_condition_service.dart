@@ -1,13 +1,15 @@
+import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 import 'package:reward_raven/db/repository/group_condition_repository.dart';
 
-import '../../main.dart';
 import '../entity/group_condition.dart';
+
+final GetIt _locator = GetIt.instance;
 
 class GroupConditionService {
   final Logger _logger = Logger();
   final GroupConditionRepository _repository =
-      locator<GroupConditionRepository>();
+      _locator<GroupConditionRepository>();
 
   Future<GroupCondition?> getGroupCondition({
     required String conditionedGroupId,

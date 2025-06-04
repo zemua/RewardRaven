@@ -1,12 +1,15 @@
-import '../../main.dart';
+import 'package:get_it/get_it.dart';
+
 import '../../screens/apps/app_list_type.dart';
 import '../../service/platform_wrapper.dart';
 import '../entity/listed_app.dart';
 import '../repository/listed_app_repository.dart';
 
+final GetIt _locator = GetIt.instance;
+
 class ListedAppService {
-  final ListedAppRepository _repository = locator<ListedAppRepository>();
-  final PlatformWrapper _platformWrapper = locator<PlatformWrapper>();
+  final ListedAppRepository _repository = _locator<ListedAppRepository>();
+  final PlatformWrapper _platformWrapper = _locator<PlatformWrapper>();
 
   ListedAppService();
 

@@ -1,15 +1,17 @@
 import 'dart:async';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
-import 'package:reward_raven/main.dart';
 
 import '../entity/collections.dart';
 import '../entity/listed_app.dart';
 import '../helper/firebase_helper.dart';
 
+final GetIt _locator = GetIt.instance;
+
 class ListedAppRepository {
-  final FirebaseHelper _firebaseHelper = locator.get<FirebaseHelper>();
+  final FirebaseHelper _firebaseHelper = _locator.get<FirebaseHelper>();
 
   final logger = Logger();
 

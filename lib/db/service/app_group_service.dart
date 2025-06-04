@@ -1,9 +1,12 @@
-import '../../main.dart';
+import 'package:get_it/get_it.dart';
+
 import '../entity/app_group.dart';
 import '../repository/app_group_repository.dart';
 
+final GetIt _locator = GetIt.instance;
+
 class AppGroupService {
-  final AppGroupRepository _appGroupRepository = locator<AppGroupRepository>();
+  final AppGroupRepository _appGroupRepository = _locator<AppGroupRepository>();
 
   Future<void> saveGroup(AppGroup group) async {
     await _appGroupRepository.saveGroup(group);

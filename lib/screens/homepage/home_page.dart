@@ -1,13 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
+import 'package:usage_tracker/usage_tracker.dart';
 
+import '../../service/foreground/androidwatchdog.dart';
+import '../../service/platform_wrapper.dart';
 import '../appgroups/app_group_list.dart';
 import '../appgroups/app_group_list_type.dart';
 import '../apps/app_list.dart';
 import '../apps/app_list_type.dart';
 
-class HomePage extends StatelessWidget {
+final logger = Logger();
+final GetIt locator = GetIt.instance;
+
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final PlatformWrapper _platformWrapper = locator<PlatformWrapper>();
+
+  @override
+  void initState() {
+    super.initState();
+    _requestPermissions();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,7 +154,7 @@ class HomePage extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        print('Random checks button pressed');
+                        logger.d('Random checks button pressed');
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -150,7 +172,7 @@ class HomePage extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        print('My Times button pressed');
+                        logger.d('My Times button pressed');
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -168,7 +190,7 @@ class HomePage extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        print('Settings button pressed');
+                        logger.d('Settings button pressed');
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -181,11 +203,45 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                 ]),
+                if (_platformWrapper.isAndroid()) const AndroidWatchdogWidget(),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  Future<void> _requestPermissions() async {
+    logger.d('Requesting permissions');
+    final hasStatsPermission = await UsageTracker.hasPermission();
+    logger.d('Has stats permission: $hasStatsPermission');
+    if (!hasStatsPermission) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(AppLocalizations.of(context)!.permissionsRequired),
+            content: Text(AppLocalizations.of(context)!
+                .usageStatisticsPermissionExplanation),
+            actions: <Widget>[
+              TextButton(
+                child: Text(AppLocalizations.of(context)!.goToSettings),
+                onPressed: () async {
+                  await UsageTracker.requestPermission();
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text(AppLocalizations.of(context)!.cancel),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }

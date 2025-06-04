@@ -1,18 +1,20 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:reward_raven/db/entity/listed_app.dart';
 import 'package:reward_raven/db/helper/firebase_helper.dart';
 import 'package:reward_raven/db/repository/listed_app_repository.dart';
-import 'package:reward_raven/main.dart';
 
 import 'listed_app_repository_test.mocks.dart';
+
+final GetIt _locator = GetIt.instance;
 
 @GenerateMocks([FirebaseHelper, DatabaseReference, DataSnapshot, DatabaseEvent])
 void main() {
   final MockFirebaseHelper mockFirebaseHelper = MockFirebaseHelper();
-  locator.registerSingleton<FirebaseHelper>(mockFirebaseHelper);
+  _locator.registerSingleton<FirebaseHelper>(mockFirebaseHelper);
   late MockDatabaseReference mockDatabaseReference;
   late ListedAppRepository listedAppRepository;
 

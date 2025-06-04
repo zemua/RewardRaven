@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:installed_apps/app_info.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:reward_raven/db/entity/app_group.dart';
 import 'package:reward_raven/db/service/app_group_service.dart';
@@ -8,13 +9,18 @@ import 'package:reward_raven/main.dart';
 import 'package:reward_raven/screens/appgroups/app_group_list.dart';
 import 'package:reward_raven/screens/apps/app_list.dart';
 import 'package:reward_raven/service/app/apps_fetcher.dart';
+import 'package:reward_raven/service/platform_wrapper.dart';
 
+import 'home_page_test.mocks.dart';
+
+@GenerateNiceMocks([MockSpec<PlatformWrapper>()])
 void main() {
   final getIt = GetIt.instance;
 
   setUp(() {
     getIt.registerSingleton<AppsFetcher>(MockAppsFetcher());
     getIt.registerSingleton<AppGroupService>(MockAppGroupService());
+    getIt.registerSingleton<PlatformWrapper>(MockPlatformWrapper());
   });
 
   tearDown(() {

@@ -1,4 +1,4 @@
-enum DbCollection { listedApps, appGroups, groupConditions }
+enum DbCollection { listedApps, appGroups, groupConditions, logs }
 
 extension DbCollectionExtension on DbCollection {
   String get name {
@@ -9,6 +9,8 @@ extension DbCollectionExtension on DbCollection {
         return 'appGroups';
       case DbCollection.groupConditions:
         return 'groupConditions';
+      case DbCollection.logs:
+        return 'timeLogs';
       default:
         return '';
     }
