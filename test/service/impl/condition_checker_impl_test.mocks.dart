@@ -3,11 +3,11 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i3;
+import 'dart:async' as _i4;
 
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:reward_raven/db/entity/time_log.dart' as _i4;
-import 'package:reward_raven/db/service/time_log_service.dart' as _i2;
+import 'package:reward_raven/db/entity/time_log.dart' as _i2;
+import 'package:reward_raven/db/service/time_log_service.dart' as _i3;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -22,8 +22,8 @@ import 'package:reward_raven/db/service/time_log_service.dart' as _i2;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeDuration_0 extends _i1.SmartFake implements Duration {
-  _FakeDuration_0(
+class _FakeTimeLog_0 extends _i1.SmartFake implements _i2.TimeLog {
+  _FakeTimeLog_0(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -35,42 +35,42 @@ class _FakeDuration_0 extends _i1.SmartFake implements Duration {
 /// A class which mocks [TimeLogService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTimeLogService extends _i1.Mock implements _i2.TimeLogService {
+class MockTimeLogService extends _i1.Mock implements _i3.TimeLogService {
   @override
-  _i3.Future<void> addToTotal(_i4.TimeLog? timelog) => (super.noSuchMethod(
+  _i4.Future<void> addToTotal(_i2.TimeLog? timelog) => (super.noSuchMethod(
         Invocation.method(
           #addToTotal,
           [timelog],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 
   @override
-  _i3.Future<Duration> getTotalDuration() => (super.noSuchMethod(
+  _i4.Future<_i2.TimeLog> getTotalDuration() => (super.noSuchMethod(
         Invocation.method(
           #getTotalDuration,
           [],
         ),
-        returnValue: _i3.Future<Duration>.value(_FakeDuration_0(
+        returnValue: _i4.Future<_i2.TimeLog>.value(_FakeTimeLog_0(
           this,
           Invocation.method(
             #getTotalDuration,
             [],
           ),
         )),
-        returnValueForMissingStub: _i3.Future<Duration>.value(_FakeDuration_0(
+        returnValueForMissingStub: _i4.Future<_i2.TimeLog>.value(_FakeTimeLog_0(
           this,
           Invocation.method(
             #getTotalDuration,
             [],
           ),
         )),
-      ) as _i3.Future<Duration>);
+      ) as _i4.Future<_i2.TimeLog>);
 
   @override
-  _i3.Future<void> addToGroup(
-    _i4.TimeLog? timelog,
+  _i4.Future<void> addToGroup(
+    _i2.TimeLog? timelog,
     String? groupId,
   ) =>
       (super.noSuchMethod(
@@ -81,12 +81,12 @@ class MockTimeLogService extends _i1.Mock implements _i2.TimeLogService {
             groupId,
           ],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 
   @override
-  _i3.Future<Duration> getGroupDurationForLastDays(
+  _i4.Future<_i2.TimeLog> getGroupDurationForLastDays(
     String? groupId,
     int? lastDays,
   ) =>
@@ -98,7 +98,7 @@ class MockTimeLogService extends _i1.Mock implements _i2.TimeLogService {
             lastDays,
           ],
         ),
-        returnValue: _i3.Future<Duration>.value(_FakeDuration_0(
+        returnValue: _i4.Future<_i2.TimeLog>.value(_FakeTimeLog_0(
           this,
           Invocation.method(
             #getGroupDurationForLastDays,
@@ -108,7 +108,7 @@ class MockTimeLogService extends _i1.Mock implements _i2.TimeLogService {
             ],
           ),
         )),
-        returnValueForMissingStub: _i3.Future<Duration>.value(_FakeDuration_0(
+        returnValueForMissingStub: _i4.Future<_i2.TimeLog>.value(_FakeTimeLog_0(
           this,
           Invocation.method(
             #getGroupDurationForLastDays,
@@ -118,5 +118,5 @@ class MockTimeLogService extends _i1.Mock implements _i2.TimeLogService {
             ],
           ),
         )),
-      ) as _i3.Future<Duration>);
+      ) as _i4.Future<_i2.TimeLog>);
 }

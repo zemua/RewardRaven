@@ -3,13 +3,13 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i5;
 
 import 'package:firebase_database/firebase_database.dart' as _i6;
 import 'package:logger/logger.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:reward_raven/db/entity/time_log.dart' as _i5;
-import 'package:reward_raven/db/repository/time_log_repository.dart' as _i3;
+import 'package:reward_raven/db/entity/time_log.dart' as _i3;
+import 'package:reward_raven/db/repository/time_log_repository.dart' as _i4;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -34,8 +34,8 @@ class _FakeLogger_0 extends _i1.SmartFake implements _i2.Logger {
         );
 }
 
-class _FakeDuration_1 extends _i1.SmartFake implements Duration {
-  _FakeDuration_1(
+class _FakeTimeLog_1 extends _i1.SmartFake implements _i3.TimeLog {
+  _FakeTimeLog_1(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -47,7 +47,7 @@ class _FakeDuration_1 extends _i1.SmartFake implements Duration {
 /// A class which mocks [TimeLogRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTimeLogRepository extends _i1.Mock implements _i3.TimeLogRepository {
+class MockTimeLogRepository extends _i1.Mock implements _i4.TimeLogRepository {
   @override
   _i2.Logger get logger => (super.noSuchMethod(
         Invocation.getter(#logger),
@@ -62,40 +62,40 @@ class MockTimeLogRepository extends _i1.Mock implements _i3.TimeLogRepository {
       ) as _i2.Logger);
 
   @override
-  _i4.Future<void> addToTotal(_i5.TimeLog? timeLog) => (super.noSuchMethod(
+  _i5.Future<void> addToTotal(_i3.TimeLog? timeLog) => (super.noSuchMethod(
         Invocation.method(
           #addToTotal,
           [timeLog],
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
 
   @override
-  _i4.Future<Duration> getTotalDuration() => (super.noSuchMethod(
+  _i5.Future<_i3.TimeLog> getTotalDuration() => (super.noSuchMethod(
         Invocation.method(
           #getTotalDuration,
           [],
         ),
-        returnValue: _i4.Future<Duration>.value(_FakeDuration_1(
+        returnValue: _i5.Future<_i3.TimeLog>.value(_FakeTimeLog_1(
           this,
           Invocation.method(
             #getTotalDuration,
             [],
           ),
         )),
-        returnValueForMissingStub: _i4.Future<Duration>.value(_FakeDuration_1(
+        returnValueForMissingStub: _i5.Future<_i3.TimeLog>.value(_FakeTimeLog_1(
           this,
           Invocation.method(
             #getTotalDuration,
             [],
           ),
         )),
-      ) as _i4.Future<Duration>);
+      ) as _i5.Future<_i3.TimeLog>);
 
   @override
-  _i4.Future<void> addToGroup(
-    _i5.TimeLog? timeLog,
+  _i5.Future<void> addToGroup(
+    _i3.TimeLog? timeLog,
     String? groupId,
   ) =>
       (super.noSuchMethod(
@@ -106,12 +106,12 @@ class MockTimeLogRepository extends _i1.Mock implements _i3.TimeLogRepository {
             groupId,
           ],
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
 
   @override
-  _i4.Future<Duration> getGroupTotalDuration(
+  _i5.Future<_i3.TimeLog> getGroupTotalDuration(
     String? groupId,
     DateTime? dateTime,
   ) =>
@@ -123,7 +123,7 @@ class MockTimeLogRepository extends _i1.Mock implements _i3.TimeLogRepository {
             dateTime,
           ],
         ),
-        returnValue: _i4.Future<Duration>.value(_FakeDuration_1(
+        returnValue: _i5.Future<_i3.TimeLog>.value(_FakeTimeLog_1(
           this,
           Invocation.method(
             #getGroupTotalDuration,
@@ -133,7 +133,7 @@ class MockTimeLogRepository extends _i1.Mock implements _i3.TimeLogRepository {
             ],
           ),
         )),
-        returnValueForMissingStub: _i4.Future<Duration>.value(_FakeDuration_1(
+        returnValueForMissingStub: _i5.Future<_i3.TimeLog>.value(_FakeTimeLog_1(
           this,
           Invocation.method(
             #getGroupTotalDuration,
@@ -143,11 +143,11 @@ class MockTimeLogRepository extends _i1.Mock implements _i3.TimeLogRepository {
             ],
           ),
         )),
-      ) as _i4.Future<Duration>);
+      ) as _i5.Future<_i3.TimeLog>);
 
   @override
-  _i4.Future<void> add(
-    _i5.TimeLog? timeLog,
+  _i5.Future<void> add(
+    _i3.TimeLog? timeLog,
     _i6.DatabaseReference? reference,
   ) =>
       (super.noSuchMethod(
@@ -158,7 +158,7 @@ class MockTimeLogRepository extends _i1.Mock implements _i3.TimeLogRepository {
             reference,
           ],
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
 }

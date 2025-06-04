@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:reward_raven/db/entity/group_condition.dart';
+import 'package:reward_raven/db/entity/time_log.dart';
 import 'package:reward_raven/db/service/time_log_service.dart';
 import 'package:reward_raven/service/impl/condition_checker_impl.dart';
 
@@ -32,7 +33,10 @@ void main() {
   group('AppsFetcherProvider', () {
     test('Checks that a condition is met', () async {
       when(mockTimeLogService.getGroupDurationForLastDays("zxcvb", 2))
-          .thenAnswer((_) => Future.value(const Duration(hours: 2)));
+          .thenAnswer((_) => Future.value(TimeLog(
+              used: const Duration(hours: 2),
+              counted: const Duration(minutes: 30),
+              dateTime: DateTime.now())));
 
       final isMet = await conditionChecker.isConditionMet(GroupCondition(
           conditionedGroupId: "asdfg",

@@ -13,7 +13,7 @@ class TimeLogService {
     await _repository.addToTotal(timelog);
   }
 
-  Future<Duration> getTotalDuration() async {
+  Future<TimeLog> getTotalDuration() async {
     return await _repository.getTotalDuration();
   }
 
@@ -21,16 +21,18 @@ class TimeLogService {
     await _repository.addToGroup(timelog, groupId);
   }
 
-  Future<Duration> getGroupDurationForLastDays(
+  Future<TimeLog> getGroupDurationForLastDays(
       String groupId, int lastDays) async {
-    Duration totaDuration = const Duration();
+    Duration totalUsed = Duration.zero;
+    Duration totalCounted = Duration.zero;
     DateTime now = DateTime.now();
     for (int i = 0; i <= lastDays; i++) {
       DateTime specificDay = now.subtract(Duration(days: i));
-      Duration durationForDay =
+      TimeLog durationForDay =
           await _repository.getGroupTotalDuration(groupId, specificDay);
-      totaDuration += durationForDay;
+      totalUsed += durationForDay.used;
+      totalCounted += durationForDay.counted;
     }
-    return totaDuration;
+    return TimeLog(used: totalUsed, counted: totalCounted, dateTime: now);
   }
 }

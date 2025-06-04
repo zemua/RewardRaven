@@ -28,9 +28,9 @@ class TimeLogRepository {
     }
   }
 
-  Future<Duration> getTotalDuration() async {
+  Future<TimeLog> getTotalDuration() async {
     final reference = await _resolveTotalReference();
-    return Duration(seconds: await _totalSeconds(reference));
+    return await _totalLog(reference);
   }
 
   Future<DatabaseReference> _resolveTotalReference() async {
@@ -54,10 +54,10 @@ class TimeLogRepository {
     }
   }
 
-  Future<Duration> getGroupTotalDuration(
+  Future<TimeLog> getGroupTotalDuration(
       String groupId, DateTime dateTime) async {
     final reference = await _resolveGroupReference(groupId, dateTime);
-    return Duration(seconds: await _totalSeconds(reference));
+    return await _totalLog(reference);
   }
 
   Future<DatabaseReference> _resolveGroupReference(
@@ -85,7 +85,8 @@ class TimeLogRepository {
       final TimeLog retrievedLog = TimeLog.fromJson(logMap);
       logger.i("Retrieved log with uuid $uuid as $retrievedLog");
       TimeLog updatedLog = TimeLog(
-          duration: timeLog.duration + retrievedLog.duration,
+          used: timeLog.used + retrievedLog.used,
+          counted: timeLog.counted + retrievedLog.counted,
           dateTime: timeLog.dateTime);
       await uuidRef
           .update(updatedLog.toJson())
@@ -99,26 +100,34 @@ class TimeLogRepository {
     }
   }
 
-  Future<int> _totalSeconds(DatabaseReference reference) async {
+  Future<TimeLog> _totalLog(DatabaseReference reference) async {
     final snapshot = await reference.get().timeout(const Duration(seconds: 10));
     if (snapshot.value != null) {
       final Map<dynamic, dynamic> logMap =
           Map<dynamic, dynamic>.from(snapshot.value as Map);
-      int totalDuration = 0;
+      int totalUsed = 0;
+      int totalCounted = 0;
       logMap.forEach((key, value) {
         if (value is Map) {
           try {
             final timeLog = TimeLog.fromJson(Map<String, dynamic>.from(value));
-            totalDuration += timeLog.duration.inSeconds;
+            totalUsed += timeLog.used.inSeconds;
+            totalCounted += timeLog.counted.inSeconds;
           } catch (e) {
             logger.e('Error parsing TimeLog: $e');
           }
         }
       });
 
-      return totalDuration;
+      return TimeLog(
+          used: Duration(seconds: totalUsed),
+          counted: Duration(seconds: totalCounted),
+          dateTime: DateTime.now());
     } else {
-      return 0;
+      return TimeLog(
+          used: Duration.zero,
+          counted: Duration.zero,
+          dateTime: DateTime.now());
     }
   }
 }

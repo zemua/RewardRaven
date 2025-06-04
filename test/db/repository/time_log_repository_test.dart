@@ -32,7 +32,8 @@ void main() {
 
   const testUuid = 'test-uuid-123';
   final testTimeLog = TimeLog(
-    duration: const Duration(minutes: 30),
+    used: const Duration(minutes: 30),
+    counted: const Duration(minutes: 20),
     dateTime: DateTime(2023, 1, 1, 12, 0),
   );
 
@@ -96,7 +97,8 @@ void main() {
       // Arrange
       final existingLog = {
         'date_time': '2023-01-01T11:00:00.000',
-        'duration': 1800, // 30 minutes
+        'used': 1800,
+        'counted': 1200,
       };
       when(mockDataSnapshot.value).thenReturn(existingLog);
       when(mockDatabaseReference.update(any)).thenAnswer((_) => Future.value());
@@ -120,7 +122,8 @@ void main() {
       // Inspect the captured update
       expect(capturedUpdate, isNotNull);
       expect(capturedUpdate!['date_time'], '2023-01-01T12:00:00.000');
-      expect(capturedUpdate!['duration'], 3600);
+      expect(capturedUpdate!['used'], 3600);
+      expect(capturedUpdate!['counted'], 2400);
     });
   });
 
@@ -134,7 +137,8 @@ void main() {
       final result = await timeLogRepository.getTotalDuration();
 
       // Assert
-      expect(result, equals(const Duration()));
+      expect(result.counted, equals(Duration.zero));
+      expect(result.used, equals(Duration.zero));
       verify(mockTotalReference.get()).called(1);
     });
 
@@ -144,11 +148,13 @@ void main() {
       when(mockDataSnapshot.value).thenReturn({
         'device1': {
           'date_time': '2023-01-01T12:00:00.000',
-          'duration': 1800, // 30 minutes
+          'used': 1800,
+          'counted': 1200,
         },
         'device2': {
           'date_time': '2023-01-01T13:00:00.000',
-          'duration': 1800, // 30 minutes
+          'used': 1800,
+          'counted': 1200,
         },
       });
 
@@ -156,7 +162,8 @@ void main() {
       final result = await timeLogRepository.getTotalDuration();
 
       // Assert
-      expect(result, equals(const Duration(seconds: 3600)));
+      expect(result.used, equals(const Duration(hours: 1)));
+      expect(result.counted, equals(const Duration(minutes: 40)));
       verify(mockTotalReference.get()).called(1);
     });
 
@@ -166,12 +173,14 @@ void main() {
       when(mockDataSnapshot.value).thenReturn({
         'device1': {
           'date_time': '2023-01-01T12:00:00.000',
-          'duration': 1800, // 30 minutes
+          'used': 1800,
+          'counted': 1200,
         },
         'device2': 'malformed-data',
         'device3': {
           'date_time': '2023-01-01T13:00:00.000',
-          'duration': 1800, // 30 minutes
+          'used': 1800,
+          'counted': 1200,
         },
       });
 
@@ -179,7 +188,8 @@ void main() {
       final result = await timeLogRepository.getTotalDuration();
 
       // Assert
-      expect(result, equals(const Duration(seconds: 3600)));
+      expect(result.used, equals(const Duration(hours: 1)));
+      expect(result.counted, equals(const Duration(minutes: 40)));
       verify(mockTotalReference.get()).called(1);
     });
   });
@@ -204,7 +214,8 @@ void main() {
       // Arrange
       final existingLog = {
         'date_time': '2023-01-01T11:00:00.000',
-        'duration': 1800, // 30 minutes
+        'used': 1800,
+        'counted': 1200,
       };
       when(mockDataSnapshot.value).thenReturn(existingLog);
       when(mockDatabaseReference.update(any)).thenAnswer((_) => Future.value());
@@ -228,7 +239,8 @@ void main() {
       // Inspect the captured update
       expect(capturedUpdate, isNotNull);
       expect(capturedUpdate!['date_time'], '2023-01-01T12:00:00.000');
-      expect(capturedUpdate!['duration'], 3600);
+      expect(capturedUpdate!['used'], 3600);
+      expect(capturedUpdate!['counted'], 2400);
     });
   });
 
@@ -240,11 +252,13 @@ void main() {
       when(mockDataSnapshot.value).thenReturn({
         'device1': {
           'date_time': '2023-01-01T12:00:00.000',
-          'duration': 1800, // 30 minutes
+          'used': 1800,
+          'counted': 1200,
         },
         'device2': {
           'date_time': '2023-01-01T13:00:00.000',
-          'duration': 1800, // 30 minutes
+          'used': 1800,
+          'counted': 1200,
         },
       });
 
@@ -253,8 +267,8 @@ void main() {
           'groupId', DateTime.now());
 
       // Assert
-      expect(result,
-          equals(const Duration(seconds: 3600))); // 60 minutes in seconds
+      expect(result.used, equals(const Duration(seconds: 3600)));
+      expect(result.counted, equals(const Duration(minutes: 40)));
       verify(mockDatabaseReference.get()).called(1);
     });
   });

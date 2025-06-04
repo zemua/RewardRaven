@@ -19,7 +19,8 @@ void main() {
   late TimeLogService timeLogService;
 
   final testTimeLog = TimeLog(
-    duration: const Duration(minutes: 30),
+    used: const Duration(minutes: 30),
+    counted: const Duration(minutes: 20),
     dateTime: DateTime(2023, 1, 1, 12, 0),
   );
 
@@ -35,18 +36,24 @@ void main() {
   });
 
   group('TimeLogService', () {
-    test('get ground seconds for last 1 days', () async {
+    test('get group duration seconds for last 1 days', () async {
       List<DateTime> captured = [];
+      DateTime now = DateTime.now();
       when(timeLogRepository.getGroupTotalDuration("someGroupId", any))
           .thenAnswer((invocation) {
         captured.add(invocation.positionalArguments.last);
-        return Future.value(const Duration(seconds: 30));
+        return Future.value(TimeLog(
+            used: const Duration(seconds: 60),
+            counted: const Duration(seconds: 30),
+            dateTime: now));
       });
 
       final result =
           await timeLogService.getGroupDurationForLastDays("someGroupId", 1);
 
-      expect(result, equals(const Duration(seconds: 60)));
+      expect(result.counted, const Duration(seconds: 60));
+      expect(result.used, const Duration(seconds: 120));
+      expect(result.dateTime, isNotNull);
       verify(timeLogRepository.getGroupTotalDuration("someGroupId", any))
           .called(2);
 
@@ -65,10 +72,14 @@ void main() {
     });
 
     test('get total duration', () async {
-      when(timeLogRepository.getTotalDuration())
-          .thenAnswer((_) => Future.value(const Duration(hours: 2)));
-      Duration result = await timeLogService.getTotalDuration();
-      expect(result, equals(const Duration(hours: 2)));
+      when(timeLogRepository.getTotalDuration()).thenAnswer((_) => Future.value(
+          TimeLog(
+              used: const Duration(hours: 2),
+              counted: const Duration(hours: 1),
+              dateTime: DateTime.now())));
+      TimeLog result = await timeLogService.getTotalDuration();
+      expect(result.used, equals(const Duration(hours: 2)));
+      expect(result.counted, equals(const Duration(hours: 1)));
     });
 
     test('add to group', () async {
