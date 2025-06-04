@@ -634,5 +634,9 @@ void main() {
 
       verify(mockAppBlocker.blockApp(any)).called(1);
     });
+
+    test('shall update total time log', () async {
+      fail("not implemented");
+    });
   });
 }
