@@ -123,7 +123,7 @@ void main() {
 
     test('should add ListedApp to AppData', () async {
       // Setup a dummy ListedApp
-      final listedApp = ListedApp(
+      const listedApp = ListedApp(
           identifier: 'test_id',
           platform: 'android',
           status: AppStatus.positive,
@@ -145,14 +145,14 @@ void main() {
 
     test('should assign group when group exists for listed app', () async {
       // Arrange
-      final testListedApp = ListedApp(
+      const testListedApp = ListedApp(
         identifier: 'test_id',
         platform: 'android',
         status: AppStatus.positive,
         listId: 'test_list_id',
       );
 
-      final testGroup = AppGroup(
+      const testGroup = AppGroup(
           id: 'test_group_id', name: 'Test Group', type: GroupType.positive);
 
       when(mockListedAppService.getListedAppById(any))
@@ -175,7 +175,7 @@ void main() {
     test('should not assign group when no group exists for listed app',
         () async {
       // Arrange
-      final testListedApp = ListedApp(
+      const testListedApp = ListedApp(
         identifier: 'test_id',
         platform: 'android',
         status: AppStatus.positive,
@@ -201,7 +201,7 @@ void main() {
 
     test('should not assign group when listed app has no listId', () async {
       // Arrange
-      final testListedApp = ListedApp(
+      const testListedApp = ListedApp(
         identifier: 'test_id',
         platform: 'android',
         status: AppStatus.positive,
@@ -236,14 +236,14 @@ void main() {
 
     test('should assign conditions when exists', () async {
       // Arrange
-      final testListedApp = ListedApp(
+      const testListedApp = ListedApp(
         identifier: 'test_id',
         platform: 'android',
         status: AppStatus.positive,
         listId: 'test_list_id',
       );
 
-      final testGroup = AppGroup(
+      const testGroup = AppGroup(
           id: 'test_group_id', name: 'Test Group', type: GroupType.positive);
 
       final conditions = [
@@ -251,7 +251,7 @@ void main() {
           id: 'test_id',
           conditionalGroupId: 'conditional_group_id',
           conditionedGroupId: 'test_group_id',
-          usedTime: Duration(hours: 1),
+          usedTime: const Duration(hours: 1),
           duringLastDays: 1,
         ),
       ];
@@ -277,14 +277,14 @@ void main() {
 
     test('should verify conditions met', () async {
       // Arrange
-      final testListedApp = ListedApp(
+      const testListedApp = ListedApp(
         identifier: 'test_id',
         platform: 'android',
         status: AppStatus.positive,
         listId: 'test_list_id',
       );
 
-      final testGroup = AppGroup(
+      const testGroup = AppGroup(
           id: 'test_group_id', name: 'Test Group', type: GroupType.positive);
 
       final conditions = [
@@ -292,7 +292,7 @@ void main() {
           id: 'test_id',
           conditionalGroupId: 'conditional_group_id',
           conditionedGroupId: 'test_group_id',
-          usedTime: Duration(hours: 1),
+          usedTime: const Duration(hours: 1),
           duringLastDays: 1,
         ),
       ];
@@ -316,14 +316,14 @@ void main() {
 
     test('should verify conditions NOT met', () async {
       // Arrange
-      final testListedApp = ListedApp(
+      const testListedApp = ListedApp(
         identifier: 'test_id',
         platform: 'android',
         status: AppStatus.positive,
         listId: 'test_list_id',
       );
 
-      final testGroup = AppGroup(
+      const testGroup = AppGroup(
           id: 'test_group_id', name: 'Test Group', type: GroupType.positive);
 
       final conditions = [
@@ -331,7 +331,7 @@ void main() {
           id: 'test_id',
           conditionalGroupId: 'conditional_group_id',
           conditionedGroupId: 'test_group_id',
-          usedTime: Duration(hours: 1),
+          usedTime: const Duration(hours: 1),
           duringLastDays: 1,
         ),
       ];
@@ -363,7 +363,7 @@ void main() {
     });
 
     test('negative should discount time', () async {
-      var testListedApp = ListedApp(
+      var testListedApp = const ListedApp(
         identifier: 'test_id',
         platform: 'android',
         status: AppStatus.negative,
@@ -382,14 +382,14 @@ void main() {
     });
 
     test('positve and conditions not met should not count time', () async {
-      var testListedApp = ListedApp(
+      var testListedApp = const ListedApp(
         identifier: 'test_id',
         platform: 'android',
         status: AppStatus.positive,
         listId: 'test_list_id',
       );
 
-      final testGroup = AppGroup(
+      const testGroup = AppGroup(
           id: 'test_group_id', name: 'Test Group', type: GroupType.positive);
 
       final conditions = [
@@ -397,7 +397,7 @@ void main() {
           id: 'test_id',
           conditionalGroupId: 'conditional_group_id',
           conditionedGroupId: 'test_group_id',
-          usedTime: Duration(hours: 1),
+          usedTime: const Duration(hours: 1),
           duringLastDays: 1,
         ),
       ];
@@ -420,14 +420,14 @@ void main() {
     });
 
     test('positve and conditions met should count time', () async {
-      var testListedApp = ListedApp(
+      var testListedApp = const ListedApp(
         identifier: 'test_id',
         platform: 'android',
         status: AppStatus.positive,
         listId: 'test_list_id',
       );
 
-      final testGroup = AppGroup(
+      const testGroup = AppGroup(
           id: 'test_group_id', name: 'Test Group', type: GroupType.positive);
 
       final conditions = [
@@ -435,7 +435,7 @@ void main() {
           id: 'test_id',
           conditionalGroupId: 'conditional_group_id',
           conditionedGroupId: 'test_group_id',
-          usedTime: Duration(hours: 1),
+          usedTime: const Duration(hours: 1),
           duringLastDays: 1,
         ),
       ];
@@ -480,14 +480,14 @@ void main() {
     test(
         'shall not block positive app even when conditions are not met and time is out',
         () async {
-      var testListedApp = ListedApp(
+      var testListedApp = const ListedApp(
         identifier: 'test_id',
         platform: 'android',
         status: AppStatus.positive,
         listId: 'test_list_id',
       );
 
-      final testGroup = AppGroup(
+      const testGroup = AppGroup(
           id: 'test_group_id', name: 'Test Group', type: GroupType.positive);
 
       final conditions = [
@@ -495,7 +495,7 @@ void main() {
           id: 'test_id',
           conditionalGroupId: 'conditional_group_id',
           conditionedGroupId: 'test_group_id',
-          usedTime: Duration(hours: 1),
+          usedTime: const Duration(hours: 1),
           duringLastDays: 1,
         ),
       ];
@@ -522,14 +522,14 @@ void main() {
 
     test('shall not block negative app when enough time and conditions met',
         () async {
-      var testListedApp = ListedApp(
+      var testListedApp = const ListedApp(
         identifier: 'test_id',
         platform: 'android',
         status: AppStatus.negative,
         listId: 'test_list_id',
       );
 
-      final testGroup = AppGroup(
+      const testGroup = AppGroup(
           id: 'test_group_id', name: 'Test Group', type: GroupType.negative);
 
       final conditions = [
@@ -537,7 +537,7 @@ void main() {
           id: 'test_id',
           conditionalGroupId: 'conditional_group_id',
           conditionedGroupId: 'test_group_id',
-          usedTime: Duration(hours: 1),
+          usedTime: const Duration(hours: 1),
           duringLastDays: 1,
         ),
       ];
@@ -558,14 +558,14 @@ void main() {
 
     test('shall call to block negative app when conditions are not met',
         () async {
-      var testListedApp = ListedApp(
+      var testListedApp = const ListedApp(
         identifier: 'test_id',
         platform: 'android',
         status: AppStatus.negative,
         listId: 'test_list_id',
       );
 
-      final testGroup = AppGroup(
+      const testGroup = AppGroup(
           id: 'test_group_id', name: 'Test Group', type: GroupType.negative);
 
       final conditions = [
@@ -573,7 +573,7 @@ void main() {
           id: 'test_id',
           conditionalGroupId: 'conditional_group_id',
           conditionedGroupId: 'test_group_id',
-          usedTime: Duration(hours: 1),
+          usedTime: const Duration(hours: 1),
           duringLastDays: 1,
         ),
       ];
