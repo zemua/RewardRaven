@@ -1,4 +1,5 @@
 import 'package:logger/logger.dart';
+import 'package:reward_raven/service/loopchain/chainelements/update_notification_chain.dart';
 
 import 'app_data_dto.dart';
 import 'app_data_handler.dart';
@@ -30,6 +31,7 @@ class AppDataChainMaster implements AppDataHandler {
     handlers.add(RemainingTimeChain());
     handlers.add(BlockingChain());
     handlers.add(UpdateTimelogsChain());
+    handlers.add(UpdateNotificationChain());
     _setupHandlers(handlers);
   }
 

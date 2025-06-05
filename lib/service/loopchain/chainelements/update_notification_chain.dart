@@ -1,6 +1,11 @@
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
-ocator = GetIt.instance;
+
+import '../app_data_dto.dart';
+import '../app_data_handler.dart';
+
+final logger = Logger();
+final GetIt _locator = GetIt.instance;
 
 class UpdateNotificationChain implements AppDataHandler {
   AppDataHandler? _nextHandler;
