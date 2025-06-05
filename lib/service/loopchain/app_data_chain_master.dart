@@ -19,34 +19,25 @@ class AppDataChainMaster implements AppDataHandler {
   AppDataHandler? _entryHandler;
 
   AppDataChainMaster() {
-    AppDataHandler updateTimelogsHandler = UpdateTimelogsChain();
+    List<AppDataHandler> handlers = [];
+    handlers.add(TimestampChain());
+    handlers.add(PlatformChain());
+    handlers.add(ListedAppChain());
+    handlers.add(AppGroupChain());
+    handlers.add(GroupConditionsChain());
+    handlers.add(ConditionsCheckChain());
+    handlers.add(AppTimeChain());
+    handlers.add(RemainingTimeChain());
+    handlers.add(BlockingChain());
+    handlers.add(UpdateTimelogsChain());
+    _setupHandlers(handlers);
+  }
 
-    AppDataHandler blockingHandler = BlockingChain();
-    blockingHandler.setNextHandler(updateTimelogsHandler);
-
-    AppDataHandler remainingTimeHandler = RemainingTimeChain();
-    remainingTimeHandler.setNextHandler(blockingHandler);
-
-    AppDataHandler appTimeHandler = AppTimeChain();
-    appTimeHandler.setNextHandler(remainingTimeHandler);
-
-    AppDataHandler conditionsCheckHandler = ConditionsCheckChain();
-    conditionsCheckHandler.setNextHandler(appTimeHandler);
-
-    AppDataHandler groupConditionsHandler = GroupConditionsChain();
-    groupConditionsHandler.setNextHandler(conditionsCheckHandler);
-
-    AppDataHandler appGroupHandler = AppGroupChain();
-    appGroupHandler.setNextHandler(groupConditionsHandler);
-
-    AppDataHandler listedAppHandler = ListedAppChain();
-    listedAppHandler.setNextHandler(appGroupHandler);
-
-    AppDataHandler platformHandler = PlatformChain();
-    platformHandler.setNextHandler(listedAppHandler);
-
-    _entryHandler = TimestampChain();
-    _entryHandler!.setNextHandler(platformHandler);
+  void _setupHandlers(List<AppDataHandler> handlers) {
+    _entryHandler = handlers[0];
+    for (int i = 1; i < handlers.length; i++) {
+      handlers[i - 1].setNextHandler(handlers[i]);
+    }
   }
 
   @override

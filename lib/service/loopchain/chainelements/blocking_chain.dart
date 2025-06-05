@@ -11,7 +11,7 @@ final GetIt _locator = GetIt.instance;
 
 class BlockingChain implements AppDataHandler {
   AppDataHandler? _nextHandler;
-  AppBlocker blocker = _locator<AppBlocker>();
+  final AppBlocker _blocker = _locator<AppBlocker>();
 
   BlockingChain();
 
@@ -35,13 +35,13 @@ class BlockingChain implements AppDataHandler {
 
   Future<void> handleBlockingOfNegativeApp(AppData data) async {
     if (!data.conditionsMet) {
-      blocker.blockApp(data.processId);
+      _blocker.blockApp(data.processId);
       return;
     }
 
     Duration resultedTime = data.remainingTime + data.timeCounted;
     if (resultedTime <= Duration.zero) {
-      blocker.blockApp(data.processId);
+      _blocker.blockApp(data.processId);
       return;
     }
   }

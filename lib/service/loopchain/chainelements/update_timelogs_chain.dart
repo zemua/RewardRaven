@@ -11,7 +11,7 @@ final GetIt _locator = GetIt.instance;
 
 class UpdateTimelogsChain implements AppDataHandler {
   AppDataHandler? _nextHandler;
-  TimeLogService timeLogService = _locator<TimeLogService>();
+  final TimeLogService _timeLogService = _locator<TimeLogService>();
 
   UpdateTimelogsChain();
 
@@ -28,10 +28,10 @@ class UpdateTimelogsChain implements AppDataHandler {
         used: data.timeElapsed,
         counted: data.timeCounted,
         dateTime: data.timestamp ?? DateTime.now());
-    await timeLogService.addToTotal(timeLog);
+    await _timeLogService.addToTotal(timeLog);
 
     if (data.appGroup?.id != null) {
-      await timeLogService.addToGroup(timeLog, data.appGroup!.id!);
+      await _timeLogService.addToGroup(timeLog, data.appGroup!.id!);
     }
 
     if (_nextHandler != null) {
