@@ -699,5 +699,9 @@ void main() {
       verify(mockTimeLogService.addToTotal(timelog)).called(1);
       verify(mockTimeLogService.addToGroup(timelog, "test_group_id")).called(1);
     });
+
+    test('shall update notification', () async {
+      fail("not yet implemented");
+    });
   });
 }
