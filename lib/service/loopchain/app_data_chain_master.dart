@@ -11,6 +11,7 @@ import 'chainelements/listed_app_chain.dart';
 import 'chainelements/platform_chain.dart';
 import 'chainelements/remaining_time_chain.dart';
 import 'chainelements/timestamp_chain.dart';
+import 'chainelements/update_timelogs_chain.dart';
 
 final logger = Logger();
 
@@ -18,7 +19,10 @@ class AppDataChainMaster implements AppDataHandler {
   AppDataHandler? _entryHandler;
 
   AppDataChainMaster() {
+    AppDataHandler updateTimelogsHandler = UpdateTimelogsChain();
+
     AppDataHandler blockingHandler = BlockingChain();
+    blockingHandler.setNextHandler(updateTimelogsHandler);
 
     AppDataHandler remainingTimeHandler = RemainingTimeChain();
     remainingTimeHandler.setNextHandler(blockingHandler);

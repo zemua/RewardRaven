@@ -636,7 +636,68 @@ void main() {
     });
 
     test('shall update total time log', () async {
-      fail("not implemented");
+      var testListedApp = const ListedApp(
+        identifier: 'test_id',
+        platform: 'android',
+        status: AppStatus.positive,
+        listId: 'test_list_id',
+      );
+
+      when(mockListedAppService.getListedAppById(any))
+          .thenAnswer((_) => Future.value(testListedApp));
+
+      // Act
+      await chainMaster.handleAppData(testAppData);
+
+      // Assert
+      TimeLog timelog = TimeLog(
+          counted: const Duration(seconds: 5),
+          used: const Duration(seconds: 5),
+          dateTime: testAppData.timestamp!);
+      verify(mockTimeLogService.addToTotal(timelog)).called(1);
+      verifyNever(mockTimeLogService.addToGroup(any, any));
+    });
+
+    test('shall update total time log and group time log', () async {
+      var testListedApp = const ListedApp(
+        identifier: 'test_id',
+        platform: 'android',
+        status: AppStatus.positive,
+        listId: 'test_list_id',
+      );
+
+      const testGroup = AppGroup(
+          id: 'test_group_id', name: 'Test Group', type: GroupType.negative);
+
+      final conditions = [
+        GroupCondition(
+          id: 'test_id',
+          conditionalGroupId: 'conditional_group_id',
+          conditionedGroupId: 'test_group_id',
+          usedTime: const Duration(hours: 1),
+          duringLastDays: 1,
+        ),
+      ];
+
+      when(mockListedAppService.getListedAppById(any))
+          .thenAnswer((_) => Future.value(testListedApp));
+      when(mockAppGroupService.getGroup(any, any))
+          .thenAnswer((_) => Future.value(testGroup));
+      when(mockGroupConditionService.getGroupConditions(any))
+          .thenAnswer((_) => Future.value(conditions));
+      when(mockConditionChecker.isConditionMet(any))
+          .thenAnswer((_) => Future.value(true));
+
+      // Act
+      await chainMaster.handleAppData(testAppData);
+
+      // Assert
+      TimeLog timelog = TimeLog(
+          counted: const Duration(seconds: 5),
+          used: const Duration(seconds: 5),
+          dateTime: testAppData.timestamp!);
+      verify(mockTimeLogService.addToTotal(timelog)).called(1);
+      verify(mockTimeLogService.addToGroup(timelog, "test_group_id")).called(1);
     });
   });
 }
