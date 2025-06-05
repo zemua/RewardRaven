@@ -11,6 +11,7 @@ import 'chainelements/listed_app_chain.dart';
 import 'chainelements/platform_chain.dart';
 import 'chainelements/remaining_time_chain.dart';
 import 'chainelements/timestamp_chain.dart';
+import 'chainelements/update_timelogs_chain.dart';
 
 final logger = Logger();
 
@@ -18,31 +19,25 @@ class AppDataChainMaster implements AppDataHandler {
   AppDataHandler? _entryHandler;
 
   AppDataChainMaster() {
-    AppDataHandler blockingHandler = BlockingChain();
+    List<AppDataHandler> handlers = [];
+    handlers.add(TimestampChain());
+    handlers.add(PlatformChain());
+    handlers.add(ListedAppChain());
+    handlers.add(AppGroupChain());
+    handlers.add(GroupConditionsChain());
+    handlers.add(ConditionsCheckChain());
+    handlers.add(AppTimeChain());
+    handlers.add(RemainingTimeChain());
+    handlers.add(BlockingChain());
+    handlers.add(UpdateTimelogsChain());
+    _setupHandlers(handlers);
+  }
 
-    AppDataHandler remainingTimeHandler = RemainingTimeChain();
-    remainingTimeHandler.setNextHandler(blockingHandler);
-
-    AppDataHandler appTimeHandler = AppTimeChain();
-    appTimeHandler.setNextHandler(remainingTimeHandler);
-
-    AppDataHandler conditionsCheckHandler = ConditionsCheckChain();
-    conditionsCheckHandler.setNextHandler(appTimeHandler);
-
-    AppDataHandler groupConditionsHandler = GroupConditionsChain();
-    groupConditionsHandler.setNextHandler(conditionsCheckHandler);
-
-    AppDataHandler appGroupHandler = AppGroupChain();
-    appGroupHandler.setNextHandler(groupConditionsHandler);
-
-    AppDataHandler listedAppHandler = ListedAppChain();
-    listedAppHandler.setNextHandler(appGroupHandler);
-
-    AppDataHandler platformHandler = PlatformChain();
-    platformHandler.setNextHandler(listedAppHandler);
-
-    _entryHandler = TimestampChain();
-    _entryHandler!.setNextHandler(platformHandler);
+  void _setupHandlers(List<AppDataHandler> handlers) {
+    _entryHandler = handlers[0];
+    for (int i = 1; i < handlers.length; i++) {
+      handlers[i - 1].setNextHandler(handlers[i]);
+    }
   }
 
   @override
