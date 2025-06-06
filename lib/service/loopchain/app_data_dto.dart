@@ -3,6 +3,9 @@ import 'package:reward_raven/db/entity/listed_app.dart';
 import '../../db/entity/app_group.dart';
 import '../../db/entity/group_condition.dart';
 
+// TODO make configurable
+const int negativeProportion = 4;
+
 class AppData {
   final String _processId;
   final String _appName;

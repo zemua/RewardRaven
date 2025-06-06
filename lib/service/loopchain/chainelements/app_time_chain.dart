@@ -25,8 +25,9 @@ class AppTimeChain implements AppDataHandler {
     if (data.listedApp?.status == AppStatus.positive && data.conditionsMet) {
       data.timeCounted = data.timeElapsed;
     } else if (data.listedApp?.status == AppStatus.negative) {
-      data.timeCounted =
-          Duration(seconds: -1 * (4 * data.timeElapsed.inSeconds).abs());
+      data.timeCounted = Duration(
+          seconds:
+              -1 * (negativeProportion * data.timeElapsed.inSeconds).abs());
     } else {
       data.timeCounted = Duration.zero;
     }

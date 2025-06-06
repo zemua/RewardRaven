@@ -1,6 +1,9 @@
+import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 
+import '../../foreground/androidwatchdog.dart';
+import '../../platform_wrapper.dart';
 import '../app_data_dto.dart';
 import '../app_data_handler.dart';
 
@@ -8,7 +11,8 @@ final logger = Logger();
 final GetIt _locator = GetIt.instance;
 
 class UpdateNotificationChain implements AppDataHandler {
-  AppDataHandler? _nextHandler;
+  late AppDataHandler? _nextHandler;
+  final PlatformWrapper _platformWrapper = _locator<PlatformWrapper>();
 
   UpdateNotificationChain();
 
@@ -21,10 +25,34 @@ class UpdateNotificationChain implements AppDataHandler {
   Future<void> handleAppData(AppData data) async {
     logger.d('handleAppData: $data');
 
-    // TODO: Update notification
+    if (_platformWrapper.isAndroid()) {
+      _updateAndroidNotification(data);
+    }
 
     if (_nextHandler != null) {
       await _nextHandler!.handleAppData(data);
     }
+  }
+
+  void _updateAndroidNotification(AppData data) {
+    FlutterForegroundTask.updateService(
+      notificationTitle: _remainingTime(data),
+      notificationText: data.appName,
+      notificationButtons: [],
+      notificationIcon: null,
+      notificationInitialRoute: '/',
+      callback: startCallback,
+    );
+  }
+
+  String _remainingTime(AppData data) {
+    final totalDuration = Duration(
+        seconds: ((data.remainingTime + data.timeCounted).inSeconds /
+                negativeProportion)
+            .floor());
+    String hours = totalDuration.inHours.toString().padLeft(2, '0');
+    String minutes = (totalDuration.inMinutes % 60).toString().padLeft(2, '0');
+    String seconds = (totalDuration.inSeconds % 60).toString().padLeft(2, '0');
+    return '$hours:$minutes:$seconds';
   }
 }

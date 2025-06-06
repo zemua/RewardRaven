@@ -75,9 +75,11 @@ class _AndroidWatchdogWidgetState extends State<AndroidWatchdogWidget> {
     logger.d("Initializing FlutterForegroundTask service");
     FlutterForegroundTask.init(
       androidNotificationOptions: AndroidNotificationOptions(
-        channelId: 'foreground_service',
+        channelId: 'raven_monitoring_service',
         channelName: _channelName,
         channelDescription: _channelDescription,
+        channelImportance: NotificationChannelImportance.LOW,
+        priority: NotificationPriority.LOW,
       ),
       iosNotificationOptions: const IOSNotificationOptions(
         showNotification: true,
