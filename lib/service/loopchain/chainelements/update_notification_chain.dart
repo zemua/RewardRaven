@@ -39,7 +39,7 @@ class UpdateNotificationChain implements AppDataHandler {
       notificationTitle: _remainingTime(data),
       notificationText: data.appName,
       notificationButtons: [],
-      notificationIcon: null,
+      //notificationIcon: NotificationIcon.resource('ic_launcher'),
       notificationInitialRoute: '/',
       callback: startCallback,
     );
