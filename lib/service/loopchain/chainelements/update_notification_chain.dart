@@ -39,7 +39,9 @@ class UpdateNotificationChain implements AppDataHandler {
       notificationTitle: _remainingTime(data),
       notificationText: data.appName,
       notificationButtons: [],
-      //notificationIcon: NotificationIcon.resource('ic_launcher'),
+      notificationIcon: const NotificationIcon(
+        metaDataName: 'devs.mrp.SLEEP_ICON',
+      ),
       notificationInitialRoute: '/',
       callback: startCallback,
     );

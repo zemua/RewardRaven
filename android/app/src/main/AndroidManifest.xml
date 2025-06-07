@@ -23,6 +23,20 @@
             android:foregroundServiceType="specialUse"
             android:exported="false" />
 
+        <!-- Foreground service icons -->
+        <meta-data
+            android:name="devs.mrp.FIRE_ICON"
+            android:resource="@drawable/fire" />
+        <meta-data
+            android:name="devs.mrp.NEUTRAL_ICON"
+            android:resource="@drawable/neutral" />
+        <meta-data
+            android:name="devs.mrp.SLEEP_ICON"
+            android:resource="@drawable/sleep" />
+        <meta-data
+            android:name="devs.mrp.SNOW_ICON"
+            android:resource="@drawable/snow" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

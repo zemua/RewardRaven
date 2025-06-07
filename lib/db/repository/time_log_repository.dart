@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
@@ -101,10 +103,16 @@ class TimeLogRepository {
   }
 
   Future<TimeLog> _totalLog(DatabaseReference reference) async {
-    final snapshot = await reference.get().timeout(const Duration(seconds: 10));
-    if (snapshot.value != null) {
+    DataSnapshot? snapshot;
+    try {
+      snapshot = await reference.get().timeout(const Duration(seconds: 10));
+    } on TimeoutException catch (e) {
+      logger.w('Timeout reached while getting total log: $e');
+      snapshot = null;
+    }
+    if (snapshot?.value != null) {
       final Map<dynamic, dynamic> logMap =
-          Map<dynamic, dynamic>.from(snapshot.value as Map);
+          Map<dynamic, dynamic>.from(snapshot!.value as Map);
       int totalUsed = 0;
       int totalCounted = 0;
       logMap.forEach((key, value) {

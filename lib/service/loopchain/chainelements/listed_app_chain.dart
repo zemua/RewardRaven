@@ -30,7 +30,11 @@ class ListedAppChain implements AppDataHandler {
       id = data.appName;
     }
 
-    data.listedApp = await _locator<ListedAppService>().getListedAppById(id);
+    try {
+      data.listedApp = await _locator<ListedAppService>().getListedAppById(id);
+    } catch (e) {
+      logger.w('Exception getting listed app for: $id');
+    }
 
     if (_nextHandler != null) {
       await _nextHandler!.handleAppData(data);
