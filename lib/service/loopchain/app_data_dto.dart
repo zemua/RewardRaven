@@ -1,4 +1,5 @@
 import 'package:reward_raven/db/entity/listed_app.dart';
+import 'package:reward_raven/service/foreground/localized_strings.dart';
 
 import '../../db/entity/app_group.dart';
 import '../../db/entity/group_condition.dart';
@@ -12,6 +13,8 @@ const String neutralIcon = 'devs.mrp.NEUTRAL_ICON';
 const String snowIcon = 'devs.mrp.SNOW_ICON';
 
 class AppData {
+  final LocalizedStrings _localizedStrings;
+  final bool _isScreenActive;
   final String _processId;
   final String _appName;
   DateTime? _timestamp;
@@ -24,8 +27,10 @@ class AppData {
   Duration _timeCounted = Duration.zero;
   Duration _remainingTime = Duration.zero;
 
+  LocalizedStrings get localizedStrings => _localizedStrings;
   String get processId => _processId;
   String get appName => _appName;
+  bool get isScreenActive => _isScreenActive;
 
   DateTime? get timestamp => _timestamp;
   set timestamp(DateTime? value) {
@@ -72,9 +77,15 @@ class AppData {
     _remainingTime = value;
   }
 
-  AppData({required String processId, required String appName})
-      : _processId = processId,
-        _appName = appName;
+  AppData(
+      {required String processId,
+      required String appName,
+      required LocalizedStrings localizedStrings,
+      required bool isScreenActive})
+      : _localizedStrings = localizedStrings,
+        _processId = processId,
+        _appName = appName,
+        _isScreenActive = isScreenActive;
 
   @override
   String toString() {

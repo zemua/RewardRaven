@@ -11,7 +11,7 @@ final logger = Logger();
 final GetIt _locator = GetIt.instance;
 
 class UpdateNotificationChain implements AppDataHandler {
-  late AppDataHandler? _nextHandler;
+  AppDataHandler? _nextHandler;
   final PlatformWrapper _platformWrapper = _locator<PlatformWrapper>();
 
   UpdateNotificationChain();

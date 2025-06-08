@@ -12,6 +12,7 @@ import 'package:reward_raven/db/service/listed_app_service.dart';
 import 'package:reward_raven/db/service/time_log_service.dart';
 import 'package:reward_raven/service/app_blocker.dart';
 import 'package:reward_raven/service/condition_checker.dart';
+import 'package:reward_raven/service/foreground/localized_strings.dart';
 import 'package:reward_raven/service/loopchain/app_data_chain_master.dart';
 import 'package:reward_raven/service/loopchain/app_data_dto.dart';
 import 'package:reward_raven/service/platform_wrapper.dart';
@@ -71,6 +72,8 @@ void main() {
       testAppData = AppData(
         processId: 'test_process_id',
         appName: 'test_app',
+        localizedStrings: LocalizedStrings(),
+        isScreenActive: true,
       );
 
       when(mockTimeLogService.getTotalDuration()).thenAnswer((_) =>

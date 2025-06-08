@@ -7,9 +7,14 @@ import 'package:logger/logger.dart';
 
 import '../loopchain/app_data_dto.dart';
 import '../loopchain/app_data_handler.dart';
+import 'localized_strings.dart';
 
 final logger = Logger();
 final GetIt locator = GetIt.instance;
+
+final String _buildLoopData = 'buildLoopData';
+final String _getForegroundAppData = 'getForegroundAppInfo';
+final String _getScreenActive = 'getScreenActive';
 
 const Duration watchdogPeriod = Duration(seconds: 5);
 
@@ -34,6 +39,8 @@ class _AndroidWatchdogWidgetState extends State<AndroidWatchdogWidget> {
   late String _channelName;
   late String _channelDescription;
 
+  final LocalizedStrings _localizedStrings = LocalizedStrings();
+
   @override
   Widget build(BuildContext context) {
     _notificationTitle =
@@ -44,19 +51,28 @@ class _AndroidWatchdogWidgetState extends State<AndroidWatchdogWidget> {
         AppLocalizations.of(context)!.watchdogServiceAndroidChannelName;
     _channelDescription =
         AppLocalizations.of(context)!.watchdogServiceAndroidChannelDescription;
+
+    _localizedStrings.sleeping = AppLocalizations.of(context)!.sleeping;
     return const SizedBox.shrink();
   }
 
   Future<void> _onReceiveTaskData(Object data) async {
-    if (data is String) {
-      logger.d("onReceiveTaskData: $data");
+    logger.d("onReceiveTaskData: $data");
+    if (data == _buildLoopData) {
       try {
-        final result = await _appinfoChannel.invokeMethod<Map>(data);
+        final result =
+            await _appinfoChannel.invokeMethod<Map>(_getForegroundAppData);
+        final isScreenActive =
+            await _appinfoChannel.invokeMethod<bool>(_getScreenActive);
         logger.d('App info: $result');
         String processId = result?['packageName'];
         String appName = result?['appName'];
-        locator<AppDataHandler>()
-            .handleAppData(AppData(processId: processId, appName: appName));
+        bool screenActive = isScreenActive ?? true;
+        locator<AppDataHandler>().handleAppData(AppData(
+            processId: processId,
+            appName: appName,
+            localizedStrings: _localizedStrings,
+            isScreenActive: screenActive));
       } catch (e) {
         logger.e('Failed to get app info: $e');
       }
@@ -166,7 +182,7 @@ class WatchdogTaskHandler extends TaskHandler {
   @override
   void onRepeatEvent(DateTime timestamp) async {
     logger.d('onRepeatEvent');
-    FlutterForegroundTask.sendDataToMain("getForegroundAppInfo");
+    FlutterForegroundTask.sendDataToMain(_buildLoopData);
   }
 
   // Called when the task is destroyed.
