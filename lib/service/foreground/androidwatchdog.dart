@@ -102,7 +102,9 @@ class _AndroidWatchdogWidgetState extends State<AndroidWatchdogWidget> {
         notificationTitle: _notificationTitle,
         notificationText: _notificationText,
         notificationButtons: [],
-        notificationIcon: null,
+        notificationIcon: const NotificationIcon(
+          metaDataName: sleepIcon,
+        ),
         notificationInitialRoute: '/',
         callback: startCallback,
       );
@@ -114,7 +116,9 @@ class _AndroidWatchdogWidgetState extends State<AndroidWatchdogWidget> {
         notificationTitle: _notificationTitle,
         notificationText: _notificationText,
         notificationButtons: [],
-        notificationIcon: null,
+        notificationIcon: const NotificationIcon(
+          metaDataName: sleepIcon,
+        ),
         notificationInitialRoute: '/',
         callback: startCallback,
       );

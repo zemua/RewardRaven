@@ -35,12 +35,13 @@ class UpdateNotificationChain implements AppDataHandler {
   }
 
   void _updateAndroidNotification(AppData data) {
+    final String icon = _resolveIcon(data);
     FlutterForegroundTask.updateService(
       notificationTitle: _remainingTime(data),
       notificationText: data.appName,
       notificationButtons: [],
-      notificationIcon: const NotificationIcon(
-        metaDataName: 'devs.mrp.SLEEP_ICON',
+      notificationIcon: NotificationIcon(
+        metaDataName: icon,
       ),
       notificationInitialRoute: '/',
       callback: startCallback,
@@ -56,5 +57,15 @@ class UpdateNotificationChain implements AppDataHandler {
     String minutes = (totalDuration.inMinutes % 60).toString().padLeft(2, '0');
     String seconds = (totalDuration.inSeconds % 60).toString().padLeft(2, '0');
     return '$hours:$minutes:$seconds';
+  }
+
+  String _resolveIcon(AppData data) {
+    if (data.timeCounted > Duration.zero) {
+      return fireIcon;
+    } else if (data.timeCounted < Duration.zero) {
+      return snowIcon;
+    } else {
+      return neutralIcon;
+    }
   }
 }

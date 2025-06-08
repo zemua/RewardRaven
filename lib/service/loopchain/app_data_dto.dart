@@ -6,6 +6,11 @@ import '../../db/entity/group_condition.dart';
 // TODO make configurable
 const int negativeProportion = 4;
 
+const String sleepIcon = 'devs.mrp.SLEEP_ICON';
+const String fireIcon = 'devs.mrp.FIRE_ICON';
+const String neutralIcon = 'devs.mrp.NEUTRAL_ICON';
+const String snowIcon = 'devs.mrp.SNOW_ICON';
+
 class AppData {
   final String _processId;
   final String _appName;
