@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mockito/annotations.dart';
@@ -27,6 +28,7 @@ import 'app_data_handler_chain_test.mocks.dart';
   MockSpec<ConditionChecker>(),
   MockSpec<TimeLogService>(),
   MockSpec<AppBlocker>(),
+  MockSpec<MethodChannel>(),
 ])
 void main() {
   late MockPlatformWrapper mockPlatformWrapper;
@@ -36,6 +38,7 @@ void main() {
   late MockConditionChecker mockConditionChecker;
   late MockTimeLogService mockTimeLogService;
   late MockAppBlocker mockAppBlocker;
+  late MockMethodChannel mockMethodChannel;
 
   final locator = GetIt.instance;
 
@@ -68,12 +71,13 @@ void main() {
       mockAppBlocker = MockAppBlocker();
       locator.registerSingleton<AppBlocker>(mockAppBlocker);
 
+      mockMethodChannel = MockMethodChannel();
+      locator.registerSingleton<MethodChannel>(mockMethodChannel);
+
       chainMaster = AppDataChainMaster();
       testAppData = AppData(
-        processId: 'test_process_id',
-        appName: 'test_app',
+        appNativeChannel: mockMethodChannel,
         localizedStrings: LocalizedStrings(),
-        isScreenActive: true,
       );
 
       when(mockTimeLogService.getTotalDuration()).thenAnswer((_) =>
@@ -81,6 +85,12 @@ void main() {
               used: const Duration(minutes: 50),
               counted: const Duration(minutes: 30),
               dateTime: DateTime.now())));
+
+      when(mockMethodChannel.invokeMethod<Map>('getForegroundAppInfo'))
+          .thenAnswer((_) => Future.value({
+                'packageName': 'test_process_id',
+                'appName': 'test_app',
+              }));
     });
 
     tearDown(() {

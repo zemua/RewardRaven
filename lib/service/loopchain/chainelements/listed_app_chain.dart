@@ -25,9 +25,9 @@ class ListedAppChain implements AppDataHandler {
 
     String id;
     if (_locator<PlatformWrapper>().isAndroid()) {
-      id = data.processId;
+      id = data.processId!;
     } else {
-      id = data.appName;
+      id = data.appName!;
     }
 
     try {

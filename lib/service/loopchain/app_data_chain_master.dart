@@ -8,6 +8,7 @@ import 'chainelements/app_time_chain.dart';
 import 'chainelements/blocking_chain.dart';
 import 'chainelements/conditions_check_chain.dart';
 import 'chainelements/detect_sleep_chain.dart';
+import 'chainelements/fetch_foreground_app_chain.dart';
 import 'chainelements/group_conditions_chain.dart';
 import 'chainelements/listed_app_chain.dart';
 import 'chainelements/platform_chain.dart';
@@ -23,6 +24,7 @@ class AppDataChainMaster implements AppDataHandler {
   AppDataChainMaster() {
     List<AppDataHandler> handlers = [];
     handlers.add(DetectSleepChain());
+    handlers.add(ForegroundAppChain());
     handlers.add(TimestampChain());
     handlers.add(PlatformChain());
     handlers.add(ListedAppChain());

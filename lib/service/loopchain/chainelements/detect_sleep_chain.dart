@@ -5,7 +5,8 @@ import '../../foreground/androidwatchdog.dart';
 import '../app_data_dto.dart';
 import '../app_data_handler.dart';
 
-final logger = Logger();
+final _logger = Logger();
+const String _getScreenActive = 'getScreenActive';
 
 class DetectSleepChain implements AppDataHandler {
   AppDataHandler? _nextHandler;
@@ -19,13 +20,16 @@ class DetectSleepChain implements AppDataHandler {
 
   @override
   Future<void> handleAppData(AppData data) async {
-    logger.d('handleAppData: $data');
+    _logger.d('handleAppData: $data');
 
-    if (!data.isScreenActive) {
+    final isScreenActive =
+        await data.appNativeChannel.invokeMethod<bool>(_getScreenActive) ??
+            true;
+    if (!isScreenActive) {
       _updateAndroidNotification(data);
     }
 
-    if (_nextHandler != null && data.isScreenActive) {
+    if (_nextHandler != null && isScreenActive) {
       await _nextHandler!.handleAppData(data);
     }
   }

@@ -13,8 +13,6 @@ final logger = Logger();
 final GetIt locator = GetIt.instance;
 
 final String _buildLoopData = 'buildLoopData';
-final String _getForegroundAppData = 'getForegroundAppInfo';
-final String _getScreenActive = 'getScreenActive';
 
 const Duration watchdogPeriod = Duration(seconds: 5);
 
@@ -32,7 +30,7 @@ class AndroidWatchdogWidget extends StatefulWidget {
 }
 
 class _AndroidWatchdogWidgetState extends State<AndroidWatchdogWidget> {
-  static const _appinfoChannel = MethodChannel('mrp.dev/appinfo');
+  static const _appNativeChannel = MethodChannel('mrp.dev/appinfo');
 
   late String _notificationTitle;
   late String _notificationText;
@@ -60,21 +58,12 @@ class _AndroidWatchdogWidgetState extends State<AndroidWatchdogWidget> {
     logger.d("onReceiveTaskData: $data");
     if (data == _buildLoopData) {
       try {
-        final result =
-            await _appinfoChannel.invokeMethod<Map>(_getForegroundAppData);
-        final isScreenActive =
-            await _appinfoChannel.invokeMethod<bool>(_getScreenActive);
-        logger.d('App info: $result');
-        String processId = result?['packageName'];
-        String appName = result?['appName'];
-        bool screenActive = isScreenActive ?? true;
         locator<AppDataHandler>().handleAppData(AppData(
-            processId: processId,
-            appName: appName,
-            localizedStrings: _localizedStrings,
-            isScreenActive: screenActive));
+          appNativeChannel: _appNativeChannel,
+          localizedStrings: _localizedStrings,
+        ));
       } catch (e) {
-        logger.e('Failed to get app info: $e');
+        logger.e('Failed to process loop chain: $e');
       }
     }
   }
