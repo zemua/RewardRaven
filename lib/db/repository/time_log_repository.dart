@@ -80,12 +80,7 @@ class TimeLogRepository {
   Future<void> add(TimeLog timeLog, DatabaseReference reference) async {
     String uuid = await _sharedPreferences.getUserUUID();
     final uuidRef = reference.child(sanitizeDbPath(uuid));
-    DataSnapshot? snapshot;
-    try {
-      snapshot = await uuidRef.get().timeout(const Duration(seconds: 10));
-    } on TimeoutException catch (e) {
-      snapshot = null;
-    }
+    final snapshot = await uuidRef.get().timeout(const Duration(seconds: 10));
     if (snapshot?.value != null) {
       final Map<String, dynamic> logMap =
           Map<String, dynamic>.from(snapshot!.value as Map);
