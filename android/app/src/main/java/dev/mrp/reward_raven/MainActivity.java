@@ -16,6 +16,7 @@ public class MainActivity extends FlutterActivity {
     private static final String TAG = "MainActivity";
     private static final String CHANNEL = "mrp.dev/appinfo";
     private static final String FOREGROUND_APP_INFO = "getForegroundAppInfo";
+    private static final String SCREEN_ACTIVE = "getScreenActive";
     private static volatile Map<String,Object> foregroundAppDataCache;
 
     @Override
@@ -37,6 +38,9 @@ public class MainActivity extends FlutterActivity {
                         foregroundAppDataCache = data;
                         Log.d(TAG, "foregroundAppDataCache: " + String.valueOf(foregroundAppDataCache));
                         result.success(data);
+                    } else if (call.method.equals(SCREEN_ACTIVE)) {
+                        ScreenLockChecker screenLockChecker = new ScreenLockChecker(getApplicationContext());
+                        result.success(screenLockChecker.getScreenActive());
                     } else {
                         result.notImplemented();
                     }

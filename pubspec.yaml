@@ -57,6 +57,7 @@ dependencies:
   usage_tracker: ^0.1.0
   shared_preferences: ^2.2.2
   uuid: ^4.0.0
+  flutter_launcher_icons: any
 
 dev_dependencies:
   flutter_test:
@@ -114,3 +115,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/raven.png"

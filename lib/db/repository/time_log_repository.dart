@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
@@ -78,20 +80,31 @@ class TimeLogRepository {
   Future<void> add(TimeLog timeLog, DatabaseReference reference) async {
     String uuid = await _sharedPreferences.getUserUUID();
     final uuidRef = reference.child(sanitizeDbPath(uuid));
-    final snapshot = await uuidRef.get().timeout(const Duration(seconds: 10));
-    if (snapshot.value != null) {
+    DataSnapshot? snapshot;
+    try {
+      snapshot = await uuidRef.get().timeout(const Duration(seconds: 10));
+    } on TimeoutException catch (e) {
+      snapshot = null;
+    }
+    if (snapshot?.value != null) {
       final Map<String, dynamic> logMap =
-          Map<String, dynamic>.from(snapshot.value as Map);
+          Map<String, dynamic>.from(snapshot!.value as Map);
       final TimeLog retrievedLog = TimeLog.fromJson(logMap);
       logger.i("Retrieved log with uuid $uuid as $retrievedLog");
       TimeLog updatedLog = TimeLog(
           used: timeLog.used + retrievedLog.used,
           counted: timeLog.counted + retrievedLog.counted,
           dateTime: timeLog.dateTime);
-      await uuidRef
-          .update(updatedLog.toJson())
-          .timeout(const Duration(seconds: 10));
-      logger.i('Updated log with uuid $uuid as $updatedLog in ${uuidRef.path}');
+      try {
+        await uuidRef
+            .update(updatedLog.toJson())
+            .timeout(const Duration(seconds: 10));
+        logger
+            .i('Updated log with uuid $uuid as $updatedLog in ${uuidRef.path}');
+      } on TimeoutException catch (e) {
+        logger.w(
+            'Timeout updating log with uuid $uuid as $updatedLog in ${uuidRef.path}');
+      }
     } else {
       logger.i(
           'No log found for uuid $uuid proceeding to create a new entry in ${uuidRef.path}');
@@ -101,10 +114,16 @@ class TimeLogRepository {
   }
 
   Future<TimeLog> _totalLog(DatabaseReference reference) async {
-    final snapshot = await reference.get().timeout(const Duration(seconds: 10));
-    if (snapshot.value != null) {
+    DataSnapshot? snapshot;
+    try {
+      snapshot = await reference.get().timeout(const Duration(seconds: 10));
+    } on TimeoutException catch (e) {
+      logger.w('Timeout reached while getting total log: $e');
+      snapshot = null;
+    }
+    if (snapshot?.value != null) {
       final Map<dynamic, dynamic> logMap =
-          Map<dynamic, dynamic>.from(snapshot.value as Map);
+          Map<dynamic, dynamic>.from(snapshot!.value as Map);
       int totalUsed = 0;
       int totalCounted = 0;
       logMap.forEach((key, value) {

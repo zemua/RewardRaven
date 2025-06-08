@@ -39,6 +39,7 @@
   "save": "Save",
   "search" : "Search",
   "settings": "Settings",
+  "sleeping": "Sleeping",
   "usageStatisticsPermissionExplanation": "This app needs usage statistics permissions to function properly. Please grant the permissions in the next screen.",
   "watchdogServiceAndroidChannelDescription": "This notification appears when the watchdog service is running and the app usage is being monitored.",
   "watchdogServiceAndroidChannelName": "Watchdog Service Notification",

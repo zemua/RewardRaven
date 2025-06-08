@@ -7,9 +7,12 @@ import 'package:logger/logger.dart';
 
 import '../loopchain/app_data_dto.dart';
 import '../loopchain/app_data_handler.dart';
+import 'localized_strings.dart';
 
 final logger = Logger();
 final GetIt locator = GetIt.instance;
+
+final String _buildLoopData = 'buildLoopData';
 
 const Duration watchdogPeriod = Duration(seconds: 5);
 
@@ -27,12 +30,14 @@ class AndroidWatchdogWidget extends StatefulWidget {
 }
 
 class _AndroidWatchdogWidgetState extends State<AndroidWatchdogWidget> {
-  static const _appinfoChannel = MethodChannel('mrp.dev/appinfo');
+  static const _appNativeChannel = MethodChannel('mrp.dev/appinfo');
 
   late String _notificationTitle;
   late String _notificationText;
   late String _channelName;
   late String _channelDescription;
+
+  final LocalizedStrings _localizedStrings = LocalizedStrings();
 
   @override
   Widget build(BuildContext context) {
@@ -44,21 +49,21 @@ class _AndroidWatchdogWidgetState extends State<AndroidWatchdogWidget> {
         AppLocalizations.of(context)!.watchdogServiceAndroidChannelName;
     _channelDescription =
         AppLocalizations.of(context)!.watchdogServiceAndroidChannelDescription;
+
+    _localizedStrings.sleeping = AppLocalizations.of(context)!.sleeping;
     return const SizedBox.shrink();
   }
 
   Future<void> _onReceiveTaskData(Object data) async {
-    if (data is String) {
-      logger.d("onReceiveTaskData: $data");
+    logger.d("onReceiveTaskData: $data");
+    if (data == _buildLoopData) {
       try {
-        final result = await _appinfoChannel.invokeMethod<Map>(data);
-        logger.d('App info: $result');
-        String processId = result?['packageName'];
-        String appName = result?['appName'];
-        locator<AppDataHandler>()
-            .handleAppData(AppData(processId: processId, appName: appName));
+        locator<AppDataHandler>().handleAppData(AppData(
+          appNativeChannel: _appNativeChannel,
+          localizedStrings: _localizedStrings,
+        ));
       } catch (e) {
-        logger.e('Failed to get app info: $e');
+        logger.e('Failed to process loop chain: $e');
       }
     }
   }
@@ -75,9 +80,11 @@ class _AndroidWatchdogWidgetState extends State<AndroidWatchdogWidget> {
     logger.d("Initializing FlutterForegroundTask service");
     FlutterForegroundTask.init(
       androidNotificationOptions: AndroidNotificationOptions(
-        channelId: 'foreground_service',
+        channelId: 'raven_monitoring_service',
         channelName: _channelName,
         channelDescription: _channelDescription,
+        channelImportance: NotificationChannelImportance.LOW,
+        priority: NotificationPriority.LOW,
       ),
       iosNotificationOptions: const IOSNotificationOptions(
         showNotification: true,
@@ -100,7 +107,9 @@ class _AndroidWatchdogWidgetState extends State<AndroidWatchdogWidget> {
         notificationTitle: _notificationTitle,
         notificationText: _notificationText,
         notificationButtons: [],
-        notificationIcon: null,
+        notificationIcon: const NotificationIcon(
+          metaDataName: sleepIcon,
+        ),
         notificationInitialRoute: '/',
         callback: startCallback,
       );
@@ -112,7 +121,9 @@ class _AndroidWatchdogWidgetState extends State<AndroidWatchdogWidget> {
         notificationTitle: _notificationTitle,
         notificationText: _notificationText,
         notificationButtons: [],
-        notificationIcon: null,
+        notificationIcon: const NotificationIcon(
+          metaDataName: sleepIcon,
+        ),
         notificationInitialRoute: '/',
         callback: startCallback,
       );
@@ -160,7 +171,7 @@ class WatchdogTaskHandler extends TaskHandler {
   @override
   void onRepeatEvent(DateTime timestamp) async {
     logger.d('onRepeatEvent');
-    FlutterForegroundTask.sendDataToMain("getForegroundAppInfo");
+    FlutterForegroundTask.sendDataToMain(_buildLoopData);
   }
 
   // Called when the task is destroyed.
