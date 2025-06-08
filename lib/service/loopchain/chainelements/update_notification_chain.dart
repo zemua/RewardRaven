@@ -54,8 +54,14 @@ class UpdateNotificationChain implements AppDataHandler {
                 negativeProportion)
             .floor());
     String hours = totalDuration.inHours.toString().padLeft(2, '0');
-    String minutes = (totalDuration.inMinutes % 60).toString().padLeft(2, '0');
-    String seconds = (totalDuration.inSeconds % 60).toString().padLeft(2, '0');
+    String minutes = (totalDuration.inMinutes - (totalDuration.inHours * 60))
+        .toString()
+        .padLeft(2, '0');
+    String seconds = (totalDuration.inSeconds -
+            (totalDuration.inHours * 3600) -
+            (totalDuration.inMinutes * 60))
+        .toString()
+        .padLeft(2, '0');
     return '$hours:$minutes:$seconds';
   }
 

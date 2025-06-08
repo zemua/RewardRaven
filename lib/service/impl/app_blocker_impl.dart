@@ -1,9 +1,9 @@
+import 'package:flutter/services.dart';
+
 import '../app_blocker.dart';
 
 class AppBlockerImpl implements AppBlocker {
   @override
-  Future<void> blockApp(String identifier) {
-    // TODO: implement blockApp
-    return Future.value();
-  }
+  Future<void> blockApp(
+      MethodChannel appNativeChannel, String identifier) async {}
 }

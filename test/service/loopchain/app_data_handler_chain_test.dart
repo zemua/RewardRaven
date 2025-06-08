@@ -487,7 +487,7 @@ void main() {
 
       await chainMaster.handleAppData(testAppData);
 
-      verifyNever(mockAppBlocker.blockApp(any));
+      verifyNever(mockAppBlocker.blockApp(any, any));
     });
 
     test(
@@ -530,7 +530,7 @@ void main() {
 
       await chainMaster.handleAppData(testAppData);
 
-      verifyNever(mockAppBlocker.blockApp(any));
+      verifyNever(mockAppBlocker.blockApp(any, any));
     });
 
     test('shall not block negative app when enough time and conditions met',
@@ -566,7 +566,7 @@ void main() {
 
       await chainMaster.handleAppData(testAppData);
 
-      verifyNever(mockAppBlocker.blockApp(any));
+      verifyNever(mockAppBlocker.blockApp(any, any));
     });
 
     test('shall call to block negative app when conditions are not met',
@@ -602,7 +602,7 @@ void main() {
 
       await chainMaster.handleAppData(testAppData);
 
-      verify(mockAppBlocker.blockApp(any)).called(1);
+      verify(mockAppBlocker.blockApp(any, any)).called(1);
     });
 
     test('shall call to block negative app when time is out', () async {
@@ -645,7 +645,7 @@ void main() {
 
       await chainMaster.handleAppData(testAppData);
 
-      verify(mockAppBlocker.blockApp(any)).called(1);
+      verify(mockAppBlocker.blockApp(any, any)).called(1);
     });
 
     test('shall update total time log', () async {

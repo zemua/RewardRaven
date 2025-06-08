@@ -3,25 +3,23 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i8;
+import 'dart:async' as _i7;
 
-import 'package:flutter/src/services/binary_messenger.dart' as _i4;
-import 'package:flutter/src/services/message_codec.dart' as _i3;
-import 'package:flutter/src/services/platform_channel.dart' as _i18;
+import 'package:flutter/services.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i6;
-import 'package:reward_raven/db/entity/app_group.dart' as _i12;
-import 'package:reward_raven/db/entity/group_condition.dart' as _i14;
-import 'package:reward_raven/db/entity/listed_app.dart' as _i9;
+import 'package:mockito/src/dummies.dart' as _i5;
+import 'package:reward_raven/db/entity/app_group.dart' as _i11;
+import 'package:reward_raven/db/entity/group_condition.dart' as _i13;
+import 'package:reward_raven/db/entity/listed_app.dart' as _i8;
 import 'package:reward_raven/db/entity/time_log.dart' as _i2;
-import 'package:reward_raven/db/service/app_group_service.dart' as _i11;
-import 'package:reward_raven/db/service/group_condition_service.dart' as _i13;
-import 'package:reward_raven/db/service/listed_app_service.dart' as _i7;
-import 'package:reward_raven/db/service/time_log_service.dart' as _i16;
-import 'package:reward_raven/screens/apps/app_list_type.dart' as _i10;
-import 'package:reward_raven/service/app_blocker.dart' as _i17;
-import 'package:reward_raven/service/condition_checker.dart' as _i15;
-import 'package:reward_raven/service/platform_wrapper.dart' as _i5;
+import 'package:reward_raven/db/service/app_group_service.dart' as _i10;
+import 'package:reward_raven/db/service/group_condition_service.dart' as _i12;
+import 'package:reward_raven/db/service/listed_app_service.dart' as _i6;
+import 'package:reward_raven/db/service/time_log_service.dart' as _i15;
+import 'package:reward_raven/screens/apps/app_list_type.dart' as _i9;
+import 'package:reward_raven/service/app_blocker.dart' as _i16;
+import 'package:reward_raven/service/condition_checker.dart' as _i14;
+import 'package:reward_raven/service/platform_wrapper.dart' as _i4;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -57,7 +55,7 @@ class _FakeMethodCodec_1 extends _i1.SmartFake implements _i3.MethodCodec {
 }
 
 class _FakeBinaryMessenger_2 extends _i1.SmartFake
-    implements _i4.BinaryMessenger {
+    implements _i3.BinaryMessenger {
   _FakeBinaryMessenger_2(
     Object parent,
     Invocation parentInvocation,
@@ -70,15 +68,15 @@ class _FakeBinaryMessenger_2 extends _i1.SmartFake
 /// A class which mocks [PlatformWrapper].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockPlatformWrapper extends _i1.Mock implements _i5.PlatformWrapper {
+class MockPlatformWrapper extends _i1.Mock implements _i4.PlatformWrapper {
   @override
   String get platformName => (super.noSuchMethod(
         Invocation.getter(#platformName),
-        returnValue: _i6.dummyValue<String>(
+        returnValue: _i5.dummyValue<String>(
           this,
           Invocation.getter(#platformName),
         ),
-        returnValueForMissingStub: _i6.dummyValue<String>(
+        returnValueForMissingStub: _i5.dummyValue<String>(
           this,
           Invocation.getter(#platformName),
         ),
@@ -98,92 +96,92 @@ class MockPlatformWrapper extends _i1.Mock implements _i5.PlatformWrapper {
 /// A class which mocks [ListedAppService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockListedAppService extends _i1.Mock implements _i7.ListedAppService {
+class MockListedAppService extends _i1.Mock implements _i6.ListedAppService {
   @override
-  _i8.Future<void> saveListedApp(_i9.ListedApp? app) => (super.noSuchMethod(
+  _i7.Future<void> saveListedApp(_i8.ListedApp? app) => (super.noSuchMethod(
         Invocation.method(
           #saveListedApp,
           [app],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i7.Future<void>.value(),
+        returnValueForMissingStub: _i7.Future<void>.value(),
+      ) as _i7.Future<void>);
 
   @override
-  _i8.Future<void> updateListedApp(_i9.ListedApp? app) => (super.noSuchMethod(
+  _i7.Future<void> updateListedApp(_i8.ListedApp? app) => (super.noSuchMethod(
         Invocation.method(
           #updateListedApp,
           [app],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i7.Future<void>.value(),
+        returnValueForMissingStub: _i7.Future<void>.value(),
+      ) as _i7.Future<void>);
 
   @override
-  _i8.Future<void> deleteListedApp(_i9.ListedApp? app) => (super.noSuchMethod(
+  _i7.Future<void> deleteListedApp(_i8.ListedApp? app) => (super.noSuchMethod(
         Invocation.method(
           #deleteListedApp,
           [app],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i7.Future<void>.value(),
+        returnValueForMissingStub: _i7.Future<void>.value(),
+      ) as _i7.Future<void>);
 
   @override
-  _i8.Future<_i9.ListedApp?> getListedAppById(String? identifier) =>
+  _i7.Future<_i8.ListedApp?> getListedAppById(String? identifier) =>
       (super.noSuchMethod(
         Invocation.method(
           #getListedAppById,
           [identifier],
         ),
-        returnValue: _i8.Future<_i9.ListedApp?>.value(),
-        returnValueForMissingStub: _i8.Future<_i9.ListedApp?>.value(),
-      ) as _i8.Future<_i9.ListedApp?>);
+        returnValue: _i7.Future<_i8.ListedApp?>.value(),
+        returnValueForMissingStub: _i7.Future<_i8.ListedApp?>.value(),
+      ) as _i7.Future<_i8.ListedApp?>);
 
   @override
-  _i8.Future<List<_i9.ListedApp>> fetchListedAppsByType(
-          _i10.AppListType? listType) =>
+  _i7.Future<List<_i8.ListedApp>> fetchListedAppsByType(
+          _i9.AppListType? listType) =>
       (super.noSuchMethod(
         Invocation.method(
           #fetchListedAppsByType,
           [listType],
         ),
-        returnValue: _i8.Future<List<_i9.ListedApp>>.value(<_i9.ListedApp>[]),
+        returnValue: _i7.Future<List<_i8.ListedApp>>.value(<_i8.ListedApp>[]),
         returnValueForMissingStub:
-            _i8.Future<List<_i9.ListedApp>>.value(<_i9.ListedApp>[]),
-      ) as _i8.Future<List<_i9.ListedApp>>);
+            _i7.Future<List<_i8.ListedApp>>.value(<_i8.ListedApp>[]),
+      ) as _i7.Future<List<_i8.ListedApp>>);
 
   @override
-  _i8.Future<_i9.AppStatus> fetchStatus(String? identifier) =>
+  _i7.Future<_i8.AppStatus> fetchStatus(String? identifier) =>
       (super.noSuchMethod(
         Invocation.method(
           #fetchStatus,
           [identifier],
         ),
-        returnValue: _i8.Future<_i9.AppStatus>.value(_i9.AppStatus.positive),
+        returnValue: _i7.Future<_i8.AppStatus>.value(_i8.AppStatus.positive),
         returnValueForMissingStub:
-            _i8.Future<_i9.AppStatus>.value(_i9.AppStatus.positive),
-      ) as _i8.Future<_i9.AppStatus>);
+            _i7.Future<_i8.AppStatus>.value(_i8.AppStatus.positive),
+      ) as _i7.Future<_i8.AppStatus>);
 }
 
 /// A class which mocks [AppGroupService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAppGroupService extends _i1.Mock implements _i11.AppGroupService {
+class MockAppGroupService extends _i1.Mock implements _i10.AppGroupService {
   @override
-  _i8.Future<void> saveGroup(_i12.AppGroup? group) => (super.noSuchMethod(
+  _i7.Future<void> saveGroup(_i11.AppGroup? group) => (super.noSuchMethod(
         Invocation.method(
           #saveGroup,
           [group],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i7.Future<void>.value(),
+        returnValueForMissingStub: _i7.Future<void>.value(),
+      ) as _i7.Future<void>);
 
   @override
-  _i8.Future<void> updateGroup(
+  _i7.Future<void> updateGroup(
     String? key,
-    _i12.AppGroup? group,
+    _i11.AppGroup? group,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -193,13 +191,13 @@ class MockAppGroupService extends _i1.Mock implements _i11.AppGroupService {
             group,
           ],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i7.Future<void>.value(),
+        returnValueForMissingStub: _i7.Future<void>.value(),
+      ) as _i7.Future<void>);
 
   @override
-  _i8.Future<_i12.AppGroup?> getGroup(
-    _i12.GroupType? type,
+  _i7.Future<_i11.AppGroup?> getGroup(
+    _i11.GroupType? type,
     String? key,
   ) =>
       (super.noSuchMethod(
@@ -210,41 +208,41 @@ class MockAppGroupService extends _i1.Mock implements _i11.AppGroupService {
             key,
           ],
         ),
-        returnValue: _i8.Future<_i12.AppGroup?>.value(),
-        returnValueForMissingStub: _i8.Future<_i12.AppGroup?>.value(),
-      ) as _i8.Future<_i12.AppGroup?>);
+        returnValue: _i7.Future<_i11.AppGroup?>.value(),
+        returnValueForMissingStub: _i7.Future<_i11.AppGroup?>.value(),
+      ) as _i7.Future<_i11.AppGroup?>);
 
   @override
-  _i8.Future<List<_i12.AppGroup>> getGroups(_i12.GroupType? type) =>
+  _i7.Future<List<_i11.AppGroup>> getGroups(_i11.GroupType? type) =>
       (super.noSuchMethod(
         Invocation.method(
           #getGroups,
           [type],
         ),
-        returnValue: _i8.Future<List<_i12.AppGroup>>.value(<_i12.AppGroup>[]),
+        returnValue: _i7.Future<List<_i11.AppGroup>>.value(<_i11.AppGroup>[]),
         returnValueForMissingStub:
-            _i8.Future<List<_i12.AppGroup>>.value(<_i12.AppGroup>[]),
-      ) as _i8.Future<List<_i12.AppGroup>>);
+            _i7.Future<List<_i11.AppGroup>>.value(<_i11.AppGroup>[]),
+      ) as _i7.Future<List<_i11.AppGroup>>);
 
   @override
-  _i8.Stream<List<_i12.AppGroup>> streamGroups(_i12.GroupType? type) =>
+  _i7.Stream<List<_i11.AppGroup>> streamGroups(_i11.GroupType? type) =>
       (super.noSuchMethod(
         Invocation.method(
           #streamGroups,
           [type],
         ),
-        returnValue: _i8.Stream<List<_i12.AppGroup>>.empty(),
-        returnValueForMissingStub: _i8.Stream<List<_i12.AppGroup>>.empty(),
-      ) as _i8.Stream<List<_i12.AppGroup>>);
+        returnValue: _i7.Stream<List<_i11.AppGroup>>.empty(),
+        returnValueForMissingStub: _i7.Stream<List<_i11.AppGroup>>.empty(),
+      ) as _i7.Stream<List<_i11.AppGroup>>);
 }
 
 /// A class which mocks [GroupConditionService].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockGroupConditionService extends _i1.Mock
-    implements _i13.GroupConditionService {
+    implements _i12.GroupConditionService {
   @override
-  _i8.Future<_i14.GroupCondition?> getGroupCondition({
+  _i7.Future<_i13.GroupCondition?> getGroupCondition({
     required String? conditionedGroupId,
     required String? conditionId,
   }) =>
@@ -257,125 +255,125 @@ class MockGroupConditionService extends _i1.Mock
             #conditionId: conditionId,
           },
         ),
-        returnValue: _i8.Future<_i14.GroupCondition?>.value(),
-        returnValueForMissingStub: _i8.Future<_i14.GroupCondition?>.value(),
-      ) as _i8.Future<_i14.GroupCondition?>);
+        returnValue: _i7.Future<_i13.GroupCondition?>.value(),
+        returnValueForMissingStub: _i7.Future<_i13.GroupCondition?>.value(),
+      ) as _i7.Future<_i13.GroupCondition?>);
 
   @override
-  _i8.Future<List<_i14.GroupCondition>> getGroupConditions(
+  _i7.Future<List<_i13.GroupCondition>> getGroupConditions(
           String? conditionedGroupId) =>
       (super.noSuchMethod(
         Invocation.method(
           #getGroupConditions,
           [conditionedGroupId],
         ),
-        returnValue: _i8.Future<List<_i14.GroupCondition>>.value(
-            <_i14.GroupCondition>[]),
-        returnValueForMissingStub: _i8.Future<List<_i14.GroupCondition>>.value(
-            <_i14.GroupCondition>[]),
-      ) as _i8.Future<List<_i14.GroupCondition>>);
+        returnValue: _i7.Future<List<_i13.GroupCondition>>.value(
+            <_i13.GroupCondition>[]),
+        returnValueForMissingStub: _i7.Future<List<_i13.GroupCondition>>.value(
+            <_i13.GroupCondition>[]),
+      ) as _i7.Future<List<_i13.GroupCondition>>);
 
   @override
-  _i8.Stream<List<_i14.GroupCondition>> streamGroupConditions(
+  _i7.Stream<List<_i13.GroupCondition>> streamGroupConditions(
           String? conditionedGroupId) =>
       (super.noSuchMethod(
         Invocation.method(
           #streamGroupConditions,
           [conditionedGroupId],
         ),
-        returnValue: _i8.Stream<List<_i14.GroupCondition>>.empty(),
+        returnValue: _i7.Stream<List<_i13.GroupCondition>>.empty(),
         returnValueForMissingStub:
-            _i8.Stream<List<_i14.GroupCondition>>.empty(),
-      ) as _i8.Stream<List<_i14.GroupCondition>>);
+            _i7.Stream<List<_i13.GroupCondition>>.empty(),
+      ) as _i7.Stream<List<_i13.GroupCondition>>);
 
   @override
-  _i8.Future<void> saveGroupCondition(_i14.GroupCondition? groupCondition) =>
+  _i7.Future<void> saveGroupCondition(_i13.GroupCondition? groupCondition) =>
       (super.noSuchMethod(
         Invocation.method(
           #saveGroupCondition,
           [groupCondition],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i7.Future<void>.value(),
+        returnValueForMissingStub: _i7.Future<void>.value(),
+      ) as _i7.Future<void>);
 
   @override
-  _i8.Future<void> updateGroupCondition(_i14.GroupCondition? groupCondition) =>
+  _i7.Future<void> updateGroupCondition(_i13.GroupCondition? groupCondition) =>
       (super.noSuchMethod(
         Invocation.method(
           #updateGroupCondition,
           [groupCondition],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i7.Future<void>.value(),
+        returnValueForMissingStub: _i7.Future<void>.value(),
+      ) as _i7.Future<void>);
 
   @override
-  _i8.Future<void> deleteGroupCondition(_i14.GroupCondition? groupCondition) =>
+  _i7.Future<void> deleteGroupCondition(_i13.GroupCondition? groupCondition) =>
       (super.noSuchMethod(
         Invocation.method(
           #deleteGroupCondition,
           [groupCondition],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i7.Future<void>.value(),
+        returnValueForMissingStub: _i7.Future<void>.value(),
+      ) as _i7.Future<void>);
 }
 
 /// A class which mocks [ConditionChecker].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockConditionChecker extends _i1.Mock implements _i15.ConditionChecker {
+class MockConditionChecker extends _i1.Mock implements _i14.ConditionChecker {
   @override
-  _i8.Future<bool> isConditionMet(_i14.GroupCondition? condition) =>
+  _i7.Future<bool> isConditionMet(_i13.GroupCondition? condition) =>
       (super.noSuchMethod(
         Invocation.method(
           #isConditionMet,
           [condition],
         ),
-        returnValue: _i8.Future<bool>.value(false),
-        returnValueForMissingStub: _i8.Future<bool>.value(false),
-      ) as _i8.Future<bool>);
+        returnValue: _i7.Future<bool>.value(false),
+        returnValueForMissingStub: _i7.Future<bool>.value(false),
+      ) as _i7.Future<bool>);
 }
 
 /// A class which mocks [TimeLogService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTimeLogService extends _i1.Mock implements _i16.TimeLogService {
+class MockTimeLogService extends _i1.Mock implements _i15.TimeLogService {
   @override
-  _i8.Future<void> addToTotal(_i2.TimeLog? timelog) => (super.noSuchMethod(
+  _i7.Future<void> addToTotal(_i2.TimeLog? timelog) => (super.noSuchMethod(
         Invocation.method(
           #addToTotal,
           [timelog],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i7.Future<void>.value(),
+        returnValueForMissingStub: _i7.Future<void>.value(),
+      ) as _i7.Future<void>);
 
   @override
-  _i8.Future<_i2.TimeLog> getTotalDuration() => (super.noSuchMethod(
+  _i7.Future<_i2.TimeLog> getTotalDuration() => (super.noSuchMethod(
         Invocation.method(
           #getTotalDuration,
           [],
         ),
-        returnValue: _i8.Future<_i2.TimeLog>.value(_FakeTimeLog_0(
+        returnValue: _i7.Future<_i2.TimeLog>.value(_FakeTimeLog_0(
           this,
           Invocation.method(
             #getTotalDuration,
             [],
           ),
         )),
-        returnValueForMissingStub: _i8.Future<_i2.TimeLog>.value(_FakeTimeLog_0(
+        returnValueForMissingStub: _i7.Future<_i2.TimeLog>.value(_FakeTimeLog_0(
           this,
           Invocation.method(
             #getTotalDuration,
             [],
           ),
         )),
-      ) as _i8.Future<_i2.TimeLog>);
+      ) as _i7.Future<_i2.TimeLog>);
 
   @override
-  _i8.Future<void> addToGroup(
+  _i7.Future<void> addToGroup(
     _i2.TimeLog? timelog,
     String? groupId,
   ) =>
@@ -387,12 +385,12 @@ class MockTimeLogService extends _i1.Mock implements _i16.TimeLogService {
             groupId,
           ],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i7.Future<void>.value(),
+        returnValueForMissingStub: _i7.Future<void>.value(),
+      ) as _i7.Future<void>);
 
   @override
-  _i8.Future<_i2.TimeLog> getGroupDurationForLastDays(
+  _i7.Future<_i2.TimeLog> getGroupDurationForLastDays(
     String? groupId,
     int? lastDays,
   ) =>
@@ -404,7 +402,7 @@ class MockTimeLogService extends _i1.Mock implements _i16.TimeLogService {
             lastDays,
           ],
         ),
-        returnValue: _i8.Future<_i2.TimeLog>.value(_FakeTimeLog_0(
+        returnValue: _i7.Future<_i2.TimeLog>.value(_FakeTimeLog_0(
           this,
           Invocation.method(
             #getGroupDurationForLastDays,
@@ -414,7 +412,7 @@ class MockTimeLogService extends _i1.Mock implements _i16.TimeLogService {
             ],
           ),
         )),
-        returnValueForMissingStub: _i8.Future<_i2.TimeLog>.value(_FakeTimeLog_0(
+        returnValueForMissingStub: _i7.Future<_i2.TimeLog>.value(_FakeTimeLog_0(
           this,
           Invocation.method(
             #getGroupDurationForLastDays,
@@ -424,36 +422,43 @@ class MockTimeLogService extends _i1.Mock implements _i16.TimeLogService {
             ],
           ),
         )),
-      ) as _i8.Future<_i2.TimeLog>);
+      ) as _i7.Future<_i2.TimeLog>);
 }
 
 /// A class which mocks [AppBlocker].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAppBlocker extends _i1.Mock implements _i17.AppBlocker {
+class MockAppBlocker extends _i1.Mock implements _i16.AppBlocker {
   @override
-  _i8.Future<void> blockApp(String? identifier) => (super.noSuchMethod(
+  _i7.Future<void> blockApp(
+    _i3.MethodChannel? appNativeChannel,
+    String? identifier,
+  ) =>
+      (super.noSuchMethod(
         Invocation.method(
           #blockApp,
-          [identifier],
+          [
+            appNativeChannel,
+            identifier,
+          ],
         ),
-        returnValue: _i8.Future<void>.value(),
-        returnValueForMissingStub: _i8.Future<void>.value(),
-      ) as _i8.Future<void>);
+        returnValue: _i7.Future<void>.value(),
+        returnValueForMissingStub: _i7.Future<void>.value(),
+      ) as _i7.Future<void>);
 }
 
 /// A class which mocks [MethodChannel].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockMethodChannel extends _i1.Mock implements _i18.MethodChannel {
+class MockMethodChannel extends _i1.Mock implements _i3.MethodChannel {
   @override
   String get name => (super.noSuchMethod(
         Invocation.getter(#name),
-        returnValue: _i6.dummyValue<String>(
+        returnValue: _i5.dummyValue<String>(
           this,
           Invocation.getter(#name),
         ),
-        returnValueForMissingStub: _i6.dummyValue<String>(
+        returnValueForMissingStub: _i5.dummyValue<String>(
           this,
           Invocation.getter(#name),
         ),
@@ -473,7 +478,7 @@ class MockMethodChannel extends _i1.Mock implements _i18.MethodChannel {
       ) as _i3.MethodCodec);
 
   @override
-  _i4.BinaryMessenger get binaryMessenger => (super.noSuchMethod(
+  _i3.BinaryMessenger get binaryMessenger => (super.noSuchMethod(
         Invocation.getter(#binaryMessenger),
         returnValue: _FakeBinaryMessenger_2(
           this,
@@ -483,10 +488,10 @@ class MockMethodChannel extends _i1.Mock implements _i18.MethodChannel {
           this,
           Invocation.getter(#binaryMessenger),
         ),
-      ) as _i4.BinaryMessenger);
+      ) as _i3.BinaryMessenger);
 
   @override
-  _i8.Future<T?> invokeMethod<T>(
+  _i7.Future<T?> invokeMethod<T>(
     String? method, [
     dynamic arguments,
   ]) =>
@@ -498,12 +503,12 @@ class MockMethodChannel extends _i1.Mock implements _i18.MethodChannel {
             arguments,
           ],
         ),
-        returnValue: _i8.Future<T?>.value(),
-        returnValueForMissingStub: _i8.Future<T?>.value(),
-      ) as _i8.Future<T?>);
+        returnValue: _i7.Future<T?>.value(),
+        returnValueForMissingStub: _i7.Future<T?>.value(),
+      ) as _i7.Future<T?>);
 
   @override
-  _i8.Future<List<T>?> invokeListMethod<T>(
+  _i7.Future<List<T>?> invokeListMethod<T>(
     String? method, [
     dynamic arguments,
   ]) =>
@@ -515,12 +520,12 @@ class MockMethodChannel extends _i1.Mock implements _i18.MethodChannel {
             arguments,
           ],
         ),
-        returnValue: _i8.Future<List<T>?>.value(),
-        returnValueForMissingStub: _i8.Future<List<T>?>.value(),
-      ) as _i8.Future<List<T>?>);
+        returnValue: _i7.Future<List<T>?>.value(),
+        returnValueForMissingStub: _i7.Future<List<T>?>.value(),
+      ) as _i7.Future<List<T>?>);
 
   @override
-  _i8.Future<Map<K, V>?> invokeMapMethod<K, V>(
+  _i7.Future<Map<K, V>?> invokeMapMethod<K, V>(
     String? method, [
     dynamic arguments,
   ]) =>
@@ -532,13 +537,13 @@ class MockMethodChannel extends _i1.Mock implements _i18.MethodChannel {
             arguments,
           ],
         ),
-        returnValue: _i8.Future<Map<K, V>?>.value(),
-        returnValueForMissingStub: _i8.Future<Map<K, V>?>.value(),
-      ) as _i8.Future<Map<K, V>?>);
+        returnValue: _i7.Future<Map<K, V>?>.value(),
+        returnValueForMissingStub: _i7.Future<Map<K, V>?>.value(),
+      ) as _i7.Future<Map<K, V>?>);
 
   @override
   void setMethodCallHandler(
-          _i8.Future<dynamic> Function(_i3.MethodCall)? handler) =>
+          _i7.Future<dynamic> Function(_i3.MethodCall)? handler) =>
       super.noSuchMethod(
         Invocation.method(
           #setMethodCallHandler,
