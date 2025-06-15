@@ -17,8 +17,12 @@ public class MainActivity extends FlutterActivity {
     private static final String CHANNEL = "mrp.dev/appinfo";
     private static final String FOREGROUND_APP_INFO = "getForegroundAppInfo";
     private static final String SCREEN_ACTIVE = "getScreenActive";
+    private static final String OVERLAY_PERMISSION = "getOverlayPermission";
+    private static final String REQUEST_OVERLAY_PERMISSION = "requestOverlayPermission";
     private static final String BLOCK_ACTION = "blockingAction";
     private static volatile Map<String,Object> foregroundAppDataCache;
+
+    private BlockLauncher blockLauncher = new BlockLauncher();
 
     @Override
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
@@ -42,8 +46,12 @@ public class MainActivity extends FlutterActivity {
                     } else if (call.method.equals(SCREEN_ACTIVE)) {
                         ScreenLockChecker screenLockChecker = new ScreenLockChecker(getApplicationContext());
                         result.success(screenLockChecker.getScreenActive());
+                    } else if (call.method.equals(OVERLAY_PERMISSION)) {
+                        result.success(blockLauncher.hasOverlayPermission(getApplicationContext()));
+                    } else if (call.method.equals(REQUEST_OVERLAY_PERMISSION)) {
+                        blockLauncher.requestOverlayPermission(getApplicationContext());
+                        result.success(null);
                     } else if (call.method.equals(BLOCK_ACTION)) {
-                        BlockLauncher blockLauncher = new BlockLauncher();
                         blockLauncher.launchBlockerActivity(getApplicationContext());
                         result.success(null);
                     } else {

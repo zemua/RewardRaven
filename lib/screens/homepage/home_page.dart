@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'package:reward_raven/service/app/permissions.dart';
 import 'package:usage_tracker/usage_tracker.dart';
 
 import '../../service/foreground/androidwatchdog.dart';
@@ -21,13 +22,26 @@ class HomePage extends StatefulWidget {
   State<StatefulWidget> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   final PlatformWrapper _platformWrapper = locator<PlatformWrapper>();
 
   @override
   void initState() {
     super.initState();
-    _requestPermissions();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _requestPermissions();
+    }
   }
 
   @override
@@ -221,7 +235,7 @@ class _HomePageState extends State<HomePage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text(AppLocalizations.of(context)!.permissionsRequired),
+            title: Text(AppLocalizations.of(context)!.usageStatistics),
             content: Text(AppLocalizations.of(context)!
                 .usageStatisticsPermissionExplanation),
             actions: <Widget>[
@@ -229,6 +243,33 @@ class _HomePageState extends State<HomePage> {
                 child: Text(AppLocalizations.of(context)!.goToSettings),
                 onPressed: () async {
                   await UsageTracker.requestPermission();
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text(AppLocalizations.of(context)!.cancel),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else if (_platformWrapper.isAndroid() &&
+        !(await locator<Permissions>().hasOverlayPermission())) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(AppLocalizations.of(context)!.overlayPermissions),
+            content: Text(
+                AppLocalizations.of(context)!.overlayPermissionsExplanation),
+            actions: <Widget>[
+              TextButton(
+                child: Text(AppLocalizations.of(context)!.goToSettings),
+                onPressed: () async {
+                  await locator<Permissions>().requestOverlayPermission();
                   Navigator.of(context).pop();
                 },
               ),

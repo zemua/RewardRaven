@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 
+import '../app/app_native.dart';
 import '../loopchain/app_data_dto.dart';
 import '../loopchain/app_data_handler.dart';
 import 'localized_strings.dart';
@@ -12,7 +12,7 @@ import 'localized_strings.dart';
 final logger = Logger();
 final GetIt locator = GetIt.instance;
 
-final String _buildLoopData = 'buildLoopData';
+const String _buildLoopData = 'buildLoopData';
 
 const Duration watchdogPeriod = Duration(seconds: 5);
 
@@ -30,8 +30,6 @@ class AndroidWatchdogWidget extends StatefulWidget {
 }
 
 class _AndroidWatchdogWidgetState extends State<AndroidWatchdogWidget> {
-  static const _appNativeChannel = MethodChannel('mrp.dev/appinfo');
-
   late String _notificationTitle;
   late String _notificationText;
   late String _channelName;
@@ -59,7 +57,7 @@ class _AndroidWatchdogWidgetState extends State<AndroidWatchdogWidget> {
     if (data == _buildLoopData) {
       try {
         locator<AppDataHandler>().handleAppData(AppData(
-          appNativeChannel: _appNativeChannel,
+          appNativeChannel: appNativeChannel,
           localizedStrings: _localizedStrings,
         ));
       } catch (e) {
