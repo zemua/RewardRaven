@@ -230,7 +230,34 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     logger.d('Requesting permissions');
     final hasStatsPermission = await UsageTracker.hasPermission();
     logger.d('Has stats permission: $hasStatsPermission');
-    if (!hasStatsPermission) {
+    if (_platformWrapper.isAndroid() &&
+        !(await locator<Permissions>().hasNotificationPermission())) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(AppLocalizations.of(context)!.notificationPermissions),
+            content: Text(AppLocalizations.of(context)!
+                .notificationPermissionsExplanation),
+            actions: <Widget>[
+              TextButton(
+                child: Text(AppLocalizations.of(context)!.goToSettings),
+                onPressed: () async {
+                  await locator<Permissions>().requestNotificationPermission();
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text(AppLocalizations.of(context)!.cancel),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else if (!hasStatsPermission) {
       showDialog(
         context: context,
         builder: (BuildContext context) {

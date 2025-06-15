@@ -31,6 +31,8 @@
   "noElementsOrNetworkError": "No elements or network error",
   "noGroupsFound": "No groups found",
   "noPositiveGroupsFound": "No positive groups found",
+  "notificationPermissions": "Notification Permissions",
+  "notificationPermissionsExplanation": "This app needs notification permissions to function properly. Please grant the permissions in the next screen.",
   "options": "Options",
   "overlayPermissions": "Overlay Permissions",
   "overlayPermissionsExplanation": "This app needs to be shown on top of other apps to function properly. Please grant the permissions in the next screen.",
