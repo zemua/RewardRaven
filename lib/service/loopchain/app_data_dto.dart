@@ -28,6 +28,9 @@ class AppData {
   Duration timeCounted = Duration.zero;
   Duration remainingTime = Duration.zero;
 
+  bool hasBeenBlocked = false;
+  List<String> blockingMessages = [];
+
   AppData({
     required this.appNativeChannel,
     required this.localizedStrings,

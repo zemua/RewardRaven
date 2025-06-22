@@ -16,6 +16,8 @@ import 'package:reward_raven/service/app/apps_fetcher.dart';
 import 'package:reward_raven/service/app/apps_fetcher_provider.dart';
 import 'package:reward_raven/service/app/impl/android_apps_fetcher.dart';
 import 'package:reward_raven/service/app/impl/empty_apps_fetcher.dart';
+import 'package:reward_raven/service/app/impl/permissions_request.dart';
+import 'package:reward_raven/service/app/permissions.dart';
 import 'package:reward_raven/service/app_blocker.dart';
 import 'package:reward_raven/service/condition_checker.dart';
 import 'package:reward_raven/service/impl/app_blocker_impl.dart';
@@ -110,4 +112,5 @@ Future<void> _setupLocator() async {
   _locator.registerSingleton<ConditionChecker>(ConditionCheckerImpl());
   _locator.registerSingleton<AppBlocker>(AppBlockerImpl());
   _locator.registerSingleton<AppDataHandler>(AppDataChainMaster());
+  _locator.registerSingleton<Permissions>(PermissionsRequest());
 }

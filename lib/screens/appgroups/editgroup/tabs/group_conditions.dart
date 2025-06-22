@@ -120,8 +120,9 @@ Future<GroupConditionItem> mapCondition(AppListType listType,
     GroupCondition condition, AppGroup conditionedGroup) async {
   var conditionedName =
       await getGroupName(listType, condition.conditionedGroupId);
+  // conditional groups are always positive
   var conditionalName =
-      await getGroupName(listType, condition.conditionalGroupId);
+      await getGroupName(AppListType.positive, condition.conditionalGroupId);
   return GroupConditionItem(
     conditionedGroupId: condition.conditionedGroupId,
     conditionedGroupName: conditionedName,

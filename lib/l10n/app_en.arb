@@ -1,6 +1,7 @@
 {
   "addCondition": "Add Condition",
   "addGroup": "Add Group",
+  "appBlocked": "App Blocked",
   "appTitle": "Reward Raven",
   "@appTitle": {
     "description": "The title of the app"
@@ -9,6 +10,7 @@
   "cancel": "Cancel",
   "conditionalGroup": "Conditional Group",
   "conditions": "Conditions",
+  "conditionNotMet": "Condition %s not met",
   "days": "days",
   "editCondition": "Edit Condition",
   "editGroup": "Edit Group",
@@ -31,7 +33,12 @@
   "noElementsOrNetworkError": "No elements or network error",
   "noGroupsFound": "No groups found",
   "noPositiveGroupsFound": "No positive groups found",
+  "notEnoughTime": "Out of time",
+  "notificationPermissions": "Notification Permissions",
+  "notificationPermissionsExplanation": "This app needs notification permissions to function properly. Please grant the permissions in the next screen.",
   "options": "Options",
+  "overlayPermissions": "Overlay Permissions",
+  "overlayPermissionsExplanation": "This app needs to be shown on top of other apps to function properly. Please grant the permissions in the next screen.",
   "permissionsRequired": "Permissions Required",
   "positiveApps": "Positive Apps",
   "positiveGroups": "Positive Groups",
@@ -40,6 +47,7 @@
   "search" : "Search",
   "settings": "Settings",
   "sleeping": "Sleeping",
+  "usageStatistics": "Usage Statistics",
   "usageStatisticsPermissionExplanation": "This app needs usage statistics permissions to function properly. Please grant the permissions in the next screen.",
   "watchdogServiceAndroidChannelDescription": "This notification appears when the watchdog service is running and the app usage is being monitored.",
   "watchdogServiceAndroidChannelName": "Watchdog Service Notification",
