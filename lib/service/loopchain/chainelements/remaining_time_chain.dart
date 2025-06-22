@@ -27,6 +27,11 @@ class RemainingTimeChain implements AppDataHandler {
     TimeLog totalDuration = await _timeLogService.getTotalDuration();
     data.remainingTime = totalDuration.counted;
 
+    if (data.remainingTime + data.timeCounted <= Duration.zero) {
+      data.blockingMessages
+          .add(data.localizedStrings.notEnoughTime ?? "Time used up");
+    }
+
     if (_nextHandler != null) {
       await _nextHandler!.handleAppData(data);
     }

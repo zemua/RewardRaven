@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'package:sprintf/sprintf.dart';
 
 import '../../condition_checker.dart';
 import '../app_data_dto.dart';
@@ -28,7 +29,10 @@ class ConditionsCheckChain implements AppDataHandler {
       for (var condition in data.groupConditions!) {
         if (!(await checker.isConditionMet(condition))) {
           allMet = false;
-          break;
+          var name = data.appGroup?.name ?? "";
+          data.blockingMessages.add(sprintf(
+              data.localizedStrings.conditionNotMet ?? "Condition %s not met",
+              [name]));
         }
       }
     }

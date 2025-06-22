@@ -41,6 +41,6 @@ class AndroidAppsFetcher implements AppsFetcher {
 
   @override
   Future<AppInfo?> fetchApp(String packageName) {
-    return InstalledApps.getAppInfo(packageName);
+    return InstalledApps.getAppInfo(packageName, BuiltWith.flutter);
   }
 }

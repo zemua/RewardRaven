@@ -49,6 +49,11 @@ class _AndroidWatchdogWidgetState extends State<AndroidWatchdogWidget> {
         AppLocalizations.of(context)!.watchdogServiceAndroidChannelDescription;
 
     _localizedStrings.sleeping = AppLocalizations.of(context)!.sleeping;
+    _localizedStrings.conditionNotMet =
+        AppLocalizations.of(context)!.conditionNotMet;
+    _localizedStrings.appBlocked = AppLocalizations.of(context)!.appBlocked;
+    _localizedStrings.notEnoughTime =
+        AppLocalizations.of(context)!.notEnoughTime;
     return const SizedBox.shrink();
   }
 

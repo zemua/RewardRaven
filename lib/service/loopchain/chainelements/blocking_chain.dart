@@ -36,12 +36,14 @@ class BlockingChain implements AppDataHandler {
   Future<void> handleBlockingOfNegativeApp(AppData data) async {
     if (!data.conditionsMet) {
       _blocker.blockApp(data.appNativeChannel, data.processId!);
+      data.hasBeenBlocked = true;
       return;
     }
 
     Duration resultedTime = data.remainingTime + data.timeCounted;
     if (resultedTime <= Duration.zero) {
       _blocker.blockApp(data.appNativeChannel, data.processId!);
+      data.hasBeenBlocked = true;
       return;
     }
   }
