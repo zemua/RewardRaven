@@ -12,7 +12,7 @@ import '../../db/service/listed_app_service.dart';
 import '../../service/app/apps_fetcher.dart';
 import '../../service/platform_wrapper.dart';
 
-final GetIt locator = GetIt.instance;
+final GetIt _locator = GetIt.instance;
 
 class AppList extends StatefulWidget {
   final AppListType listType;
@@ -31,7 +31,7 @@ class AppList extends StatefulWidget {
 class AppListState extends State<AppList> {
   late Future<List<AppInfo>> _futureApps;
   bool _isSwitched = false;
-  final AppsFetcher appsFetcher = locator<AppsFetcher>();
+  final AppsFetcher appsFetcher = _locator<AppsFetcher>();
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
 
@@ -148,12 +148,12 @@ class AppListItem extends StatefulWidget {
 }
 
 class AppListItemState extends State<AppListItem> {
-  final PlatformWrapper _platformWrapper = locator<PlatformWrapper>();
+  final PlatformWrapper _platformWrapper = _locator<PlatformWrapper>();
 
   final _logger = Logger();
   bool _isSwitched = false;
   bool _isDisabled = false;
-  final ListedAppService _service = locator<ListedAppService>();
+  final ListedAppService _service = _locator<ListedAppService>();
 
   @override
   void initState() {

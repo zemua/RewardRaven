@@ -6,6 +6,7 @@
   "@appTitle": {
     "description": "The title of the app"
   },
+  "activateShutdownDescription": "Activate shutdown mode to sleep better",
   "apps": "Apps",
   "cancel": "Cancel",
   "conditionalGroup": "Conditional Group",
@@ -46,6 +47,11 @@
   "save": "Save",
   "search" : "Search",
   "settings": "Settings",
+  "shutdownNegativesWillBeClosed": "Negatives will be closed",
+  "shutdownNeutralsWillConsume": "Neutrals will consume time",
+  "shutdownPositivesDoNotCount": "Positives will not count",
+  "shutdownPositivesWillConsume": "Positives will consume time",
+  "shutdownStartsAt": "Shutdown starts at",
   "sleeping": "Sleeping",
   "usageStatistics": "Usage Statistics",
   "usageStatisticsPermissionExplanation": "This app needs usage statistics permissions to function properly. Please grant the permissions in the next screen.",

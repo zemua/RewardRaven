@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
+import 'package:reward_raven/screens/settings/settings_screen.dart';
 import 'package:reward_raven/service/app/permissions.dart';
 import 'package:usage_tracker/usage_tracker.dart';
 
@@ -12,8 +13,8 @@ import '../appgroups/app_group_list_type.dart';
 import '../apps/app_list.dart';
 import '../apps/app_list_type.dart';
 
-final logger = Logger();
-final GetIt locator = GetIt.instance;
+final _logger = Logger();
+final GetIt _locator = GetIt.instance;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,7 +24,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
-  final PlatformWrapper _platformWrapper = locator<PlatformWrapper>();
+  final PlatformWrapper _platformWrapper = _locator<PlatformWrapper>();
 
   @override
   void initState() {
@@ -168,7 +169,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        logger.d('Random checks button pressed');
+                        _logger.d('Random checks button pressed');
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -186,7 +187,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        logger.d('My Times button pressed');
+                        _logger.d('My Times button pressed');
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -204,7 +205,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        logger.d('Settings button pressed');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SettingsScreen(),
+                          ),
+                        );
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -227,11 +233,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   Future<void> _requestPermissions() async {
-    logger.d('Requesting permissions');
+    _logger.d('Requesting permissions');
     final hasStatsPermission = await UsageTracker.hasPermission();
-    logger.d('Has stats permission: $hasStatsPermission');
+    _logger.d('Has stats permission: $hasStatsPermission');
     if (_platformWrapper.isAndroid() &&
-        !(await locator<Permissions>().hasNotificationPermission())) {
+        !(await _locator<Permissions>().hasNotificationPermission())) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -243,7 +249,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               TextButton(
                 child: Text(AppLocalizations.of(context)!.goToSettings),
                 onPressed: () async {
-                  await locator<Permissions>().requestNotificationPermission();
+                  await _locator<Permissions>().requestNotificationPermission();
                   Navigator.of(context).pop();
                 },
               ),
@@ -284,7 +290,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         },
       );
     } else if (_platformWrapper.isAndroid() &&
-        !(await locator<Permissions>().hasOverlayPermission())) {
+        !(await _locator<Permissions>().hasOverlayPermission())) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -296,7 +302,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               TextButton(
                 child: Text(AppLocalizations.of(context)!.goToSettings),
                 onPressed: () async {
-                  await locator<Permissions>().requestOverlayPermission();
+                  await _locator<Permissions>().requestOverlayPermission();
                   Navigator.of(context).pop();
                 },
               ),

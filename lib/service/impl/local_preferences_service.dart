@@ -9,28 +9,40 @@ class LocalPreferencesService implements PreferencesService {
   final logger = Logger();
   final GetIt _locator = GetIt.instance;
 
+  SharedPreferences _preferences() {
+    return _locator<SharedPreferences>();
+  }
+
   @override
   void saveSharedString(String key, String value) async {
-    SharedPreferences prefs = _locator<SharedPreferences>();
-    await prefs.setString(key, value);
+    await _preferences().setString(key, value);
   }
 
   @override
   Future<String?> getSharedString(String key) async {
-    SharedPreferences prefs = _locator<SharedPreferences>();
-    return prefs.getString(key);
+    return _preferences().getString(key);
   }
 
   @override
   Future<String> getUserUUID() async {
     String deviceUuidProperty = "device_uuid";
-    SharedPreferences prefs = _locator<SharedPreferences>();
+    SharedPreferences prefs = _preferences();
     String? uuid = prefs.getString(deviceUuidProperty);
     if (uuid == null) {
-      uuid = Uuid().v1();
+      uuid = const Uuid().v1();
       logger.i("Generated device uuid: $uuid");
       await prefs.setString(deviceUuidProperty, uuid);
     }
     return uuid;
+  }
+
+  @override
+  Future<bool?> getSharedBool(String key) async {
+    return _preferences().getBool(key);
+  }
+
+  @override
+  void saveSharedBool(String key, bool value) {
+    _preferences().setBool(key, value);
   }
 }
