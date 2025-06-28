@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
@@ -28,6 +29,10 @@ class SettingsScreenState extends State<SettingsScreen> {
   Duration? _shutdownSelectedStartTime;
   final _shutdownEndTimeController = TextEditingController();
   Duration? _shutdownSelectedEndTime;
+  final _shutdownNoticeTimeController = TextEditingController();
+  int? _selectedShutdownNoticeMinutes;
+  final _hoursForDayChangeController = TextEditingController();
+  int? _selectedHoursForDayChange;
 
   bool? _isShutdownEnabled;
 
@@ -310,7 +315,144 @@ class SettingsScreenState extends State<SettingsScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(width: 16.0),
+                      Expanded(
+                        child: Text(
+                          AppLocalizations.of(context)!
+                              .shutdownPrenotificationDesc,
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Switch(
+                          value: true,
+                          onChanged: (value) {
+                            _logger.d('Switch changed to $value');
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(width: 16.0),
+                      Expanded(
+                        child: Text(
+                          AppLocalizations.of(context)!
+                              .shutdownPrenotificationTimeDesc,
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: IntrinsicWidth(
+                          child: Baseline(
+                            baseline: 30,
+                            baselineType: TextBaseline.alphabetic,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 6),
+                              child: ConstrainedBox(
+                                constraints: const BoxConstraints(minWidth: 60),
+                                child: TextFormField(
+                                  key: const Key("daysField"),
+                                  controller: _shutdownNoticeTimeController,
+                                  decoration: const InputDecoration(
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 18),
+                                    border: OutlineInputBorder(),
+                                    counterText: '',
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  ],
+                                  maxLength: 2,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return '';
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (value) {
+                                    _selectedShutdownNoticeMinutes =
+                                        int.tryParse(value) ?? 0;
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(width: 16.0),
+                      Expanded(
+                        child: Text(
+                          AppLocalizations.of(context)!
+                              .dayChangesHoursAfterMidnight,
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: IntrinsicWidth(
+                          child: Baseline(
+                            baseline: 30,
+                            baselineType: TextBaseline.alphabetic,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 6),
+                              child: ConstrainedBox(
+                                constraints: const BoxConstraints(minWidth: 60),
+                                child: TextFormField(
+                                  key: const Key("daysField"),
+                                  controller: _hoursForDayChangeController,
+                                  decoration: const InputDecoration(
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 18),
+                                    border: OutlineInputBorder(),
+                                    counterText: '',
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  ],
+                                  maxLength: 1,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return '';
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (value) {
+                                    _selectedHoursForDayChange =
+                                        int.tryParse(value) ?? 0;
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
