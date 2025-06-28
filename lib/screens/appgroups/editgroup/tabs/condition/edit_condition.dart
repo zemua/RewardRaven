@@ -10,12 +10,12 @@ import '../../../../../db/service/app_group_service.dart';
 import '../../../../../db/service/group_condition_service.dart';
 import '../../../../../tools/injectable_time_picker.dart';
 
-final GetIt locator = GetIt.instance;
+final GetIt _locator = GetIt.instance;
 
 class EditCondition extends StatefulWidget {
   final _logger = Logger();
-  final groupConditionService = locator<GroupConditionService>();
-  final groupService = locator<AppGroupService>();
+  final groupConditionService = _locator<GroupConditionService>();
+  final groupService = _locator<AppGroupService>();
   final AppGroup conditionedGroup;
   final GroupCondition? condition;
 
@@ -32,7 +32,7 @@ class EditCondition extends StatefulWidget {
 class EditConditionState extends State<EditCondition> {
   final _timeController = TextEditingController();
   final _daysController = TextEditingController();
-  final timePicker = locator<InjectableTimePicker>();
+  final timePicker = _locator<InjectableTimePicker>();
 
   late Map<String, AppGroup> groupsMap;
 
@@ -288,9 +288,9 @@ class EditConditionState extends State<EditCondition> {
       duringLastDays: _selectedDays!,
     );
     if (widget.condition != null) {
-      locator<GroupConditionService>().updateGroupCondition(groupCondition);
+      _locator<GroupConditionService>().updateGroupCondition(groupCondition);
     } else {
-      locator<GroupConditionService>().saveGroupCondition(groupCondition);
+      _locator<GroupConditionService>().saveGroupCondition(groupCondition);
     }
   }
 }
@@ -299,7 +299,7 @@ Future<List<AppGroup>> _fetchPositiveGroups(AppGroup currentGroup) async {
   if (currentGroup.id == null) {
     return [];
   }
-  final appGroupService = locator<AppGroupService>();
+  final appGroupService = _locator<AppGroupService>();
   final groups = await appGroupService.getGroups(GroupType.positive);
   return groups.where((group) => group.id != currentGroup.id).toList();
 }

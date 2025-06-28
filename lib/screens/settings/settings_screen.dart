@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 
 import '../../service/preferences_service.dart';
+import '../../tools/injectable_time_picker.dart';
 
 final GetIt _locator = GetIt.instance;
 final _logger = Logger();
@@ -19,7 +20,15 @@ class SettingsScreen extends StatefulWidget {
 
 class SettingsScreenState extends State<SettingsScreen> {
   final _preferences = _locator.get<PreferencesService>();
+
   bool _isLoading = true;
+
+  final timePicker = _locator<InjectableTimePicker>();
+  final _shutdownStartTimeController = TextEditingController();
+  Duration? _shutdownSelectedStartTime;
+  final _shutdownEndTimeController = TextEditingController();
+  Duration? _shutdownSelectedEndTime;
+
   bool? _isShutdownEnabled;
 
   @override
@@ -36,6 +45,33 @@ class SettingsScreenState extends State<SettingsScreen> {
         _isShutdownEnabled = isEnabled;
         _isLoading = false;
       });
+    }
+  }
+
+  Future<Duration?> _pickTime(
+      Duration? selectedTime, TextEditingController timeController) async {
+    TimeOfDay? initialTime;
+    if (selectedTime != null) {
+      initialTime = toTimeOfDay(selectedTime!);
+    } else {
+      initialTime = const TimeOfDay(hour: 0, minute: 0); // Default time
+    }
+
+    final TimeOfDay? newTime = await timePicker.showPicker(
+      context: context,
+      initialTime: initialTime,
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child!,
+        );
+      },
+    );
+    if (newTime != null) {
+      setState(() {
+        timeController.text = timeToDigitalClock(newTime);
+      });
+      return Duration(hours: newTime.hour, minutes: newTime.minute);
     }
   }
 
@@ -186,16 +222,114 @@ class SettingsScreenState extends State<SettingsScreen> {
                       ),
                       const SizedBox(width: 10),
                       Expanded(
-                        child: Switch(
-                          value: true,
-                          onChanged: (value) {
-                            _logger.d('Switch changed to $value');
-                          },
+                        child: IntrinsicWidth(
+                          child: Baseline(
+                            baseline: 40,
+                            baselineType: TextBaseline.alphabetic,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 6),
+                              child: ConstrainedBox(
+                                constraints: const BoxConstraints(minWidth: 60),
+                                child: TextFormField(
+                                  key: const Key("shutdownStartTimeField"),
+                                  controller: _shutdownStartTimeController,
+                                  decoration: InputDecoration(
+                                    labelText:
+                                        AppLocalizations.of(context)!.hhmm,
+                                    isDense: true,
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 0),
+                                    border: const OutlineInputBorder(),
+                                  ),
+                                  readOnly: true,
+                                  textAlign: TextAlign.center,
+                                  onTap: () {
+                                    _pickTime(_shutdownSelectedStartTime,
+                                            _shutdownStartTimeController)
+                                        .then((onValue) {
+                                      setState(() {
+                                        _shutdownSelectedStartTime = onValue;
+                                      });
+                                    });
+                                  },
+                                  validator: (value) {
+                                    if (value == null ||
+                                        value.isEmpty ||
+                                        value == '00:00') {
+                                      return '';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 20),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(width: 16.0),
+                      Expanded(
+                        child: Text(
+                          AppLocalizations.of(context)!.shutdownEndsAt,
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: IntrinsicWidth(
+                          child: Baseline(
+                            baseline: 40,
+                            baselineType: TextBaseline.alphabetic,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 6),
+                              child: ConstrainedBox(
+                                constraints: const BoxConstraints(minWidth: 60),
+                                child: TextFormField(
+                                  key: const Key("shutdownEndTimeField"),
+                                  controller: _shutdownEndTimeController,
+                                  decoration: InputDecoration(
+                                    labelText:
+                                        AppLocalizations.of(context)!.hhmm,
+                                    isDense: true,
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 0),
+                                    border: const OutlineInputBorder(),
+                                  ),
+                                  readOnly: true,
+                                  textAlign: TextAlign.center,
+                                  onTap: () {
+                                    _pickTime(_shutdownSelectedEndTime,
+                                            _shutdownEndTimeController)
+                                        .then((onValue) {
+                                      setState(() {
+                                        _shutdownSelectedEndTime = onValue;
+                                      });
+                                    });
+                                  },
+                                  validator: (value) {
+                                    if (value == null ||
+                                        value.isEmpty ||
+                                        value == '00:00') {
+                                      return '';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
                 ],
               ),
             ),

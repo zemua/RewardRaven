@@ -47,6 +47,7 @@
   "save": "Save",
   "search" : "Search",
   "settings": "Settings",
+  "shutdownEndsAt": "Shutdown ends at",
   "shutdownNegativesWillBeClosed": "Negatives will be closed",
   "shutdownNeutralsWillConsume": "Neutrals will consume time",
   "shutdownPositivesDoNotCount": "Positives will not count",
