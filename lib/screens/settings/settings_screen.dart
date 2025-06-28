@@ -48,33 +48,6 @@ class SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  Future<Duration?> _pickTime(
-      Duration? selectedTime, TextEditingController timeController) async {
-    TimeOfDay? initialTime;
-    if (selectedTime != null) {
-      initialTime = toTimeOfDay(selectedTime!);
-    } else {
-      initialTime = const TimeOfDay(hour: 0, minute: 0); // Default time
-    }
-
-    final TimeOfDay? newTime = await timePicker.showPicker(
-      context: context,
-      initialTime: initialTime,
-      builder: (context, child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-          child: child!,
-        );
-      },
-    );
-    if (newTime != null) {
-      setState(() {
-        timeController.text = timeToDigitalClock(newTime);
-      });
-      return Duration(hours: newTime.hour, minutes: newTime.minute);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -245,7 +218,11 @@ class SettingsScreenState extends State<SettingsScreen> {
                                   readOnly: true,
                                   textAlign: TextAlign.center,
                                   onTap: () {
-                                    _pickTime(_shutdownSelectedStartTime,
+                                    timePicker
+                                        .pickTime(
+                                            context,
+                                            this,
+                                            _shutdownSelectedStartTime,
                                             _shutdownStartTimeController)
                                         .then((onValue) {
                                       setState(() {
@@ -305,7 +282,11 @@ class SettingsScreenState extends State<SettingsScreen> {
                                   readOnly: true,
                                   textAlign: TextAlign.center,
                                   onTap: () {
-                                    _pickTime(_shutdownSelectedEndTime,
+                                    timePicker
+                                        .pickTime(
+                                            context,
+                                            this,
+                                            _shutdownSelectedEndTime,
                                             _shutdownEndTimeController)
                                         .then((onValue) {
                                       setState(() {

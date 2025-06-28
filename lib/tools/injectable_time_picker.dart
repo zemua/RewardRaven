@@ -1,6 +1,33 @@
 import 'package:flutter/material.dart';
 
 class InjectableTimePicker {
+  Future<Duration?> pickTime(BuildContext context, State state,
+      Duration? selectedTime, TextEditingController timeController) async {
+    TimeOfDay? initialTime;
+    if (selectedTime != null) {
+      initialTime = toTimeOfDay(selectedTime!);
+    } else {
+      initialTime = const TimeOfDay(hour: 0, minute: 0); // Default time
+    }
+
+    final TimeOfDay? newTime = await showPicker(
+      context: context,
+      initialTime: initialTime,
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child!,
+        );
+      },
+    );
+    if (newTime != null) {
+      state.setState(() {
+        timeController.text = timeToDigitalClock(newTime);
+      });
+      return Duration(hours: newTime.hour, minutes: newTime.minute);
+    }
+  }
+
   Future<TimeOfDay?> showPicker({
     required BuildContext context,
     required TimeOfDay initialTime,
