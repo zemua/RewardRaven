@@ -16,6 +16,10 @@ final GetIt locator = GetIt.instance;
 
 final _logger = Logger();
 
+// TODO new settings tab
+// TODO include switch to temporarily ignore conditions required
+// TODO include switch to temporarly disable conditions based on this group
+
 Builder buildConditionsList(AppGroup group, AppListType listType) {
   return Builder(
     builder: (context) {

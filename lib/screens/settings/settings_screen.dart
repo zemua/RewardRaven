@@ -33,6 +33,12 @@ class SettingsScreenState extends State<SettingsScreen> {
   int? _selectedShutdownNoticeMinutes;
   final _hoursForDayChangeController = TextEditingController();
   int? _selectedHoursForDayChange;
+  final _dayChangeNoticeTimeController = TextEditingController();
+  int? _selectedDayChangeNoticeMinutes;
+  final _notifyOutOfTimeController = TextEditingController();
+  int? _selectedNoticeOutOfTime;
+  final _positiveNegativeProportionController = TextEditingController();
+  int? _selectedPositiveNegativeProportion;
 
   bool? _isShutdownEnabled;
 
@@ -360,7 +366,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const SizedBox(width: 16.0),
+                      const SizedBox(width: 32.0),
                       Expanded(
                         child: Text(
                           AppLocalizations.of(context)!
@@ -424,7 +430,6 @@ class SettingsScreenState extends State<SettingsScreen> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const SizedBox(width: 16.0),
                       Expanded(
                         child: Text(
                           AppLocalizations.of(context)!
@@ -485,6 +490,236 @@ class SettingsScreenState extends State<SettingsScreen> {
                     ],
                   ),
                   const SizedBox(height: 20),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          AppLocalizations.of(context)!.dayChangeNotification,
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Switch(
+                          value: true,
+                          onChanged: (value) {
+                            _logger.d('Switch changed to $value');
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(width: 16.0),
+                      Expanded(
+                        child: Text(
+                          AppLocalizations.of(context)!
+                              .dayChangeNotificationTime,
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IntrinsicWidth(
+                                child: Baseline(
+                                  baseline: 30,
+                                  baselineType: TextBaseline.alphabetic,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 6),
+                                    child: ConstrainedBox(
+                                      constraints:
+                                          const BoxConstraints(minWidth: 60),
+                                      child: TextFormField(
+                                        key: const Key("daysField"),
+                                        controller:
+                                            _dayChangeNoticeTimeController,
+                                        decoration: const InputDecoration(
+                                          isDense: true,
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 18),
+                                          border: OutlineInputBorder(),
+                                          counterText: '',
+                                        ),
+                                        textAlign: TextAlign.center,
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter
+                                              .digitsOnly,
+                                        ],
+                                        maxLength: 2,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return '';
+                                          }
+                                          return null;
+                                        },
+                                        onChanged: (value) {
+                                          _selectedDayChangeNoticeMinutes =
+                                              int.tryParse(value) ?? 0;
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ]),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          AppLocalizations.of(context)!
+                              .timeOfGraceForNegativeSettings,
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Switch(
+                          value: true,
+                          onChanged: (value) {
+                            _logger.d('Switch changed to $value');
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          AppLocalizations.of(context)!.noticeTimeOutInAdvance,
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IntrinsicWidth(
+                                child: Baseline(
+                                  baseline: 30,
+                                  baselineType: TextBaseline.alphabetic,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 6),
+                                    child: ConstrainedBox(
+                                      constraints:
+                                          const BoxConstraints(minWidth: 60),
+                                      child: TextFormField(
+                                        key: const Key("daysField"),
+                                        controller: _notifyOutOfTimeController,
+                                        decoration: const InputDecoration(
+                                          isDense: true,
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 18),
+                                          border: OutlineInputBorder(),
+                                          counterText: '',
+                                        ),
+                                        textAlign: TextAlign.center,
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter
+                                              .digitsOnly,
+                                        ],
+                                        maxLength: 2,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return '';
+                                          }
+                                          return null;
+                                        },
+                                        onChanged: (value) {
+                                          _selectedNoticeOutOfTime =
+                                              int.tryParse(value) ?? 0;
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ]),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          AppLocalizations.of(context)!
+                              .positiveNegativeProportionDesc,
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IntrinsicWidth(
+                                child: Baseline(
+                                  baseline: 30,
+                                  baselineType: TextBaseline.alphabetic,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 6),
+                                    child: ConstrainedBox(
+                                      constraints:
+                                          const BoxConstraints(minWidth: 60),
+                                      child: TextFormField(
+                                        key: const Key("daysField"),
+                                        controller:
+                                            _positiveNegativeProportionController,
+                                        decoration: const InputDecoration(
+                                          isDense: true,
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 18),
+                                          border: OutlineInputBorder(),
+                                          counterText: '',
+                                        ),
+                                        textAlign: TextAlign.center,
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter
+                                              .digitsOnly,
+                                        ],
+                                        maxLength: 1,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return '';
+                                          }
+                                          return null;
+                                        },
+                                        onChanged: (value) {
+                                          _selectedPositiveNegativeProportion =
+                                              int.tryParse(value) ?? 0;
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ]),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
