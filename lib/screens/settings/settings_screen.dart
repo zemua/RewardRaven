@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 
-import '../../service/impl/local_preferences_service.dart';
+import '../../service/preferences_enums.dart';
 import '../../service/preferences_service.dart';
 import '../../tools/injectable_time_picker.dart';
 
@@ -41,6 +41,7 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   bool? _isShutdownEnabled;
   bool? _isShutdownNegativesWillBeClosed;
+  bool? _isShutdownNeutralsWillConsume;
 
   @override
   void initState() {
@@ -49,15 +50,17 @@ class SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _loadPreferences() async {
-    final isEnabled =
-        await _preferences.getSharedBool(shutdownEnabledKey) ?? false;
-    final isNegativesWillBeClosed =
-        await _preferences.getSharedBool(shutdownNegativesWillBeClosedKey) ??
-            false;
+    final isShutdownEnabled =
+        await _preferences.getSharedBool(BoolPreferencesKey.shutdownEnabled);
+    final isNegativesWillBeClosed = await _preferences
+        .getSharedBool(BoolPreferencesKey.shutdownNegativesWillBeClosed);
+    final isNeutralsWillConsume = await _preferences
+        .getSharedBool(BoolPreferencesKey.shutdownNeutralsWillConsume);
     if (mounted) {
       setState(() {
-        _isShutdownEnabled = isEnabled;
+        _isShutdownEnabled = isShutdownEnabled;
         _isShutdownNegativesWillBeClosed = isNegativesWillBeClosed;
+        _isShutdownNeutralsWillConsume = isNeutralsWillConsume;
         _isLoading = false;
       });
     }
@@ -99,7 +102,8 @@ class SettingsScreenState extends State<SettingsScreen> {
                                     _isShutdownEnabled = value;
                                   });
                                   _preferences.saveSharedBool(
-                                      shutdownEnabledKey, value);
+                                      BoolPreferencesKey.shutdownEnabled,
+                                      value);
                                 },
                         ),
                       ),
@@ -128,7 +132,9 @@ class SettingsScreenState extends State<SettingsScreen> {
                                     _isShutdownNegativesWillBeClosed = value;
                                   });
                                   _preferences.saveSharedBool(
-                                      shutdownNegativesWillBeClosedKey, value);
+                                      BoolPreferencesKey
+                                          .shutdownNegativesWillBeClosed,
+                                      value);
                                 },
                         ),
                       ),
@@ -149,10 +155,18 @@ class SettingsScreenState extends State<SettingsScreen> {
                       const SizedBox(width: 10),
                       Expanded(
                         child: Switch(
-                          value: true,
-                          onChanged: (value) {
-                            _logger.d('Switch changed to $value');
-                          },
+                          value: _isShutdownNeutralsWillConsume ?? false,
+                          onChanged: _isLoading
+                              ? null
+                              : (value) async {
+                                  setState(() {
+                                    _isShutdownNeutralsWillConsume = value;
+                                  });
+                                  _preferences.saveSharedBool(
+                                      BoolPreferencesKey
+                                          .shutdownNeutralsWillConsume,
+                                      value);
+                                },
                         ),
                       ),
                     ],

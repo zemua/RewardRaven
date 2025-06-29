@@ -3,9 +3,16 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'dart:async' as _i7;
+import 'dart:ui' as _i9;
+
+import 'package:flutter/material.dart' as _i8;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i3;
 import 'package:reward_raven/service/platform_wrapper.dart' as _i2;
+import 'package:reward_raven/service/preferences_enums.dart' as _i5;
+import 'package:reward_raven/service/preferences_service.dart' as _i4;
+import 'package:reward_raven/tools/injectable_time_picker.dart' as _i6;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -46,4 +53,173 @@ class MockPlatformWrapper extends _i1.Mock implements _i2.PlatformWrapper {
         returnValue: false,
         returnValueForMissingStub: false,
       ) as bool);
+}
+
+/// A class which mocks [PreferencesService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockPreferencesService extends _i1.Mock
+    implements _i4.PreferencesService {
+  @override
+  void saveSharedString(
+    _i5.StringPreferencesKey? key,
+    String? value,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #saveSharedString,
+          [
+            key,
+            value,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  String getSharedString(_i5.StringPreferencesKey? key) => (super.noSuchMethod(
+        Invocation.method(
+          #getSharedString,
+          [key],
+        ),
+        returnValue: _i3.dummyValue<String>(
+          this,
+          Invocation.method(
+            #getSharedString,
+            [key],
+          ),
+        ),
+        returnValueForMissingStub: _i3.dummyValue<String>(
+          this,
+          Invocation.method(
+            #getSharedString,
+            [key],
+          ),
+        ),
+      ) as String);
+
+  @override
+  void saveSharedBool(
+    _i5.BoolPreferencesKey? key,
+    bool? value,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #saveSharedBool,
+          [
+            key,
+            value,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  bool getSharedBool(_i5.BoolPreferencesKey? key) => (super.noSuchMethod(
+        Invocation.method(
+          #getSharedBool,
+          [key],
+        ),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+
+  @override
+  String getUserUUID() => (super.noSuchMethod(
+        Invocation.method(
+          #getUserUUID,
+          [],
+        ),
+        returnValue: _i3.dummyValue<String>(
+          this,
+          Invocation.method(
+            #getUserUUID,
+            [],
+          ),
+        ),
+        returnValueForMissingStub: _i3.dummyValue<String>(
+          this,
+          Invocation.method(
+            #getUserUUID,
+            [],
+          ),
+        ),
+      ) as String);
+}
+
+/// A class which mocks [InjectableTimePicker].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockInjectableTimePicker extends _i1.Mock
+    implements _i6.InjectableTimePicker {
+  @override
+  _i7.Future<Duration?> pickTime(
+    _i8.BuildContext? context,
+    _i8.State<_i8.StatefulWidget>? state,
+    Duration? selectedTime,
+    _i8.TextEditingController? timeController,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #pickTime,
+          [
+            context,
+            state,
+            selectedTime,
+            timeController,
+          ],
+        ),
+        returnValue: _i7.Future<Duration?>.value(),
+        returnValueForMissingStub: _i7.Future<Duration?>.value(),
+      ) as _i7.Future<Duration?>);
+
+  @override
+  _i7.Future<_i8.TimeOfDay?> showPicker({
+    required _i8.BuildContext? context,
+    required _i8.TimeOfDay? initialTime,
+    _i8.TransitionBuilder? builder,
+    bool? barrierDismissible = true,
+    _i9.Color? barrierColor,
+    String? barrierLabel,
+    bool? useRootNavigator = true,
+    _i8.TimePickerEntryMode? initialEntryMode = _i8.TimePickerEntryMode.dial,
+    String? cancelText,
+    String? confirmText,
+    String? helpText,
+    String? errorInvalidText,
+    String? hourLabelText,
+    String? minuteLabelText,
+    _i8.RouteSettings? routeSettings,
+    _i8.EntryModeChangeCallback? onEntryModeChanged,
+    _i9.Offset? anchorPoint,
+    _i8.Orientation? orientation,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #showPicker,
+          [],
+          {
+            #context: context,
+            #initialTime: initialTime,
+            #builder: builder,
+            #barrierDismissible: barrierDismissible,
+            #barrierColor: barrierColor,
+            #barrierLabel: barrierLabel,
+            #useRootNavigator: useRootNavigator,
+            #initialEntryMode: initialEntryMode,
+            #cancelText: cancelText,
+            #confirmText: confirmText,
+            #helpText: helpText,
+            #errorInvalidText: errorInvalidText,
+            #hourLabelText: hourLabelText,
+            #minuteLabelText: minuteLabelText,
+            #routeSettings: routeSettings,
+            #onEntryModeChanged: onEntryModeChanged,
+            #anchorPoint: anchorPoint,
+            #orientation: orientation,
+          },
+        ),
+        returnValue: _i7.Future<_i8.TimeOfDay?>.value(),
+        returnValueForMissingStub: _i7.Future<_i8.TimeOfDay?>.value(),
+      ) as _i7.Future<_i8.TimeOfDay?>);
 }

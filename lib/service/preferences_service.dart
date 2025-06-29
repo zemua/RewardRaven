@@ -1,7 +1,9 @@
+import 'preferences_enums.dart';
+
 abstract class PreferencesService {
-  void saveSharedString(String key, String value);
-  Future<String?> getSharedString(String key);
-  void saveSharedBool(String key, bool value);
-  Future<bool?> getSharedBool(String key);
-  Future<String> getUserUUID();
+  void saveSharedString(StringPreferencesKey key, String value);
+  String getSharedString(StringPreferencesKey key);
+  void saveSharedBool(BoolPreferencesKey key, bool value);
+  bool getSharedBool(BoolPreferencesKey key);
+  String getUserUUID();
 }

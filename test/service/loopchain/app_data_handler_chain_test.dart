@@ -17,6 +17,7 @@ import 'package:reward_raven/service/foreground/localized_strings.dart';
 import 'package:reward_raven/service/loopchain/app_data_chain_master.dart';
 import 'package:reward_raven/service/loopchain/app_data_dto.dart';
 import 'package:reward_raven/service/platform_wrapper.dart';
+import 'package:reward_raven/service/toaster.dart';
 
 import 'app_data_handler_chain_test.mocks.dart';
 
@@ -29,8 +30,11 @@ import 'app_data_handler_chain_test.mocks.dart';
   MockSpec<TimeLogService>(),
   MockSpec<AppBlocker>(),
   MockSpec<MethodChannel>(),
+  MockSpec<Toaster>(),
 ])
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   late MockPlatformWrapper mockPlatformWrapper;
   late MockListedAppService mockListedAppService;
   late MockAppGroupService mockAppGroupService;
@@ -39,8 +43,9 @@ void main() {
   late MockTimeLogService mockTimeLogService;
   late MockAppBlocker mockAppBlocker;
   late MockMethodChannel mockMethodChannel;
+  late MockToaster mockToaster;
 
-  final locator = GetIt.instance;
+  final _locator = GetIt.instance;
 
   group('AppDataChainMaster', () {
     late AppDataChainMaster chainMaster;
@@ -50,29 +55,32 @@ void main() {
       // Create and setup mock
       mockPlatformWrapper = MockPlatformWrapper();
       when(mockPlatformWrapper.platformName).thenReturn('test_platform');
-      locator.registerSingleton<PlatformWrapper>(mockPlatformWrapper);
+      _locator.registerSingleton<PlatformWrapper>(mockPlatformWrapper);
 
       mockListedAppService = MockListedAppService();
-      locator.registerSingleton<ListedAppService>(mockListedAppService);
+      _locator.registerSingleton<ListedAppService>(mockListedAppService);
 
       mockAppGroupService = MockAppGroupService();
-      locator.registerSingleton<AppGroupService>(mockAppGroupService);
+      _locator.registerSingleton<AppGroupService>(mockAppGroupService);
 
       mockGroupConditionService = MockGroupConditionService();
-      locator
+      _locator
           .registerSingleton<GroupConditionService>(mockGroupConditionService);
 
       mockConditionChecker = MockConditionChecker();
-      locator.registerSingleton<ConditionChecker>(mockConditionChecker);
+      _locator.registerSingleton<ConditionChecker>(mockConditionChecker);
 
       mockTimeLogService = MockTimeLogService();
-      locator.registerSingleton<TimeLogService>(mockTimeLogService);
+      _locator.registerSingleton<TimeLogService>(mockTimeLogService);
 
       mockAppBlocker = MockAppBlocker();
-      locator.registerSingleton<AppBlocker>(mockAppBlocker);
+      _locator.registerSingleton<AppBlocker>(mockAppBlocker);
 
       mockMethodChannel = MockMethodChannel();
-      locator.registerSingleton<MethodChannel>(mockMethodChannel);
+      _locator.registerSingleton<MethodChannel>(mockMethodChannel);
+
+      mockToaster = MockToaster();
+      _locator.registerSingleton<Toaster>(mockToaster);
 
       chainMaster = AppDataChainMaster();
       testAppData = AppData(
@@ -94,7 +102,7 @@ void main() {
     });
 
     tearDown(() {
-      locator.reset();
+      _locator.reset();
     });
 
     test('should maintain initial AppData properties', () async {

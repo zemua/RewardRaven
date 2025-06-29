@@ -4,8 +4,10 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i7;
+import 'dart:ui' as _i19;
 
 import 'package:flutter/services.dart' as _i3;
+import 'package:fluttertoast/fluttertoast.dart' as _i18;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i5;
 import 'package:reward_raven/db/entity/app_group.dart' as _i11;
@@ -20,6 +22,7 @@ import 'package:reward_raven/screens/apps/app_list_type.dart' as _i9;
 import 'package:reward_raven/service/app_blocker.dart' as _i16;
 import 'package:reward_raven/service/condition_checker.dart' as _i14;
 import 'package:reward_raven/service/platform_wrapper.dart' as _i4;
+import 'package:reward_raven/service/toaster.dart' as _i17;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -548,6 +551,46 @@ class MockMethodChannel extends _i1.Mock implements _i3.MethodChannel {
         Invocation.method(
           #setMethodCallHandler,
           [handler],
+        ),
+        returnValueForMissingStub: null,
+      );
+}
+
+/// A class which mocks [Toaster].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockToaster extends _i1.Mock implements _i17.Toaster {
+  @override
+  void showToast({
+    required String? msg,
+    _i18.Toast? toastLength,
+    int? timeInSecForIosWeb = 1,
+    double? fontSize,
+    String? fontAsset,
+    _i18.ToastGravity? gravity,
+    _i19.Color? backgroundColor,
+    _i19.Color? textColor,
+    bool? webShowClose = false,
+    dynamic webBgColor = r'linear-gradient(to right, #00b09b, #96c93d)',
+    dynamic webPosition = r'right',
+  }) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #showToast,
+          [],
+          {
+            #msg: msg,
+            #toastLength: toastLength,
+            #timeInSecForIosWeb: timeInSecForIosWeb,
+            #fontSize: fontSize,
+            #fontAsset: fontAsset,
+            #gravity: gravity,
+            #backgroundColor: backgroundColor,
+            #textColor: textColor,
+            #webShowClose: webShowClose,
+            #webBgColor: webBgColor,
+            #webPosition: webPosition,
+          },
         ),
         returnValueForMissingStub: null,
       );

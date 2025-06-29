@@ -3,10 +3,8 @@ import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
+import '../preferences_enums.dart';
 import '../preferences_service.dart';
-
-const shutdownEnabledKey = 'isShutdownEnabled';
-const shutdownNegativesWillBeClosedKey = 'shutdownNegativesWillBeClosed';
 
 class LocalPreferencesService implements PreferencesService {
   final logger = Logger();
@@ -17,35 +15,37 @@ class LocalPreferencesService implements PreferencesService {
   }
 
   @override
-  void saveSharedString(String key, String value) async {
-    await _preferences().setString(key, value);
+  void saveSharedString(StringPreferencesKey key, String value) async {
+    await _preferences().setString(key.name, value);
   }
 
   @override
-  Future<String?> getSharedString(String key) async {
-    return _preferences().getString(key);
+  String getSharedString(StringPreferencesKey key) {
+    String? value = _preferences().getString(key.name);
+    return value ?? key.defaultValue;
   }
 
   @override
-  Future<String> getUserUUID() async {
+  String getUserUUID() {
     String deviceUuidProperty = "device_uuid";
     SharedPreferences prefs = _preferences();
     String? uuid = prefs.getString(deviceUuidProperty);
     if (uuid == null) {
       uuid = const Uuid().v1();
       logger.i("Generated device uuid: $uuid");
-      await prefs.setString(deviceUuidProperty, uuid);
+      prefs.setString(deviceUuidProperty, uuid);
     }
     return uuid;
   }
 
   @override
-  Future<bool?> getSharedBool(String key) async {
-    return _preferences().getBool(key);
+  bool getSharedBool(BoolPreferencesKey key) {
+    bool? value = _preferences().getBool(key.name);
+    return value ?? key.defaultValue;
   }
 
   @override
-  void saveSharedBool(String key, bool value) {
-    _preferences().setBool(key, value);
+  void saveSharedBool(BoolPreferencesKey key, bool value) async {
+    await _preferences().setBool(key.name, value);
   }
 }

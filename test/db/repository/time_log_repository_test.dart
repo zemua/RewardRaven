@@ -51,8 +51,7 @@ void main() {
 
     when(mockFirebaseHelper.databaseReference)
         .thenAnswer((_) async => mockDatabaseReference);
-    when(mockPreferencesService.getUserUUID())
-        .thenAnswer((_) async => testUuid);
+    when(mockPreferencesService.getUserUUID()).thenAnswer((_) => testUuid);
     when(mockDatabaseReference.child(DbCollection.logs.name))
         .thenReturn(mockDatabaseReference);
     when(mockDatabaseReference.child('group'))

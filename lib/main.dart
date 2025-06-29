@@ -24,10 +24,12 @@ import 'package:reward_raven/service/impl/app_blocker_impl.dart';
 import 'package:reward_raven/service/impl/condition_checker_impl.dart';
 import 'package:reward_raven/service/impl/local_preferences_service.dart';
 import 'package:reward_raven/service/impl/platform_wrapper_impl.dart';
+import 'package:reward_raven/service/impl/tiaster_service.dart';
 import 'package:reward_raven/service/loopchain/app_data_chain_master.dart';
 import 'package:reward_raven/service/loopchain/app_data_handler.dart';
 import 'package:reward_raven/service/platform_wrapper.dart';
 import 'package:reward_raven/service/preferences_service.dart';
+import 'package:reward_raven/service/toaster.dart';
 import 'package:reward_raven/tools/injectable_time_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -87,6 +89,7 @@ class RewardRavenApp extends StatelessWidget {
 }
 
 Future<void> _setupLocator() async {
+  _locator.registerSingleton<Toaster>(ToasterService());
   _locator.registerSingleton<SharedPreferences>(
       await SharedPreferences.getInstance());
   _locator.registerSingleton<PreferencesService>(LocalPreferencesService());

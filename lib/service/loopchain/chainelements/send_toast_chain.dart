@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 
 import '../../platform_wrapper.dart';
+import '../../toaster.dart';
 import '../app_data_dto.dart';
 import '../app_data_handler.dart';
 
@@ -30,7 +31,7 @@ class SendToastChain implements AppDataHandler {
     if (!data.hasBeenBlocked) {
       return;
     }
-    Fluttertoast.showToast(
+    _locator<Toaster>().showToast(
       msg: data.localizedStrings.appBlocked ?? "App Blocked",
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
@@ -38,7 +39,7 @@ class SendToastChain implements AppDataHandler {
     );
     if (_platformWrapper.isAndroid()) {
       for (var message in data.blockingMessages) {
-        Fluttertoast.showToast(
+        _locator<Toaster>().showToast(
           msg: message,
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,

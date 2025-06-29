@@ -192,6 +192,26 @@ class MockInjectableTimePicker extends _i1.Mock
   }
 
   @override
+  _i3.Future<Duration?> pickTime(
+    _i8.BuildContext? context,
+    _i8.State<_i8.StatefulWidget>? state,
+    Duration? selectedTime,
+    _i8.TextEditingController? timeController,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #pickTime,
+          [
+            context,
+            state,
+            selectedTime,
+            timeController,
+          ],
+        ),
+        returnValue: _i3.Future<Duration?>.value(),
+      ) as _i3.Future<Duration?>);
+
+  @override
   _i3.Future<_i8.TimeOfDay?> showPicker({
     required _i8.BuildContext? context,
     required _i8.TimeOfDay? initialTime,

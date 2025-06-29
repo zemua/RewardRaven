@@ -10,10 +10,16 @@ import 'package:reward_raven/screens/appgroups/app_group_list.dart';
 import 'package:reward_raven/screens/apps/app_list.dart';
 import 'package:reward_raven/service/app/apps_fetcher.dart';
 import 'package:reward_raven/service/platform_wrapper.dart';
+import 'package:reward_raven/service/preferences_service.dart';
+import 'package:reward_raven/tools/injectable_time_picker.dart';
 
 import 'home_page_test.mocks.dart';
 
-@GenerateNiceMocks([MockSpec<PlatformWrapper>()])
+@GenerateNiceMocks([
+  MockSpec<PlatformWrapper>(),
+  MockSpec<PreferencesService>(),
+  MockSpec<InjectableTimePicker>()
+])
 void main() {
   final getIt = GetIt.instance;
 
@@ -21,6 +27,8 @@ void main() {
     getIt.registerSingleton<AppsFetcher>(MockAppsFetcher());
     getIt.registerSingleton<AppGroupService>(MockAppGroupService());
     getIt.registerSingleton<PlatformWrapper>(MockPlatformWrapper());
+    getIt.registerSingleton<PreferencesService>(MockPreferencesService());
+    getIt.registerSingleton<InjectableTimePicker>(MockInjectableTimePicker());
   });
 
   tearDown(() {

@@ -9,6 +9,7 @@ import 'package:firebase_database/firebase_database.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i5;
 import 'package:reward_raven/db/helper/firebase_helper.dart' as _i3;
+import 'package:reward_raven/service/preferences_enums.dart' as _i7;
 import 'package:reward_raven/service/preferences_service.dart' as _i6;
 
 // ignore_for_file: type=lint
@@ -771,7 +772,7 @@ class MockPreferencesService extends _i1.Mock
     implements _i6.PreferencesService {
   @override
   void saveSharedString(
-    String? key,
+    _i7.StringPreferencesKey? key,
     String? value,
   ) =>
       super.noSuchMethod(
@@ -786,35 +787,72 @@ class MockPreferencesService extends _i1.Mock
       );
 
   @override
-  _i4.Future<String?> getSharedString(String? key) => (super.noSuchMethod(
+  String getSharedString(_i7.StringPreferencesKey? key) => (super.noSuchMethod(
         Invocation.method(
           #getSharedString,
           [key],
         ),
-        returnValue: _i4.Future<String?>.value(),
-        returnValueForMissingStub: _i4.Future<String?>.value(),
-      ) as _i4.Future<String?>);
+        returnValue: _i5.dummyValue<String>(
+          this,
+          Invocation.method(
+            #getSharedString,
+            [key],
+          ),
+        ),
+        returnValueForMissingStub: _i5.dummyValue<String>(
+          this,
+          Invocation.method(
+            #getSharedString,
+            [key],
+          ),
+        ),
+      ) as String);
 
   @override
-  _i4.Future<String> getUserUUID() => (super.noSuchMethod(
+  void saveSharedBool(
+    _i7.BoolPreferencesKey? key,
+    bool? value,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #saveSharedBool,
+          [
+            key,
+            value,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  bool getSharedBool(_i7.BoolPreferencesKey? key) => (super.noSuchMethod(
+        Invocation.method(
+          #getSharedBool,
+          [key],
+        ),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+
+  @override
+  String getUserUUID() => (super.noSuchMethod(
         Invocation.method(
           #getUserUUID,
           [],
         ),
-        returnValue: _i4.Future<String>.value(_i5.dummyValue<String>(
+        returnValue: _i5.dummyValue<String>(
           this,
           Invocation.method(
             #getUserUUID,
             [],
           ),
-        )),
-        returnValueForMissingStub:
-            _i4.Future<String>.value(_i5.dummyValue<String>(
+        ),
+        returnValueForMissingStub: _i5.dummyValue<String>(
           this,
           Invocation.method(
             #getUserUUID,
             [],
           ),
-        )),
-      ) as _i4.Future<String>);
+        ),
+      ) as String);
 }
