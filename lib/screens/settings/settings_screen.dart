@@ -200,54 +200,64 @@ class SettingsScreenState extends State<SettingsScreen> {
                       ),
                       const SizedBox(width: 10),
                       Expanded(
-                        child: IntrinsicWidth(
-                          child: Baseline(
-                            baseline: 40,
-                            baselineType: TextBaseline.alphabetic,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 6),
-                              child: ConstrainedBox(
-                                constraints: const BoxConstraints(minWidth: 60),
-                                child: TextFormField(
-                                  key: const Key("shutdownStartTimeField"),
-                                  controller: _shutdownStartTimeController,
-                                  decoration: InputDecoration(
-                                    labelText:
-                                        AppLocalizations.of(context)!.hhmm,
-                                    isDense: true,
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 0),
-                                    border: const OutlineInputBorder(),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IntrinsicWidth(
+                                child: Baseline(
+                                  baseline: 40,
+                                  baselineType: TextBaseline.alphabetic,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 6),
+                                    child: ConstrainedBox(
+                                      constraints:
+                                          const BoxConstraints(minWidth: 60),
+                                      child: TextFormField(
+                                        key:
+                                            const Key("shutdownStartTimeField"),
+                                        controller:
+                                            _shutdownStartTimeController,
+                                        decoration: InputDecoration(
+                                          labelText:
+                                              AppLocalizations.of(context)!
+                                                  .hhmm,
+                                          isDense: true,
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  vertical: 10, horizontal: 0),
+                                          border: const OutlineInputBorder(),
+                                        ),
+                                        readOnly: true,
+                                        textAlign: TextAlign.center,
+                                        onTap: () {
+                                          timePicker
+                                              .pickTime(
+                                                  context,
+                                                  this,
+                                                  _shutdownSelectedStartTime,
+                                                  _shutdownStartTimeController)
+                                              .then((onValue) {
+                                            setState(() {
+                                              _shutdownSelectedStartTime =
+                                                  onValue;
+                                            });
+                                          });
+                                        },
+                                        validator: (value) {
+                                          if (value == null ||
+                                              value.isEmpty ||
+                                              value == '00:00') {
+                                            return '';
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                    ),
                                   ),
-                                  readOnly: true,
-                                  textAlign: TextAlign.center,
-                                  onTap: () {
-                                    timePicker
-                                        .pickTime(
-                                            context,
-                                            this,
-                                            _shutdownSelectedStartTime,
-                                            _shutdownStartTimeController)
-                                        .then((onValue) {
-                                      setState(() {
-                                        _shutdownSelectedStartTime = onValue;
-                                      });
-                                    });
-                                  },
-                                  validator: (value) {
-                                    if (value == null ||
-                                        value.isEmpty ||
-                                        value == '00:00') {
-                                      return '';
-                                    }
-                                    return null;
-                                  },
                                 ),
                               ),
-                            ),
-                          ),
-                        ),
+                            ]),
                       ),
                     ],
                   ),
@@ -264,54 +274,62 @@ class SettingsScreenState extends State<SettingsScreen> {
                       ),
                       const SizedBox(width: 10),
                       Expanded(
-                        child: IntrinsicWidth(
-                          child: Baseline(
-                            baseline: 40,
-                            baselineType: TextBaseline.alphabetic,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 6),
-                              child: ConstrainedBox(
-                                constraints: const BoxConstraints(minWidth: 60),
-                                child: TextFormField(
-                                  key: const Key("shutdownEndTimeField"),
-                                  controller: _shutdownEndTimeController,
-                                  decoration: InputDecoration(
-                                    labelText:
-                                        AppLocalizations.of(context)!.hhmm,
-                                    isDense: true,
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 0),
-                                    border: const OutlineInputBorder(),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IntrinsicWidth(
+                                child: Baseline(
+                                  baseline: 40,
+                                  baselineType: TextBaseline.alphabetic,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 6),
+                                    child: ConstrainedBox(
+                                      constraints:
+                                          const BoxConstraints(minWidth: 60),
+                                      child: TextFormField(
+                                        key: const Key("shutdownEndTimeField"),
+                                        controller: _shutdownEndTimeController,
+                                        decoration: InputDecoration(
+                                          labelText:
+                                              AppLocalizations.of(context)!
+                                                  .hhmm,
+                                          isDense: true,
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  vertical: 10, horizontal: 0),
+                                          border: const OutlineInputBorder(),
+                                        ),
+                                        readOnly: true,
+                                        textAlign: TextAlign.center,
+                                        onTap: () {
+                                          timePicker
+                                              .pickTime(
+                                                  context,
+                                                  this,
+                                                  _shutdownSelectedEndTime,
+                                                  _shutdownEndTimeController)
+                                              .then((onValue) {
+                                            setState(() {
+                                              _shutdownSelectedEndTime =
+                                                  onValue;
+                                            });
+                                          });
+                                        },
+                                        validator: (value) {
+                                          if (value == null ||
+                                              value.isEmpty ||
+                                              value == '00:00') {
+                                            return '';
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                    ),
                                   ),
-                                  readOnly: true,
-                                  textAlign: TextAlign.center,
-                                  onTap: () {
-                                    timePicker
-                                        .pickTime(
-                                            context,
-                                            this,
-                                            _shutdownSelectedEndTime,
-                                            _shutdownEndTimeController)
-                                        .then((onValue) {
-                                      setState(() {
-                                        _shutdownSelectedEndTime = onValue;
-                                      });
-                                    });
-                                  },
-                                  validator: (value) {
-                                    if (value == null ||
-                                        value.isEmpty ||
-                                        value == '00:00') {
-                                      return '';
-                                    }
-                                    return null;
-                                  },
                                 ),
                               ),
-                            ),
-                          ),
-                        ),
+                            ]),
                       ),
                     ],
                   ),
@@ -352,46 +370,53 @@ class SettingsScreenState extends State<SettingsScreen> {
                       ),
                       const SizedBox(width: 10),
                       Expanded(
-                        child: IntrinsicWidth(
-                          child: Baseline(
-                            baseline: 30,
-                            baselineType: TextBaseline.alphabetic,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 6),
-                              child: ConstrainedBox(
-                                constraints: const BoxConstraints(minWidth: 60),
-                                child: TextFormField(
-                                  key: const Key("daysField"),
-                                  controller: _shutdownNoticeTimeController,
-                                  decoration: const InputDecoration(
-                                    isDense: true,
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 18),
-                                    border: OutlineInputBorder(),
-                                    counterText: '',
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IntrinsicWidth(
+                                child: Baseline(
+                                  baseline: 30,
+                                  baselineType: TextBaseline.alphabetic,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 6),
+                                    child: ConstrainedBox(
+                                      constraints:
+                                          const BoxConstraints(minWidth: 60),
+                                      child: TextFormField(
+                                        key: const Key("daysField"),
+                                        controller:
+                                            _shutdownNoticeTimeController,
+                                        decoration: const InputDecoration(
+                                          isDense: true,
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 18),
+                                          border: OutlineInputBorder(),
+                                          counterText: '',
+                                        ),
+                                        textAlign: TextAlign.center,
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter
+                                              .digitsOnly,
+                                        ],
+                                        maxLength: 2,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return '';
+                                          }
+                                          return null;
+                                        },
+                                        onChanged: (value) {
+                                          _selectedShutdownNoticeMinutes =
+                                              int.tryParse(value) ?? 0;
+                                        },
+                                      ),
+                                    ),
                                   ),
-                                  textAlign: TextAlign.center,
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                  ],
-                                  maxLength: 2,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return '';
-                                    }
-                                    return null;
-                                  },
-                                  onChanged: (value) {
-                                    _selectedShutdownNoticeMinutes =
-                                        int.tryParse(value) ?? 0;
-                                  },
                                 ),
                               ),
-                            ),
-                          ),
-                        ),
+                            ]),
                       ),
                     ],
                   ),
@@ -409,46 +434,53 @@ class SettingsScreenState extends State<SettingsScreen> {
                       ),
                       const SizedBox(width: 10),
                       Expanded(
-                        child: IntrinsicWidth(
-                          child: Baseline(
-                            baseline: 30,
-                            baselineType: TextBaseline.alphabetic,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 6),
-                              child: ConstrainedBox(
-                                constraints: const BoxConstraints(minWidth: 60),
-                                child: TextFormField(
-                                  key: const Key("daysField"),
-                                  controller: _hoursForDayChangeController,
-                                  decoration: const InputDecoration(
-                                    isDense: true,
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 18),
-                                    border: OutlineInputBorder(),
-                                    counterText: '',
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IntrinsicWidth(
+                                child: Baseline(
+                                  baseline: 30,
+                                  baselineType: TextBaseline.alphabetic,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 6),
+                                    child: ConstrainedBox(
+                                      constraints:
+                                          const BoxConstraints(minWidth: 60),
+                                      child: TextFormField(
+                                        key: const Key("daysField"),
+                                        controller:
+                                            _hoursForDayChangeController,
+                                        decoration: const InputDecoration(
+                                          isDense: true,
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 18),
+                                          border: OutlineInputBorder(),
+                                          counterText: '',
+                                        ),
+                                        textAlign: TextAlign.center,
+                                        keyboardType: TextInputType.number,
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter
+                                              .digitsOnly,
+                                        ],
+                                        maxLength: 1,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return '';
+                                          }
+                                          return null;
+                                        },
+                                        onChanged: (value) {
+                                          _selectedHoursForDayChange =
+                                              int.tryParse(value) ?? 0;
+                                        },
+                                      ),
+                                    ),
                                   ),
-                                  textAlign: TextAlign.center,
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly,
-                                  ],
-                                  maxLength: 1,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return '';
-                                    }
-                                    return null;
-                                  },
-                                  onChanged: (value) {
-                                    _selectedHoursForDayChange =
-                                        int.tryParse(value) ?? 0;
-                                  },
                                 ),
                               ),
-                            ),
-                          ),
-                        ),
+                            ]),
                       ),
                     ],
                   ),
