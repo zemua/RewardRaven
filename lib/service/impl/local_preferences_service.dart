@@ -5,6 +5,9 @@ import 'package:uuid/uuid.dart';
 
 import '../preferences_service.dart';
 
+const shutdownEnabledKey = 'isShutdownEnabled';
+const shutdownNegativesWillBeClosedKey = 'shutdownNegativesWillBeClosed';
+
 class LocalPreferencesService implements PreferencesService {
   final logger = Logger();
   final GetIt _locator = GetIt.instance;

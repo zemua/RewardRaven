@@ -4,13 +4,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:logger/logger.dart';
 
+import '../../service/impl/local_preferences_service.dart';
 import '../../service/preferences_service.dart';
 import '../../tools/injectable_time_picker.dart';
 
 final GetIt _locator = GetIt.instance;
 final _logger = Logger();
-
-const shutdownEnabledKey = 'isShutdownEnabled';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -41,6 +40,7 @@ class SettingsScreenState extends State<SettingsScreen> {
   int? _selectedPositiveNegativeProportion;
 
   bool? _isShutdownEnabled;
+  bool? _isShutdownNegativesWillBeClosed;
 
   @override
   void initState() {
@@ -51,9 +51,13 @@ class SettingsScreenState extends State<SettingsScreen> {
   Future<void> _loadPreferences() async {
     final isEnabled =
         await _preferences.getSharedBool(shutdownEnabledKey) ?? false;
+    final isNegativesWillBeClosed =
+        await _preferences.getSharedBool(shutdownNegativesWillBeClosedKey) ??
+            false;
     if (mounted) {
       setState(() {
         _isShutdownEnabled = isEnabled;
+        _isShutdownNegativesWillBeClosed = isNegativesWillBeClosed;
         _isLoading = false;
       });
     }
@@ -116,10 +120,16 @@ class SettingsScreenState extends State<SettingsScreen> {
                       const SizedBox(width: 10),
                       Expanded(
                         child: Switch(
-                          value: true,
-                          onChanged: (value) {
-                            _logger.d('Switch changed to $value');
-                          },
+                          value: _isShutdownNegativesWillBeClosed ?? false,
+                          onChanged: _isLoading
+                              ? null
+                              : (value) async {
+                                  setState(() {
+                                    _isShutdownNegativesWillBeClosed = value;
+                                  });
+                                  _preferences.saveSharedBool(
+                                      shutdownNegativesWillBeClosedKey, value);
+                                },
                         ),
                       ),
                     ],
