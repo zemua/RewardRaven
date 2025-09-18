@@ -26,7 +26,7 @@
   "groupNameEmpty": "Group name cannot be empty",
   "hasUsed": "Has used",
   "hhmm": "HH:mm",
-  "homePage": "Reward Raven Home Page",
+  "homePage": "Home Page",
   "installedApps": "Installed Apps",
   "inTheLast": "in the last",
   "myTimings": "My Timings",
@@ -68,5 +68,5 @@
   "watchdogServiceAndroidChannelName": "Watchdog Service Notification",
   "watchdogServiceDefaultText": "App usage will be monitored",
   "watchdogServiceDefaultTitle": "Watchdog service running",
-  "welcome": "Welcome to Reward Raven"
+  "welcome": "Welcome"
 }
